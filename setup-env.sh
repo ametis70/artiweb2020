@@ -15,7 +15,7 @@ gen_password() {
   openssl rand -base64 32
 }
 
-read -p "MariaDB password: (press enter to randomize): " mysql_password
+read -p "MySQL password: (press enter to randomize): " mysql_password
 mysql_password=${mysql_password:-`gen_password`}
 
 read -p "Directus pubkey: (press enter to randomize): " directus_pubkey
@@ -38,11 +38,6 @@ sed -i -e "s#DIRECTUS_AUTH_PUBLICKEY=.*#DIRECTUS_AUTH_PUBLICKEY=${directus_pubke
 sed -i -e "s#DIRECTUS_AUTH_SECRETKEY=.*#DIRECTUS_AUTH_SECRETKEY=${directus_secret}#g" \
        "$(dirname "$0")/.env"
 
-if [ ! -d "./docker" ]; then
-  echo "Creating docker volume directories"
-  sudo mkdir -p ./docker/mysql ./docker/dirctus ./docker/dirctus/config ./docker/dirctus/uploads
-fi
-
 read -p "Start docker containers? (requires docker-compose) [Y/n] " start_docker
 start_docker=${start_docker:-Y}
 
@@ -50,13 +45,13 @@ if [[ $start_docker =~ [yY] ]]; then
   check_available docker-compose
   sudo docker-compose up -d
 
- while true; do
-     sudo docker-compose logs mysql | grep "mysqld: ready for connections" &> /dev/null
-     EC=$?
-     if [ $EC -eq 0 ]; then
-         sleep 5
-         sudo docker-compose run --rm directus install --email admin@artiweb.net --password password
-         break
-     fi
- done
+  # while true; do
+  #    sudo docker-compose logs mysql | grep "mysqld: ready for connections" &> /dev/null
+  #    EC=$?
+  #    if [ $EC -eq 0 ]; then
+  #        sleep 5
+  #        sudo docker-compose run --rm directus install --email admin@artiweb.net --password password
+  #        break
+  #    fi
+  # done
 fi
