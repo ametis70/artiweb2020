@@ -1,30 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Artimañas 2020
 
-## Getting Started
+Este es el repositorio para el código del sitio web de Artimañas 2020.
 
-First, run the development server:
+## Instrucciones para desarrollo
+
+La aplicación web consiste de dos partes:
+
+1. CMS: [Directus](https://directus.io/)
+2. Componente de SSR (Server Side Rendering): [Next.js](https://nextjs.org/)
+
+### Configurando el entorno
+
+Hay 3 variables de entorno que se deben configurar en el archivo `.env`, la primera corresponde a la contraseña de la base de datos de MySQL y las otras dos a la seguridad de Directus:
+
+- `MYSQL_PASSWORD`
+- `DIRECTUS_AUTH_PUBLICKEY`
+- `DIRECTUS_AUTH_SECRETKEY`
+
+Estas pueden ser cualquier string, pero se deben asignar antes de crear los contenedores, y si se modifican posteriormente, los contenedores no funcionaran correctamente.
+
+El script `setup-env.sh` permite generar valores para las variables de entorno automáticamente y crear e iniciar los contenedores de docker después de esto.
+
+``` bash
+./setup-env.sh
+```
+
+### CMS y base de datos
+
+Directus depende de una base de datos SQL que se puede levantar usando [Docker](https://www.docker.com/) con el archivo de [docker-compose](https://docs.docker.com/compose/) provisto:
+
+```bash
+docker-compose up -d
+```
+
+Cuando el contenedor de la base de datos se cree por primera vez, la base de datos se inicializará con el dump que se encuentra en `./db/init.sql`. Este contiene las tablas para las obras, biografías, e información general del sitio, así como los usuarios correspondientes a cada alumno de la materia. Para modificar los datos una vez iniciados los contenedores, se puede acceder a la interfaz web de directus en [http://localhost:8080](http://localhost:8080) con las siguientes credenciales:
+
+- Usuario: `admin@artiweb.net`
+- Contraseña: `password`
+
+Eventualmente, este dump deberá ser actualizado con el contenido real/final, para que el entorno de desarrollo sea lo mas fiel posible con respecto al de producción. Esto se puede llevar a cabo con el script provisto en la raíz del repositorio (`manage-db`):
+
+``` bash
+./manage-db.sh backup
+```
+
+### Sitio web (front end)
+
+Una vez que la base de datos haya sido inicializada, se puede iniciar el servidor de desarrollo (componente de SSR) con:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Los archivos en el directorio `src` se pueden editar y los cambios se verán reflejados en el navegador sin la necesidad de recargar la página.
