@@ -53,3 +53,8 @@ npm run dev
 ```
 
 Los archivos en el directorio `src` se pueden editar y los cambios se verán reflejados en el navegador sin la necesidad de recargar la página.
+
+## Screencasts
+
+- [Configurando el servidor de desarrollo en Manjaro / Arch Linux](https://youtu.be/1_Eo37owlDw)
+- [Descripción de los archivos del respositorio](https://youtu.be/5-D9CbGm-8Q)
