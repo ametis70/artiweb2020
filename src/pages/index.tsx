@@ -1,9 +1,9 @@
 import Head from 'next/head'
 
-import Festival from '../components/Festival'
 import Alumnxs from '../components/Alumnxs'
+import Festival from '../components/Festival'
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
     <>
       <Head>
@@ -15,3 +15,5 @@ export default function Home() {
     </>
   )
 }
+
+export default Home
