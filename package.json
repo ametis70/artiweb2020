@@ -13,6 +13,7 @@
     "@chakra-ui/core": "^1.0.0-rc.5",
     "@chakra-ui/theme": "^1.0.0-rc.5",
     "@chakra-ui/theme-tools": "^1.0.0-rc.5",
+    "@directus/sdk-js": "^6.3.0",
     "@next/bundle-analyzer": "^9.5.5",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",

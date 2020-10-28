@@ -1,9 +1,11 @@
 import Head from 'next/head'
+import directus, { login } from '../lib/api'
 
 import Alumnxs from '../components/Alumnxs'
 import Festival from '../components/Festival'
 
-const Home: React.FC = () => {
+const Home: React.FC = ({ data }) => {
+  console.log(data)
   return (
     <>
       <Head>
@@ -14,6 +16,14 @@ const Home: React.FC = () => {
       <Alumnxs />
     </>
   )
+}
+
+export async function getServerSideProps() {
+  await login()
+  const data = await directus.getItems('obras')
+
+  // Pass data to the page via props
+  return { props: { data } }
 }
 
 export default Home
