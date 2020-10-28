@@ -18,7 +18,7 @@ module.exports = {
     amd: true,
     node: true,
   },
-  plugins: ['simple-import-sort'],
+  plugins: ['prettier'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',

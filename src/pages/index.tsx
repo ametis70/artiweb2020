@@ -5,7 +5,6 @@ import Alumnxs from '../components/Alumnxs'
 import Festival from '../components/Festival'
 
 const Home: React.FC = ({ data }) => {
-  console.log(data)
   return (
     <>
       <Head>
