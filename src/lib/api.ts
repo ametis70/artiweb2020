@@ -1,16 +1,49 @@
 import DirectusSDK from '@directus/sdk-js'
 
-const client = new DirectusSDK({
-  url: process.env.DIRECTUS_HOST,
-  project: '_',
-})
+const studentsRole = 'Alumn@'
+const teachersRole = 'Docente'
+
+const client = new DirectusSDK()
 
 export async function login() {
   return client.login({
     email: process.env.DIRECTUS_API_USER,
     password: process.env.DIRECTUS_API_PASSWORD,
-    mode: 'jwt',
+    url: process.env.DIRECTUS_HOST,
+    project: '_',
   })
+}
+
+export async function getRoleIdByName(roleName: string) {
+  const role = await client.getRoles({ filter: { name: { eq: roleName } } })
+  return role.data[0].id
+}
+
+export async function getAllStudents() {
+  const role = await getRoleIdByName(studentsRole)
+  return client.getUsers({ filter: { role: { eq: role } } })
+}
+
+export async function getAllTeachers() {
+  const role = await getRoleIdByName(teachersRole)
+  return client.getUsers({ filter: { role: { eq: role } } })
+}
+
+export async function getAllObras() {
+  return client.getItems('obras')
+}
+
+export async function getObraByUserId(id: number) {
+  const allObras = await getAllObras()
+  return allObras.data.find((item) => item.user === id)
+}
+
+export async function getAllBios() {
+  return client.getItems('biografias')
+}
+
+export async function getGeneralInfo() {
+  return client.getItems('general')
 }
 
 export default client
