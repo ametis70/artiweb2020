@@ -9,7 +9,7 @@ import {
   ListItem,
   Link,
 } from '@chakra-ui/core'
-import { getAllStudents, getAllObras, login } from '../../lib/api'
+import { getAllStudents, getAllObras, login } from '../lib/api'
 import { MouseEvent } from 'react'
 
 interface IObra {
