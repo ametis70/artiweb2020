@@ -3,14 +3,16 @@ import DirectusSDK from '@directus/sdk-js'
 const studentsRole = 'Alumn@'
 const teachersRole = 'Docente'
 
-const client = new DirectusSDK()
+const client = new DirectusSDK({
+  mode: 'jwt',
+  project: '-',
+  url: process.env.DIRECTUS_HOST,
+})
 
 export async function login() {
   return client.login({
     email: process.env.DIRECTUS_API_USER,
     password: process.env.DIRECTUS_API_PASSWORD,
-    url: process.env.DIRECTUS_HOST,
-    project: '_',
   })
 }
 
