@@ -45,7 +45,6 @@ type ObrasPageProps = {
 
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   const router = useRouter()
-  console.log(obras[0].descripcion)
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement, MouseEvent>, to: string) => {
     e.preventDefault()
