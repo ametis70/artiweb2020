@@ -14,7 +14,7 @@ const profesores: Array<string> = [
 const Festival: React.FC = () => {
   return (
     <>
-      <SEO title="Alumnes" />
+      <SEO title="Festival" />
       <Flex w="100%" direction="row" wrap="wrap">
         <Container>
           <Box h="fit-content">

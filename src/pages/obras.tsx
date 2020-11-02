@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/core'
 import { getAllStudents, getAllObras, login } from '../lib/api'
 import { MouseEvent } from 'react'
+import SEO from '../components/SEO'
 
 interface IObra {
   id: number
@@ -67,39 +68,87 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     if (obra) {
       return (
-        <Box key={obra.slug} overflow="hidden scroll">
-          <Text> {obra.banner} </Text>
-          <Heading> {obra.titulo} </Heading>
-          <Text> {obra.descripcion} </Text>
-          <Link href={obra.link_contenido_personalizado}>{getLinkText(obra)}</Link>
-          <Text>{obra.ayuda_contenido_personalizado} </Text>
+        <Box key={obra.slug} flex="1 1 0" overflow="hidden auto" h="100%" p="2rem">
+          <Box maxW="840px" m="0 auto">
+            <Text> {obra.banner} </Text>
+            <Heading> {obra.titulo} </Heading>
+            <Text> {obra.descripcion} </Text>
+            <Link href={obra.link_contenido_personalizado}>{getLinkText(obra)}</Link>
+            <Text>{obra.ayuda_contenido_personalizado} </Text>
+          </Box>
         </Box>
       )
     }
 
     return (
-      <Flex key="select_obra" w="100vw" align="center" justify="center">
+      <Flex key="select_obra" w="100%" h="100%" align="center" justify="center">
         <Text> Seleccioná una obra a la izquierda </Text>
       </Flex>
     )
   }
 
   return (
-    <Flex>
-      <Stack as={UnorderedList} minW="300px" h="100vh" overflow="hidden auto">
-        {students.map((student) => (
-          <ListItem key={student.obra_url}>
-            <Link
-              href={student.obra_url}
-              onClick={(e) => handleClick(e, student.obra_url)}
-            >
-              {student.full_name}
-            </Link>
-          </ListItem>
-        ))}
-      </Stack>
-      <Content />
-    </Flex>
+    <>
+      <SEO title="Obras" />
+      <Flex h="calc(100vh - 100px - 1rem)" mt="1rem" position="relative">
+        <Box flex="0 0 400px" />
+        <Stack
+          as={UnorderedList}
+          w="400px"
+          position="absolute"
+          zIndex="1"
+          h="100%"
+          overflow="hidden auto"
+          direction="column"
+        >
+          {students.map((student, index) => (
+            <ListItem key={student.obra_url}>
+              <Link
+                href={student.obra_url}
+                onClick={(e) => handleClick(e, student.obra_url)}
+              >
+                <Flex align="center">
+                  <Box
+                    bg={router.query.obra === student.slug ? 'green' : 'gray.400'}
+                    h="128px"
+                    flex="0 0 128px"
+                    borderRadius="50%"
+                    display="inline-block"
+                    position="relative"
+                    overflow="visible"
+                    mb="1.5rem"
+                  >
+                    {index !== students.length - 1 ? (
+                      <Box
+                        position="absolute"
+                        w="10px"
+                        h="calc(100%)"
+                        bg="gray.400"
+                        zIndex="-1"
+                        top="50%"
+                        left="50%"
+                        transform="translateX(-50%)"
+                      />
+                    ) : null}
+                  </Box>
+
+                  <Text
+                    textTransform="uppercase"
+                    fontWeight="bold"
+                    style={{ wordSpacing: 'calc(400px - 128px)' }}
+                    lineHeight={1.1}
+                    pl="1rem"
+                  >
+                    {student.full_name}
+                  </Text>
+                </Flex>
+              </Link>
+            </ListItem>
+          ))}
+        </Stack>
+        <Content />
+      </Flex>
+    </>
   )
 }
 
