@@ -67,7 +67,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     if (obra) {
       return (
-        <Box key={obra.slug}>
+        <Box key={obra.slug} h="100vh" overflow="hidden auto">
           <Text> {obra.banner} </Text>
           <Heading> {obra.titulo} </Heading>
           <Text> {obra.descripcion} </Text>
@@ -86,14 +86,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
   return (
     <Flex>
-      <Stack
-        as={UnorderedList}
-        minW="300px"
-        position="sticky"
-        top="1px"
-        h="100vh"
-        overflow="hidden auto"
-      >
+      <Stack as={UnorderedList} minW="300px" h="100vh" overflow="hidden auto">
         {students.map((student) => (
           <ListItem key={student.obra_url}>
             <Link
