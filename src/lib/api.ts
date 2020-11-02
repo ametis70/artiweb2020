@@ -1,4 +1,5 @@
 import DirectusSDK from '@directus/sdk-js'
+import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
 
 const studentsRole = 'Alumn@'
 const teachersRole = 'Docente'
@@ -46,6 +47,11 @@ export async function getAllBios() {
 
 export async function getGeneralInfo() {
   return client.getItems('general')
+}
+
+export async function getImage(id: number) {
+  const images = await client.getFiles()
+  return images.data.find((file) => file.id === id)
 }
 
 export default client

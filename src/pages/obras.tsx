@@ -8,11 +8,12 @@ import {
   UnorderedList,
   ListItem,
   Link,
+  Image,
 } from '@chakra-ui/core'
 import ReactMarkdown from 'react-markdown'
 import { MouseEvent } from 'react'
 
-import { getAllStudents, getAllObras, login } from '../lib/api'
+import { getAllStudents, getAllObras, login, getImage } from '../lib/api'
 import SEO from '../components/SEO'
 
 interface IObra {
@@ -73,7 +74,12 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       return (
         <Box key={obra.slug} flex="1 1 0" overflow="hidden auto" h="100%" p="2rem">
           <Stack maxW="840px" m="0 auto" spacing="1rem">
-            <Text> {obra.banner} </Text>
+            <Image
+              src={obra.banner ? obra.banner : 'https://source.unsplash.com/random/800x'}
+              alt={`Imagen de banner de ${obra.titulo} `}
+              maxH="300px"
+              objectFit={obra.banner ? 'contain' : 'cover'}
+            />
             <Heading> {obra.titulo} </Heading>
             <Text as={ReactMarkdown} source={obra.descripcion} />
             <Link href={obra.link_contenido_personalizado}>
@@ -189,10 +195,17 @@ export async function getStaticProps() {
     }
   })
 
-  const obrasWithSlug = obras.data.map((obra) => {
-    const { slug } = studentsFiltered.find((student) => obra.user === student.id)
-    return { ...obra, slug }
-  })
+  const obrasWithSlug = await Promise.all(
+    obras.data.map(async (obra) => {
+      let banner = null
+      if (obra.banner) {
+        const imageData = await getImage(obra.banner)
+        banner = imageData.data.full_url
+      }
+      const { slug } = studentsFiltered.find((student) => obra.user === student.id)
+      return { ...obra, slug, banner }
+    }),
+  )
 
   return { props: { obras: obrasWithSlug, students: studentsFiltered } }
 }
