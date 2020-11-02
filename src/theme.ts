@@ -18,6 +18,8 @@ const customTheme = extendTheme({
         fontSize: 'xl',
         lineHeight: 'tall',
         overflowX: 'hidden',
+        width: '100%',
+        minHeight: '100vh',
       },
     },
   },

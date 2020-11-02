@@ -7,11 +7,12 @@ const AlumnesList: React.FC = () => {
   return (
     <Box
       w="100vw"
-      h="100vh"
+      minH="calc(100vh - 2rem)"
       bg="magenta"
       position="relative"
       color="white"
       overflow="hidden"
+      py="2rem"
     >
       <Box position="absolute" w="100%" h="100%" opacity="0.1">
         <Box

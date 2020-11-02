@@ -67,7 +67,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     if (obra) {
       return (
-        <Box key={obra.slug} h="100vh" overflow="hidden auto">
+        <Box key={obra.slug} overflow="hidden scroll">
           <Text> {obra.banner} </Text>
           <Heading> {obra.titulo} </Heading>
           <Text> {obra.descripcion} </Text>
@@ -78,9 +78,9 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     }
 
     return (
-      <Box key="select_obra">
+      <Flex key="select_obra" w="100vw" align="center" justify="center">
         <Text> Seleccioná una obra a la izquierda </Text>
-      </Box>
+      </Flex>
     )
   }
 
