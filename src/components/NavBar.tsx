@@ -58,7 +58,9 @@ const childrenVariants = {
   },
 }
 
-const TopBar: React.FC = () => {
+export const navBarHeight = '100px'
+
+const NavBar: React.FC = () => {
   const [isOpen, setOpen] = useState<boolean>(false)
   const router = useRouter()
 
@@ -74,7 +76,7 @@ const TopBar: React.FC = () => {
 
   return (
     <>
-      <Flex w="100%" h="100px" align-items="center">
+      <Flex w="100%" h={navBarHeight} align-items="center">
         <Link href="/">
           <Image
             src={require('../images/logo.svg')}
@@ -182,4 +184,4 @@ const TopBar: React.FC = () => {
   )
 }
 
-export default TopBar
+export default NavBar
