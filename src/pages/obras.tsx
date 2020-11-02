@@ -9,8 +9,10 @@ import {
   ListItem,
   Link,
 } from '@chakra-ui/core'
-import { getAllStudents, getAllObras, login } from '../lib/api'
+import ReactMarkdown from 'react-markdown'
 import { MouseEvent } from 'react'
+
+import { getAllStudents, getAllObras, login } from '../lib/api'
 import SEO from '../components/SEO'
 
 interface IObra {
@@ -42,6 +44,7 @@ type ObrasPageProps = {
 
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   const router = useRouter()
+  console.log(obras[0].descripcion)
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement, MouseEvent>, to: string) => {
     e.preventDefault()
@@ -69,13 +72,25 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     if (obra) {
       return (
         <Box key={obra.slug} flex="1 1 0" overflow="hidden auto" h="100%" p="2rem">
-          <Box maxW="840px" m="0 auto">
+          <Stack maxW="840px" m="0 auto" spacing="1rem">
             <Text> {obra.banner} </Text>
             <Heading> {obra.titulo} </Heading>
-            <Text> {obra.descripcion} </Text>
-            <Link href={obra.link_contenido_personalizado}>{getLinkText(obra)}</Link>
-            <Text>{obra.ayuda_contenido_personalizado} </Text>
-          </Box>
+            <Text as={ReactMarkdown} source={obra.descripcion} />
+            <Link href={obra.link_contenido_personalizado}>
+              <Flex w="100%" py="1rem" bg="magenta" justify="center" mb="1rem">
+                <Text textTransform="uppercase" fontWeight="bold">
+                  {getLinkText(obra)}
+                </Text>
+              </Flex>
+            </Link>
+            <Text
+              as={ReactMarkdown}
+              source={obra.ayuda_contenido_personalizado}
+              opacity={0.52}
+              fontSize="md"
+              textAlign="center"
+            />
+          </Stack>
         </Box>
       )
     }
