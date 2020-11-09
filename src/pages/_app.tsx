@@ -1,6 +1,7 @@
 import { ChakraProvider } from '@chakra-ui/core'
 import { AppProps } from 'next/app'
 import NavBar from '../components/NavBar'
+import { ParallaxProvider } from 'react-scroll-parallax'
 
 // disable FitText warning
 console.warn = () => undefined
@@ -12,8 +13,10 @@ import theme from '../theme'
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={theme} resetCSS>
-      <NavBar />
-      <Component {...pageProps} />
+      <ParallaxProvider>
+        <NavBar />
+        <Component {...pageProps} />
+      </ParallaxProvider>
     </ChakraProvider>
   )
 }

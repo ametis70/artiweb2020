@@ -1,8 +1,10 @@
 import { Suspense, useRef, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from 'react-three-fiber'
+import { Parallax } from 'react-scroll-parallax'
+import { Heading, Flex, Box } from '@chakra-ui/core'
 
-function Box(props) {
+function Cube(props) {
   // This reference will give us direct access to the mesh
   const mesh = useRef()
 
@@ -30,12 +32,34 @@ function Box(props) {
 
 const Hero: React.FC = () => {
   return (
-    <Canvas style={{ width: '100%', height: '100vh' }}>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-    </Canvas>
+    <>
+      <Box h="100vh" />
+      <Box h="50vh" w="100%" justify="center" direction="column" align="center">
+        <Parallax x={[50, -50]}>
+          <Heading textTransform="uppercase" fontSize="7xl">
+            Festival
+          </Heading>
+        </Parallax>
+        <Box w="100%" h="2rem" />
+        <Parallax x={[-50, 50]}>
+          <Heading textTransform="uppercase" fontSize="7xl">
+            Artimañas
+          </Heading>
+        </Parallax>
+        <Box w="100%" h="2rem" />
+        <Parallax x={[75, -75]}>
+          <Heading textTransform="uppercase" fontSize="7xl">
+            2020
+          </Heading>
+        </Parallax>
+      </Box>
+      <Canvas style={{ width: '100%', height: '100vh' }}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Cube position={[-1.2, 0, 0]} />
+        <Cube position={[1.2, 0, 0]} />
+      </Canvas>
+    </>
   )
 }
 
