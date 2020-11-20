@@ -2,6 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import NavBar from '../components/NavBar'
 import { ParallaxProvider } from 'react-scroll-parallax'
+import Footer from '../components/Footer'
 
 // disable FitText warning
 console.warn = () => undefined
@@ -16,6 +17,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
       <ParallaxProvider>
         <NavBar />
         <Component {...pageProps} />
+        <Footer />
       </ParallaxProvider>
     </ChakraProvider>
   )
