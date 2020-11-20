@@ -1,4 +1,4 @@
-import { Box, Flex, List, ListItem } from '@chakra-ui/core'
+import { Box, Flex, List, ListItem } from '@chakra-ui/react'
 import React from 'react'
 
 import students from '../students'

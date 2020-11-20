@@ -9,7 +9,7 @@ import {
   ListItem,
   Link,
   Image,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import ReactMarkdown from 'react-markdown'
 import { MouseEvent } from 'react'
 

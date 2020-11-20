@@ -6,7 +6,7 @@ import {
   Spacer,
   Text,
   Link as ChakraLink,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 

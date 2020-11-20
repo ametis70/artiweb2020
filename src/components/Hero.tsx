@@ -2,7 +2,7 @@ import { Suspense, useRef, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, useFrame } from 'react-three-fiber'
 import { Parallax } from 'react-scroll-parallax'
-import { Heading, Flex, Box } from '@chakra-ui/core'
+import { Heading, Flex, Box } from '@chakra-ui/react'
 
 function Cube(props) {
   // This reference will give us direct access to the mesh

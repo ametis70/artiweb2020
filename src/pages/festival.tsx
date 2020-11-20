@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, Stack, Text } from '@chakra-ui/core'
+import { Box, Flex, Heading, HStack, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { Textfit } from 'react-textfit'
 
