@@ -30,6 +30,7 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-simple-import-sort": "^5.0.3",
+    "focus-visible": "^5.2.0",
     "framer-motion": "^2.9.4",
     "next": "^10.0.2",
     "next-compose-plugins": "^2.2.1",

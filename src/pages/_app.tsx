@@ -9,6 +9,7 @@ import Footer from '../components/Footer'
 console.warn = () => undefined
 
 import '../styles/typeface-futura.css'
+import 'focus-visible/dist/focus-visible'
 
 import theme from '../theme'
 
