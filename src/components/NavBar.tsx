@@ -39,9 +39,8 @@ const containerVariants = {
   },
 }
 
-const childrenVariants = {
+const strokeVariants = {
   open: {
-    opacity: 1,
     x: '0%',
     transition: {
       duration: 0.3,
@@ -50,12 +49,23 @@ const childrenVariants = {
     },
   },
   closed: {
-    opacity: 0,
-    x: '100%',
+    x: '200%',
     transition: {
       duration: 0.3,
       ease: 'easeInOut',
     },
+  },
+}
+
+const linkVariants = {
+  open: {
+    ...strokeVariants.open,
+    opacity: 1,
+  },
+  closed: {
+    ...strokeVariants.closed,
+    opacity: 0,
+    x: '100%',
   },
 }
 
@@ -177,7 +187,7 @@ const NavBar: React.FC = () => {
 
                       return (
                         <MotionBox
-                          variants={childrenVariants}
+                          variants={linkVariants}
                           key={path.path}
                           onClick={() => closeNav()}
                         >
@@ -187,19 +197,25 @@ const NavBar: React.FC = () => {
                               color="magenta"
                               fontWeight="bold"
                               position="relative"
+                              _hover={{
+                                // @ts-ignore
+                                '& div': {
+                                  opacity: current ? 1 : 0.5,
+                                },
+                              }}
                             >
                               {path.name}
-                              {current ? (
-                                <MotionBox
-                                  variants={childrenVariants}
-                                  h="8px"
-                                  bg="green"
-                                  borderRadius="8px"
-                                  w="100%"
-                                  position="absolute"
-                                  top="50%"
-                                />
-                              ) : null}
+                              <MotionBox
+                                variants={strokeVariants}
+                                h="8px"
+                                bg="green"
+                                borderRadius="8px"
+                                w="100%"
+                                position="absolute"
+                                top="50%"
+                                opacity={current ? 1 : 0}
+                                sx={{ transition: 'opacity 0.2s ease' }}
+                              />
                             </ChakraLink>
                           </Link>
                         </MotionBox>

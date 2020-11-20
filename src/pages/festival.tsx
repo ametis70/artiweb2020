@@ -15,7 +15,7 @@ const Festival: React.FC = () => {
   return (
     <>
       <SEO title="Festival" />
-      <Flex w="100%" direction="row" wrap="wrap">
+      <Flex w="100%" direction="row" wrap="wrap" mt="1rem">
         <Container>
           <Box h="fit-content">
             <Heading
