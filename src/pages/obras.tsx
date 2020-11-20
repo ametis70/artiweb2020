@@ -128,7 +128,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           py="2rem"
         >
           {students.map((student, index) => (
-            <ListItem key={student.obra_url}>
+            <ListItem key={student.obra_url} mb="1.5rem">
               <Link
                 href={student.obra_url}
                 onClick={(e) => handleClick(e, student.obra_url)}
@@ -142,7 +142,6 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
                     display="inline-block"
                     position="relative"
                     overflow="visible"
-                    mb="1.5rem"
                   >
                     {index !== students.length - 1 ? (
                       <Box
