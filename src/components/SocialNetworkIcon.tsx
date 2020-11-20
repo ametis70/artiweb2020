@@ -22,7 +22,7 @@ const SocialNetworkIcon: React.FC<SocialNetworkIconProps> = ({
     bg="green"
     color="white"
     isExternal
-    to={link}
+    href={link}
     icon={icon}
     aria-label={`Ver Festival Armtimañas en ${siteName}`}
   />
