@@ -102,7 +102,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     }
 
     return (
-      <Flex key="select_obra" w="100%" align="center" justify="center">
+      <Flex key="select_obra" w="100%" align="center" justify="center" p="2rem">
         <Text> Seleccioná una obra a la izquierda </Text>
       </Flex>
     )
@@ -121,7 +121,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           as={UnorderedList}
           w="400px"
           position="absolute"
-          zIndex="1"
+          zIndex="0"
           h="100%"
           overflow="hidden auto"
           direction="column"

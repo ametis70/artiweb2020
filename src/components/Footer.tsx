@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <Image src="/images/footer.svg" />
         <Spacer />
         <Stack color="black" direction="row" spacing="1rem">
-          <Text fontWeight="bold" lineHeight="1" fontSize="md">
+          <Text fontWeight="bold" lineHeight="1" fontSize="md" pr="1rem">
             Seguinos <br /> en nuestras <br />
             redes
           </Text>

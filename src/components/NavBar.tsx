@@ -10,6 +10,7 @@ import {
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
+import Headroom from 'react-headroom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
@@ -77,112 +78,140 @@ const NavBar: React.FC = () => {
     return null
   }
 
+  const toggleNav = () => {
+    setOpen(!isOpen)
+
+    const body = document.getElementsByTagName('body')[0]
+    body.classList.toggle('lock-scroll')
+    body.classList.toggle('enable-scroll')
+  }
+
+  const closeNav = () => {
+    setOpen(false)
+
+    const body = document.getElementsByTagName('body')[0]
+    body.classList.remove('lock-scroll')
+    body.classList.add('enable-scroll')
+  }
+
   return (
     <>
-      <Flex w="100%" h={navBarHeight} align-items="center">
-        <Link href="/">
-          <Image
-            src="/images/logo.svg"
-            h="100%"
-            p="0.5rem"
-            ml="2rem"
-            transition="transform 0.1s ease-in-out"
-            _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
-          />
-        </Link>
-        <Spacer />
-        <Flex align="center" mr="2rem" fontSize="3xl">
-          <Text fontWeight={700} color="magenta" mr="3rem">
-            {currentPathTitle()}
-          </Text>
-          <IconButton
-            fontSize="5xl"
-            variant="ghost"
-            aria-label="Abrir menu de navegación"
-            color="magenta"
-            icon={<AiOutlineMenu />}
-            onClick={() => setOpen(true)}
-          />
-        </Flex>
-      </Flex>
-      <AnimatePresence>
-        {isOpen && (
-          <MotionBox
-            key="nav"
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={containerVariants}
-            w="100%"
-            h="100vh"
-            zIndex={2}
-            backgroundColor="rgba(0, 0, 0, 0.9)"
-            style={{ backdropFilter: 'blur(5px)' }}
-            position="absolute"
-            top="0"
-            left="0"
-          >
-            <Flex
-              w="fit-content"
-              position="absolute"
-              right="0"
-              mr="2rem"
-              mt="1.4rem"
-              direction="column"
-              align="flex-end"
-            >
-              <IconButton
-                fontSize="5xl"
-                variant="ghost"
-                mb="2rem"
-                aria-label="Cerrar menu de navegación"
-                color="magenta"
-                icon={<AiOutlineClose />}
-                onClick={() => setOpen(false)}
-              />
-              {paths.map((path) => {
-                const currentLocation =
-                  router.pathname === '/' ? '/' : router.pathname.substring(1)
-                const currentPath = path.path === '/' ? '/' : path.path.substring(1)
+      <Headroom>
+        <Flex
+          w="100%"
+          h={navBarHeight}
+          align-items="center"
+          bg="black"
+          position="relative"
+        >
+          <Link href="/">
+            <Image
+              src="/images/logo.svg"
+              h="100%"
+              p="0.5rem"
+              ml="2rem"
+              transition="transform 0.1s ease-in-out"
+              _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
+            />
+          </Link>
+          <Spacer />
+          <Flex align="center" mr="2rem" fontSize="3xl">
+            <Text fontWeight={700} color="magenta" mr="3rem">
+              {currentPathTitle()}
+            </Text>
+            <IconButton
+              fontSize="5xl"
+              variant="ghost"
+              aria-label="Abrir menu de navegación"
+              color="magenta"
+              icon={<AiOutlineMenu />}
+              onClick={() => toggleNav()}
+            />
+          </Flex>
 
-                const current =
-                  currentLocation === currentPath ||
-                  (currentPath !== '/' && currentLocation.includes(currentPath))
-
-                return (
-                  <MotionBox
-                    variants={childrenVariants}
-                    key={path.path}
-                    onClick={() => setOpen(false)}
+          <AnimatePresence>
+            {isOpen && (
+              <MotionBox
+                key="nav"
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={containerVariants}
+                w="100%"
+                minH="calc(var(--vh, 1vh) * 100)"
+                zIndex={2}
+                backgroundColor="rgba(0, 0, 0, 0.9)"
+                style={{ backdropFilter: 'blur(5px)' }}
+                position="absolute"
+                top="0"
+                left="0"
+              >
+                <Flex direction="row" align="flex-end" justify="flex-end">
+                  <Flex
+                    w="fit-content"
+                    maxH="calc(var(--vh, 1vh) * 100)"
+                    overflow="hidden auto"
+                    pr="2rem"
+                    pb="2rem"
+                    mt="1.4rem"
+                    direction="column"
+                    align="flex-end"
                   >
-                    <Link href={path.path}>
-                      <ChakraLink
-                        fontSize="5xl"
-                        color="magenta"
-                        fontWeight="bold"
-                        position="relative"
-                      >
-                        {path.name}
-                        {current ? (
-                          <MotionBox
-                            variants={childrenVariants}
-                            h="8px"
-                            bg="green"
-                            borderRadius="8px"
-                            w="100%"
-                            position="absolute"
-                            top="50%"
-                          />
-                        ) : null}
-                      </ChakraLink>
-                    </Link>
-                  </MotionBox>
-                )
-              })}
-            </Flex>
-          </MotionBox>
-        )}
-      </AnimatePresence>
+                    <IconButton
+                      fontSize="5xl"
+                      variant="ghost"
+                      mb="2rem"
+                      aria-label="Cerrar menu de navegación"
+                      color="magenta"
+                      icon={<AiOutlineClose />}
+                      onClick={() => closeNav()}
+                    />
+                    {paths.map((path) => {
+                      const currentLocation =
+                        router.pathname === '/' ? '/' : router.pathname.substring(1)
+                      const currentPath = path.path === '/' ? '/' : path.path.substring(1)
+
+                      const current =
+                        currentLocation === currentPath ||
+                        (currentPath !== '/' && currentLocation.includes(currentPath))
+
+                      return (
+                        <MotionBox
+                          variants={childrenVariants}
+                          key={path.path}
+                          onClick={() => closeNav()}
+                        >
+                          <Link href={path.path}>
+                            <ChakraLink
+                              fontSize="5xl"
+                              color="magenta"
+                              fontWeight="bold"
+                              position="relative"
+                            >
+                              {path.name}
+                              {current ? (
+                                <MotionBox
+                                  variants={childrenVariants}
+                                  h="8px"
+                                  bg="green"
+                                  borderRadius="8px"
+                                  w="100%"
+                                  position="absolute"
+                                  top="50%"
+                                />
+                              ) : null}
+                            </ChakraLink>
+                          </Link>
+                        </MotionBox>
+                      )
+                    })}
+                  </Flex>
+                </Flex>
+              </MotionBox>
+            )}
+          </AnimatePresence>
+        </Flex>
+      </Headroom>
     </>
   )
 }

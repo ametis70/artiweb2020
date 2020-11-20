@@ -32,7 +32,7 @@ function Cube(props) {
 
 const Hero: React.FC = () => {
   return (
-    <>
+    <Box w="100%" overflow="hidden">
       <Box h="100vh" />
       <Box h="50vh" w="100%" justify="center" direction="column" align="center">
         <Parallax x={[50, -50]}>
@@ -59,7 +59,7 @@ const Hero: React.FC = () => {
         <Cube position={[-1.2, 0, 0]} />
         <Cube position={[1.2, 0, 0]} />
       </Canvas>
-    </>
+    </Box>
   )
 }
 

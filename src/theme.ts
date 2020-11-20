@@ -19,9 +19,14 @@ const customTheme = extendTheme({
         color: 'white',
         fontSize: 'xl',
         lineHeight: 'tall',
-        overflowX: 'hidden',
         width: '100%',
         minHeight: '100vh',
+      },
+      '.enable-scroll': {
+        overflow: 'hidden auto',
+      },
+      '.lock-scroll': {
+        overflow: 'hidden !important',
       },
       '*': {
         scrollbarWidth: 'auto',
