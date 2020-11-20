@@ -7,7 +7,7 @@ const AlumnesList: React.FC = () => {
   return (
     <Box
       w="100vw"
-      minH="calc(100vh - 2rem)"
+      minH="calc(var(--vh, 1vh) * 100 - 2rem)"
       bg="magenta"
       position="relative"
       color="white"

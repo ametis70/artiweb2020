@@ -15,6 +15,7 @@ import { MouseEvent } from 'react'
 
 import { getAllStudents, getAllObras, login, getImage } from '../lib/api'
 import SEO from '../components/SEO'
+import { navBarHeight } from '../components/NavBar'
 
 interface IObra {
   id: number
@@ -71,7 +72,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     if (obra) {
       return (
-        <Box key={obra.slug} flex="1 1 0" overflow="hidden auto" h="100%" p="2rem">
+        <Box key={obra.slug} flex="1 1 0" p="2rem">
           <Stack maxW="840px" m="0 auto" spacing="1rem">
             <Image
               src={obra.banner ? obra.banner : 'https://source.unsplash.com/random/800x'}
@@ -101,7 +102,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     }
 
     return (
-      <Flex key="select_obra" w="100%" h="100%" align="center" justify="center">
+      <Flex key="select_obra" w="100%" align="center" justify="center">
         <Text> Seleccioná una obra a la izquierda </Text>
       </Flex>
     )
@@ -110,7 +111,11 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   return (
     <>
       <SEO title="Obras" />
-      <Flex h="calc(100vh - 100px - 1rem)" mt="1rem" position="relative">
+      <Flex
+        mt="1rem"
+        position="relative"
+        minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
+      >
         <Box flex="0 0 400px" />
         <Stack
           as={UnorderedList}
@@ -120,6 +125,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           h="100%"
           overflow="hidden auto"
           direction="column"
+          py="2rem"
         >
           {students.map((student, index) => (
             <ListItem key={student.obra_url}>
@@ -141,8 +147,8 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
                     {index !== students.length - 1 ? (
                       <Box
                         position="absolute"
+                        h="150%"
                         w="10px"
-                        h="calc(100%)"
                         bg="gray.400"
                         zIndex="-1"
                         top="50%"

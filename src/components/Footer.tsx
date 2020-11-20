@@ -5,7 +5,7 @@ import SocialNetworkIcon from './SocialNetworkIcon'
 const Footer: React.FC = () => {
   return (
     <Box w="100%" bg="white" py="4rem">
-      <Flex maxW="1170px" m="0 auto">
+      <Flex maxW="1170px" m="0 auto" px="2rem">
         <Image src="/images/footer.svg" />
         <Spacer />
         <Stack color="black" direction="row" spacing="1rem">

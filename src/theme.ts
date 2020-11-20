@@ -1,8 +1,10 @@
 import { extendTheme } from '@chakra-ui/react'
 
+const green = '#99ff00'
+
 const customTheme = extendTheme({
   colors: {
-    green: '#99FF00',
+    green,
     magenta: '#9800BF',
   },
   fonts: {
@@ -20,6 +22,22 @@ const customTheme = extendTheme({
         overflowX: 'hidden',
         width: '100%',
         minHeight: '100vh',
+      },
+      '*': {
+        scrollbarWidth: 'auto',
+        scrollbarColor: `${green} black`,
+      },
+
+      '*::-webkit-scrollbar': {
+        width: '20px',
+      },
+      '*::-webkit-scrollbar-track': {
+        background: 'orange',
+      },
+      '*::-webkit-scrollbar-thumb': {
+        backgroundColor: 'green',
+        borderRadius: '20px',
+        border: '5px solid black',
       },
     },
   },

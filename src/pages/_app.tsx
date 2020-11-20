@@ -1,4 +1,5 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { ChakraProvider, Box } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import NavBar from '../components/NavBar'
 import { ParallaxProvider } from 'react-scroll-parallax'
@@ -12,11 +13,27 @@ import '../styles/typeface-futura.css'
 import theme from '../theme'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+  useEffect(() => {
+    const setDocHeight = () => {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight / 100}px`)
+    }
+
+    setDocHeight()
+    window.addEventListener('resize', function () {
+      setDocHeight()
+    })
+    window.addEventListener('orientationchange', function () {
+      setDocHeight()
+    })
+  }, [])
+
   return (
     <ChakraProvider theme={theme} resetCSS>
       <ParallaxProvider>
-        <NavBar />
-        <Component {...pageProps} />
+        <Box minH="calc(var(--vh, 1vh) * 100)">
+          <NavBar />
+          <Component {...pageProps} />
+        </Box>
         <Footer />
       </ParallaxProvider>
     </ChakraProvider>
