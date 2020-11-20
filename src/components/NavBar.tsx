@@ -69,8 +69,11 @@ const NavBar: React.FC = () => {
       (path) =>
         router.pathname === '/' ||
         router.pathname.substring(1) === path.path.substring(1),
-    ).name
-    if (title) return title
+    )
+
+    if (title) {
+      return title.name
+    }
     return null
   }
 
@@ -79,7 +82,7 @@ const NavBar: React.FC = () => {
       <Flex w="100%" h={navBarHeight} align-items="center">
         <Link href="/">
           <Image
-            src={require('../images/logo.svg')}
+            src="/images/logo.svg"
             h="100%"
             p="0.5rem"
             ml="2rem"
