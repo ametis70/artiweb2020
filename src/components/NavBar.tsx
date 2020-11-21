@@ -196,6 +196,7 @@ const NavBar: React.FC = () => {
                               color="magenta"
                               fontWeight="bold"
                               position="relative"
+                              textDecoration="none !important"
                               sx={{
                                 '&:hover': {
                                   '& div': {

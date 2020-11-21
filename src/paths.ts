@@ -17,10 +17,6 @@ const paths: Array<Path> = [
     path: '/alumnes',
   },
   {
-    name: 'Tesis invitadas',
-    path: '/invitades',
-  },
-  {
     name: 'Obras',
     path: '/obras',
   },
