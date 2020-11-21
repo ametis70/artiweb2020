@@ -190,7 +190,7 @@ const NavBar: React.FC = () => {
                           key={path.path}
                           onClick={() => closeNav()}
                         >
-                          <Link href={path.path}>
+                          <Link href={path.path} passHref>
                             <ChakraLink
                               fontSize="5xl"
                               color="magenta"

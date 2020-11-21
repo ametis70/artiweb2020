@@ -1,8 +1,9 @@
-import { Box, Flex, Link, List, ListItem } from '@chakra-ui/react'
+import { Box, Flex, Link as ChakraLink, List, ListItem } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 import { AlumnesProps } from '../pages/alumnes'
+import { navBarHeight } from './NavBar'
 
 const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
   const router = useRouter()
@@ -16,7 +17,6 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
   return (
     <Box
       w="100vw"
-      minH="calc(var(--vh, 1vh) * 100 - 2rem)"
       bg="magenta"
       position="relative"
       color="white"
@@ -61,13 +61,22 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
           transform="translate(0, -100%) rotate(-35deg)"
         />
       </Box>
-      <Flex align="center" h="100vh" px="4rem" position="relative" zIndex="1">
+      <Flex
+        align="center"
+        minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
+        px="4rem"
+        position="relative"
+        zIndex="1"
+      >
         <List fontSize="3xl" fontWeight={700}>
           {students.map((student) => (
             <ListItem key={student.slug}>
-              <Link onClick={(e) => handleClick(e, student.slug)}>
+              <ChakraLink
+                href={`/alumnes?alumne=${student.slug}`}
+                onClick={(e) => handleClick(e, student.slug)}
+              >
                 {student.full_name}
-              </Link>
+              </ChakraLink>
             </ListItem>
           ))}
         </List>

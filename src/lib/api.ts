@@ -55,7 +55,7 @@ export async function getAllStudents() {
   return client.getUsers({ filter: { role: { eq: role } } })
 }
 
-export interface StudentWithObra {
+export interface IStudentWithObra {
   slug: string
   obra_url: string
   id: number
@@ -67,7 +67,7 @@ export interface StudentWithObra {
 
 export async function getAllStudentsWithObra() {
   const students = await getAllStudents()
-  const studentsWithObra: StudentWithObra[] = students.data.map((student) => {
+  const studentsWithObra: IStudentWithObra[] = students.data.map((student) => {
     const { first_name, last_name, avatar, id } = student
     const full_name = `${first_name} ${last_name}`
     const slug = student.last_name.toLowerCase().replace(' ', '_')
@@ -86,8 +86,15 @@ export async function getAllStudentsWithObra() {
   return studentsWithObra
 }
 
+export interface IBio {
+  id: number
+  user: number
+  texto: string
+  carrera: 'multimedia' | 'musica_popular'
+}
+
 export async function getAllBios() {
-  return client.getItems('biografias')
+  return client.getItems<IBio[]>('biografias')
 }
 
 interface IGeneralInfo {

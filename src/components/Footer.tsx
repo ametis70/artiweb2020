@@ -16,12 +16,12 @@ const Footer: React.FC = () => {
           </Text>
           <SocialNetworkIcon
             siteName="Facebook"
-            link="https://facebook.com"
+            link="https://www.facebook.com/festival.de.artimanas"
             icon={<FaFacebookF />}
           />
           <SocialNetworkIcon
             siteName="Instagram"
-            link="https://instagram.com"
+            link="https://www.instagram.com/festivalartimanas/"
             icon={<FaInstagram />}
           />
         </Stack>

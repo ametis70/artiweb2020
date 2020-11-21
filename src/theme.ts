@@ -16,6 +16,9 @@ const customTheme = extendTheme({
       '.headroom': {
         zIndex: '99 !important',
       },
+      a: {
+        textDecoration: 'none !important',
+      },
       'html, body': {
         fontFamily: 'Futura PT, sans-serif',
         bg: 'black',

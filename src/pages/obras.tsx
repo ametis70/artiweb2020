@@ -15,13 +15,7 @@ import ReactMarkdown from 'react-markdown'
 
 import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
-import {
-  getAllObras,
-  getAllStudents,
-  getAllStudentsWithObra,
-  getImage,
-  login,
-} from '../lib/api'
+import { getAllObras, getAllStudentsWithObra, getImage, login } from '../lib/api'
 
 //const { serverRuntimeConfig } = getConfig()
 
