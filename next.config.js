@@ -5,14 +5,21 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 // const withCSS = require('@zeit/next-css')
 
-module.exports = withPlugins([
-  [withBundleAnalyzer({})],
+module.exports = withPlugins(
   [
-    withSourceMaps({
-      webpack(config) {
-        return config
-      },
-    }),
+    [withBundleAnalyzer({})],
+    [
+      withSourceMaps({
+        webpack(config) {
+          return config
+        },
+      }),
+    ],
+    // [withCSS({ cssModules: true })],
   ],
-  // [withCSS({ cssModules: true })],
-])
+  {
+    serverRuntimeConfig: {
+      PROJECT_ROOT: __dirname,
+    },
+  },
+)

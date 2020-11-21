@@ -10,11 +10,14 @@ import {
   UnorderedList,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
+import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
 
 import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
 import { getAllObras, getAllStudents, getImage, login } from '../lib/api'
+
+const { serverRuntimeConfig } = getConfig()
 
 interface IObra {
   id: number
@@ -180,7 +183,11 @@ export async function getStaticProps() {
   await login()
   const obras = await getAllObras()
   const students = await getAllStudents()
-  console.log(obras)
+
+  //const path = require('path')
+  //const fs = require('fs')
+  //fs.mkdirSync(path.join(__dirname, './algo'))
+  console.log(serverRuntimeConfig.PROJECT_ROOT)
 
   const studentsFiltered = students.data.map((student) => {
     const { first_name, last_name, avatar, id } = student
