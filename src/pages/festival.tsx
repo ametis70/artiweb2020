@@ -1,9 +1,10 @@
-import { Box, Flex, Heading, HStack, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { Textfit } from 'react-textfit'
 
 import Container from '../components/Container'
 import SEO from '../components/SEO'
+import { getGeneralInfo, login } from '../lib/api'
 
 const profesores: Array<string> = [
   'Federico Joselevich Puiggrós',
@@ -11,7 +12,15 @@ const profesores: Array<string> = [
   'Nicolas Mata Lastra',
 ]
 
-const Festival: React.FC = () => {
+type FestivalProps = {
+  generalInfo: {
+    texto_descripcion_columna_1: string
+    texto_descripcion_columna_2: string
+  }
+}
+
+const Festival: React.FC<FestivalProps> = ({ generalInfo }) => {
+  const { texto_descripcion_columna_1, texto_descripcion_columna_2 } = generalInfo
   return (
     <>
       <SEO title="Festival" />
@@ -38,18 +47,10 @@ const Festival: React.FC = () => {
             padding="1rem"
           >
             <Text flex="0 0 calc(33.33% - 2rem)" textAlign="justify">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus
-              sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus
-              dolor purus non enim praesent elementum facilisis leo, vel fringilla est
-              ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis
-              scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis
+              {texto_descripcion_columna_1}
             </Text>
             <Text flex="0 0 calc(33.33% - 2rem)" textAlign="justify">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus
-              sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus
-              dolor purus non enim praesent elementum facilisis leo, vel fringilla est
-              ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis
-              scelerisque fermentum dui faucibus in ornare quam viverra orci sagittis
+              {texto_descripcion_columna_2}
             </Text>
             <Flex
               direction="column"
@@ -87,6 +88,14 @@ const Festival: React.FC = () => {
       </Flex>
     </>
   )
+}
+
+export async function getStaticProps() {
+  await login()
+  const generalInfo = await getGeneralInfo()
+  console.log(generalInfo)
+
+  return { props: { generalInfo: generalInfo.data[0] } }
 }
 
 export default Festival

@@ -45,8 +45,13 @@ export async function getAllBios() {
   return client.getItems('biografias')
 }
 
+interface IGeneralInfo {
+  texto_descripcion_columna_1: string
+  texto_descripcion_columna_2: string
+}
+
 export async function getGeneralInfo() {
-  return client.getItems('general')
+  return client.getItems<IGeneralInfo[]>('general')
 }
 
 export async function getImage(id: number) {
