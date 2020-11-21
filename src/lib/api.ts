@@ -1,12 +1,13 @@
 import DirectusSDK from '@directus/sdk-js'
 import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
+import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
 
 const studentsRole = 'Alumn@'
 const teachersRole = 'Docente'
 
 const client = new DirectusSDK({
   mode: 'jwt',
-  project: '-',
+  project: '_',
   url: process.env.DIRECTUS_HOST,
 })
 
@@ -18,7 +19,9 @@ export async function login() {
 }
 
 export async function getRoleIdByName(roleName: string) {
-  const role = await client.getRoles({ filter: { name: { eq: roleName } } })
+  const role = ((await client.getRoles({
+    filter: { name: { eq: roleName } },
+  })) as unknown) as IRoleResponse
   return role.data[0].id
 }
 
@@ -32,8 +35,19 @@ export async function getAllTeachers() {
   return client.getUsers({ filter: { role: { eq: role } } })
 }
 
+interface IObra {
+  id: number
+  titulo: string
+  descripcion: string
+  user: number
+  tipo_contenido_personalizado: 'external' | 'video' | 'download'
+  link_contenido_personalizado: string
+  ayuda_contenido_personalizado: string
+  banner: number
+}
+
 export async function getAllObras() {
-  return client.getItems('obras')
+  return client.getItems<IObra[]>('obras')
 }
 
 export async function getObraByUserId(id: number) {
@@ -54,8 +68,14 @@ export async function getGeneralInfo() {
   return client.getItems<IGeneralInfo[]>('general')
 }
 
+interface IFileWithData extends IFile {
+  data: {
+    full_url: string
+  }
+}
+
 export async function getImage(id: number) {
-  const images = await client.getFiles()
+  const images = ((await client.getFiles()) as unknown) as { data: Array<IFileWithData> }
   return images.data.find((file) => file.id === id)
 }
 

@@ -1,21 +1,20 @@
-import { useRouter } from 'next/router'
 import {
-  Text,
-  Heading,
   Box,
-  Stack,
   Flex,
-  UnorderedList,
-  ListItem,
-  Link,
+  Heading,
   Image,
+  Link,
+  ListItem,
+  Stack,
+  Text,
+  UnorderedList,
 } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
-import { MouseEvent } from 'react'
 
-import { getAllStudents, getAllObras, login, getImage } from '../lib/api'
-import SEO from '../components/SEO'
 import { navBarHeight } from '../components/NavBar'
+import SEO from '../components/SEO'
+import { getAllObras, getAllStudents, getImage, login } from '../lib/api'
 
 interface IObra {
   id: number
@@ -47,7 +46,7 @@ type ObrasPageProps = {
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   const router = useRouter()
 
-  const handleClick = (e: MouseEvent<HTMLAnchorElement, MouseEvent>, to: string) => {
+  const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
     e.preventDefault()
     router.push(to, undefined, { shallow: true })
   }
@@ -181,6 +180,7 @@ export async function getStaticProps() {
   await login()
   const obras = await getAllObras()
   const students = await getAllStudents()
+  console.log(obras)
 
   const studentsFiltered = students.data.map((student) => {
     const { first_name, last_name, avatar, id } = student

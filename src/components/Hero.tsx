@@ -1,28 +1,29 @@
-import { Suspense, useRef, useState } from 'react'
-import { OrbitControls } from '@react-three/drei'
-import { Canvas, useFrame } from 'react-three-fiber'
+import { Box, Heading } from '@chakra-ui/react'
+import { useRef, useState } from 'react'
 import { Parallax } from 'react-scroll-parallax'
-import { Heading, Flex, Box } from '@chakra-ui/react'
+import { Canvas, useFrame } from 'react-three-fiber'
+import { Mesh } from 'three'
 
-function Cube(props) {
-  // This reference will give us direct access to the mesh
-  const mesh = useRef()
+function Cube(props: JSX.IntrinsicElements['mesh']) {
+  const mesh = useRef<Mesh>(null)
 
-  // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
 
-  // Rotate mesh every frame, this is outside of React without overhead
-  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01))
+  useFrame(() => {
+    if (mesh.current !== undefined) {
+      mesh.current.rotation.x = mesh.current.rotation.y += 0.01
+    }
+  })
 
   return (
     <mesh
       {...props}
       ref={mesh}
       scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      onClick={(e) => setActive(!active)}
-      onPointerOver={(e) => setHover(true)}
-      onPointerOut={(e) => setHover(false)}
+      onClick={() => setActive(!active)}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
     >
       <boxBufferGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />

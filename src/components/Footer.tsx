@@ -1,5 +1,6 @@
-import { Box, Flex, Spacer, Image, Stack, Text } from '@chakra-ui/react'
-import { FaInstagram, FaFacebookF } from 'react-icons/fa'
+import { Box, Flex, Image, Spacer, Stack, Text } from '@chakra-ui/react'
+import { FaFacebookF, FaInstagram } from 'react-icons/fa'
+
 import SocialNetworkIcon from './SocialNetworkIcon'
 
 const Footer: React.FC = () => {

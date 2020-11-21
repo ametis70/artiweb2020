@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
-import { ChakraProvider, Box } from '@chakra-ui/react'
+import { Box, ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
-import NavBar from '../components/NavBar'
+import { useEffect } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
+
 import Footer from '../components/Footer'
+import NavBar from '../components/NavBar'
 
 // disable FitText warning
 console.warn = () => undefined

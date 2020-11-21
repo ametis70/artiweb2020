@@ -18,7 +18,7 @@ module.exports = {
     amd: true,
     node: true,
   },
-  plugins: ['prettier'],
+  plugins: ['prettier', 'simple-import-sort'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -32,8 +32,10 @@ module.exports = {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'simple-import-sort/sort': 'error',
+    'sort-imports': 'off',
+    'import/order': 'off',
     'jsx-a11y/anchor-is-valid': [
       'error',
       {

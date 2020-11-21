@@ -3,17 +3,16 @@ import {
   Flex,
   IconButton,
   Image,
+  Link as ChakraLink,
   Spacer,
   Text,
-  Link as ChakraLink,
 } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-
-import Headroom from 'react-headroom'
 import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
+import Headroom from 'react-headroom'
+import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 
 import paths from '../paths'
 
@@ -197,10 +196,11 @@ const NavBar: React.FC = () => {
                               color="magenta"
                               fontWeight="bold"
                               position="relative"
-                              _hover={{
-                                // @ts-ignore
-                                '& div': {
-                                  opacity: current ? 1 : 0.5,
+                              sx={{
+                                '&:hover': {
+                                  '& div': {
+                                    opacity: current ? 1 : 0.5,
+                                  },
                                 },
                               }}
                             >

@@ -1,6 +1,5 @@
-import SEO from '../components/SEO'
 import Hero from '../components/Hero'
-import dynamic from 'next/dynamic'
+import SEO from '../components/SEO'
 
 const Home: React.FC = () => {
   return (
@@ -13,7 +12,7 @@ const Home: React.FC = () => {
 
 export default Home
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   return {
     props: {}, // will be passed to the page component as props
   }
