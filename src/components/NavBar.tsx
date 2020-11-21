@@ -13,6 +13,9 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Headroom from 'react-headroom'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
 
 import paths from '../paths'
 
@@ -115,7 +118,7 @@ const NavBar: React.FC = () => {
         >
           <Link href="/">
             <Image
-              src="/images/logo.svg"
+              src={`${publicRuntimeConfig.basePath}/images/logo.svg`}
               h="100%"
               p="0.5rem"
               ml="2rem"

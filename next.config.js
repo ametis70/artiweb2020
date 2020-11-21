@@ -5,6 +5,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 // const withCSS = require('@zeit/next-css')
 
+const basePath = '/artimanias/2020'
+
 module.exports = withPlugins(
   [
     [withBundleAnalyzer({})],
@@ -18,8 +20,12 @@ module.exports = withPlugins(
     // [withCSS({ cssModules: true })],
   ],
   {
+    publicRuntimeConfig: {
+      basePath,
+    },
     serverRuntimeConfig: {
       PROJECT_ROOT: __dirname,
     },
+    basePath,
   },
 )
