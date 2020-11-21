@@ -1,9 +1,18 @@
-import { Box, Flex, List, ListItem } from '@chakra-ui/react'
+import { Box, Flex, Link, List, ListItem } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import React from 'react'
 
-import students from '../students'
+import { AlumnesProps } from '../pages/alumnes'
 
-const AlumnesList: React.FC = () => {
+const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
+  const router = useRouter()
+
+  const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
+    e.preventDefault()
+    router.push(`/alumnes?alumne=${to}`, undefined, { shallow: true })
+    document.querySelector(`#${to}`).scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <Box
       w="100vw"
@@ -14,7 +23,14 @@ const AlumnesList: React.FC = () => {
       overflow="hidden"
       py="2rem"
     >
-      <Box position="absolute" w="100%" h="100%" opacity="0.1">
+      <Box
+        position="absolute"
+        w="100%"
+        h="100%"
+        opacity="0.1"
+        transform="translateY(-100%)"
+        zIndex="0"
+      >
         <Box
           position="absolute"
           borderRadius="50%"
@@ -45,10 +61,14 @@ const AlumnesList: React.FC = () => {
           transform="translate(0, -100%) rotate(-35deg)"
         />
       </Box>
-      <Flex align="center" minH="100vh" px="4rem">
+      <Flex align="center" h="100vh" px="4rem" position="relative" zIndex="1">
         <List fontSize="3xl" fontWeight={700}>
           {students.map((student) => (
-            <ListItem key={student}>{student} </ListItem>
+            <ListItem key={student.slug}>
+              <Link onClick={(e) => handleClick(e, student.slug)}>
+                {student.full_name}
+              </Link>
+            </ListItem>
           ))}
         </List>
       </Flex>

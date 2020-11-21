@@ -18,23 +18,6 @@ export async function login() {
   })
 }
 
-export async function getRoleIdByName(roleName: string) {
-  const role = ((await client.getRoles({
-    filter: { name: { eq: roleName } },
-  })) as unknown) as IRoleResponse
-  return role.data[0].id
-}
-
-export async function getAllStudents() {
-  const role = await getRoleIdByName(studentsRole)
-  return client.getUsers({ filter: { role: { eq: role } } })
-}
-
-export async function getAllTeachers() {
-  const role = await getRoleIdByName(teachersRole)
-  return client.getUsers({ filter: { role: { eq: role } } })
-}
-
 interface IObra {
   id: number
   titulo: string
@@ -53,6 +36,54 @@ export async function getAllObras() {
 export async function getObraByUserId(id: number) {
   const allObras = await getAllObras()
   return allObras.data.find((item) => item.user === id)
+}
+
+export async function getRoleIdByName(roleName: string) {
+  const role = ((await client.getRoles({
+    filter: { name: { eq: roleName } },
+  })) as unknown) as IRoleResponse
+  return role.data[0].id
+}
+
+export async function getAllTeachers() {
+  const role = await getRoleIdByName(teachersRole)
+  return client.getUsers({ filter: { role: { eq: role } } })
+}
+
+export async function getAllStudents() {
+  const role = await getRoleIdByName(studentsRole)
+  return client.getUsers({ filter: { role: { eq: role } } })
+}
+
+export interface StudentWithObra {
+  slug: string
+  obra_url: string
+  id: number
+  first_name: string
+  last_name: string
+  full_name: string
+  avatar: number
+}
+
+export async function getAllStudentsWithObra() {
+  const students = await getAllStudents()
+  const studentsWithObra: StudentWithObra[] = students.data.map((student) => {
+    const { first_name, last_name, avatar, id } = student
+    const full_name = `${first_name} ${last_name}`
+    const slug = student.last_name.toLowerCase().replace(' ', '_')
+    const obra_url = `/obras?obra=${slug}`
+
+    return {
+      id,
+      first_name,
+      last_name,
+      full_name,
+      slug,
+      obra_url,
+      avatar,
+    }
+  })
+  return studentsWithObra
 }
 
 export async function getAllBios() {

@@ -13,6 +13,9 @@ const customTheme = extendTheme({
   },
   styles: {
     global: {
+      '.headroom': {
+        zIndex: '99 !important',
+      },
       'html, body': {
         fontFamily: 'Futura PT, sans-serif',
         bg: 'black',

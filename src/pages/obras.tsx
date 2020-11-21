@@ -10,14 +10,20 @@ import {
   UnorderedList,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import getConfig from 'next/config'
+// import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
 
 import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
-import { getAllObras, getAllStudents, getImage, login } from '../lib/api'
+import {
+  getAllObras,
+  getAllStudents,
+  getAllStudentsWithObra,
+  getImage,
+  login,
+} from '../lib/api'
 
-const { serverRuntimeConfig } = getConfig()
+//const { serverRuntimeConfig } = getConfig()
 
 interface IObra {
   id: number
@@ -84,7 +90,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
             />
             <Heading> {obra.titulo} </Heading>
             <Text as={ReactMarkdown} source={obra.descripcion} />
-            <Link href={obra.link_contenido_personalizado}>
+            <Link href={obra.link_contenido_personalizado} isExternal>
               <Flex w="100%" py="1rem" bg="magenta" justify="center" mb="1rem">
                 <Text textTransform="uppercase" fontWeight="bold">
                   {getLinkText(obra)}
@@ -182,29 +188,11 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 export async function getStaticProps() {
   await login()
   const obras = await getAllObras()
-  const students = await getAllStudents()
+  const students = await getAllStudentsWithObra()
 
   //const path = require('path')
   //const fs = require('fs')
   //fs.mkdirSync(path.join(__dirname, './algo'))
-  console.log(serverRuntimeConfig.PROJECT_ROOT)
-
-  const studentsFiltered = students.data.map((student) => {
-    const { first_name, last_name, avatar, id } = student
-    const full_name = `${first_name} ${last_name}`
-    const slug = student.last_name.toLowerCase().replace(' ', '_')
-    const obra_url = `/obras?obra=${slug}`
-
-    return {
-      id,
-      first_name,
-      last_name,
-      full_name,
-      slug,
-      obra_url,
-      avatar,
-    }
-  })
 
   const obrasWithSlug = await Promise.all(
     obras.data.map(async (obra) => {
@@ -213,12 +201,12 @@ export async function getStaticProps() {
         const imageData = await getImage(obra.banner)
         banner = imageData.data.full_url
       }
-      const { slug } = studentsFiltered.find((student) => obra.user === student.id)
+      const { slug } = students.find((student) => obra.user === student.id)
       return { ...obra, slug, banner }
     }),
   )
 
-  return { props: { obras: obrasWithSlug, students: studentsFiltered } }
+  return { props: { obras: obrasWithSlug, students } }
 }
 
 export default Obras

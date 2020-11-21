@@ -93,7 +93,6 @@ const Festival: React.FC<FestivalProps> = ({ generalInfo }) => {
 export async function getStaticProps() {
   await login()
   const generalInfo = await getGeneralInfo()
-  console.log(generalInfo)
 
   return { props: { generalInfo: generalInfo.data[0] } }
 }
