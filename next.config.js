@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 // const withCSS = require('@zeit/next-css')
 
-const basePath = '/artimanias/2020'
+const basePath = process.env.NODE_ENV === 'development' ? '' : '/artimanias/2020'
 
 module.exports = withPlugins(
   [
