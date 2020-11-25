@@ -3,17 +3,10 @@ import { Box } from '@chakra-ui/react'
 import AlumnesBios from '../components/AlumnesBios'
 import AlumnesList from '../components/AlumnesList'
 import SEO from '../components/SEO'
-import {
-  getAllBios,
-  getAllStudentsWithObra,
-  IBio,
-  IStudentWithObra,
-  login,
-} from '../lib/api'
+import { getAllParticipantsExtended, IParticipantExtended, login } from '../lib/api'
 
 export type AlumnesProps = {
-  students: IStudentWithObra[]
-  bios?: IBio[]
+  students: IParticipantExtended[]
 }
 
 const Alumnes: React.FC<AlumnesProps> = ({ students, bios }) => {
@@ -22,7 +15,7 @@ const Alumnes: React.FC<AlumnesProps> = ({ students, bios }) => {
       <SEO title="Alumnes" />
       <Box w="100%" overflow="hidden">
         <AlumnesList students={students} />
-        <AlumnesBios students={students} bios={bios} />
+        <AlumnesBios students={students} />
       </Box>
     </>
   )
@@ -30,10 +23,9 @@ const Alumnes: React.FC<AlumnesProps> = ({ students, bios }) => {
 
 export async function getStaticProps() {
   await login()
-  const students = await getAllStudentsWithObra()
-  const bios = await getAllBios()
+  const participants = await getAllParticipantsExtended()
 
-  return { props: { students, bios: bios.data } }
+  return { props: { students: participants } }
 }
 
 export default Alumnes

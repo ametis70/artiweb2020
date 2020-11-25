@@ -15,35 +15,24 @@ import ReactMarkdown from 'react-markdown'
 
 import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
-import { getAllObras, getAllStudentsWithObra, getImage, login } from '../lib/api'
+import {
+  getAllObras,
+  getAllParticipantsExtended,
+  getImage,
+  login,
+  IObra,
+  IParticipantExtended,
+} from '../lib/api'
 
 //const { serverRuntimeConfig } = getConfig()
 
-interface IObra {
-  id: number
-  titulo: string
-  user: number
-  descripcion: string
-  tipo_contenido_personalizado: 'external' | 'download' | 'video'
-  link_contenido_personalizado: string
-  ayuda_contenido_personalizado: string
-  banner: string | null
-  slug: string
-}
-
-interface IStudents {
-  id: number
-  first_name: string
-  last_name: string
-  full_name: string
-  obra_url: string
-  avatar: string | null
+interface IObraWithSlug extends IObra {
   slug: string
 }
 
 type ObrasPageProps = {
-  obras: Array<IObra>
-  students: Array<IStudents>
+  obras: IObraWithSlug[]
+  students: IParticipantExtended[]
 }
 
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
@@ -62,7 +51,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       case 'video':
         return 'Ver Video'
 
-      case 'download':
+      case 'downloadable':
         return 'Continuar a descarga'
 
       default:
@@ -70,14 +59,29 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     }
   }
   const Content: React.FC = () => {
-    const obra = obras.find((obra) => obra.slug === router.query.obra)
+    const selectedStudent = students.find((student) => {
+      if (!student.obra) {
+        return false
+      }
+      return student.slug === (router.query.obra as string)
+    })
+
+    if (!selectedStudent) {
+      return null
+    }
+
+    const { obra } = selectedStudent
 
     if (obra) {
       return (
-        <Box key={obra.slug} flex="1 1 0" p="2rem">
+        <Box key={selectedStudent.slug} flex="1 1 0" p="2rem">
           <Stack maxW="840px" m="0 auto" spacing="1rem">
             <Image
-              src={obra.banner ? obra.banner : 'https://source.unsplash.com/random/800x'}
+              src={
+                obra.banner
+                  ? obra.banner.toString()
+                  : 'https://source.unsplash.com/random/800x'
+              }
               alt={`Imagen de banner de ${obra.titulo} `}
               maxH="300px"
               objectFit={obra.banner ? 'contain' : 'cover'}
@@ -181,26 +185,13 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
 export async function getStaticProps() {
   await login()
-  const obras = await getAllObras()
-  const students = await getAllStudentsWithObra()
+  const students = await getAllParticipantsExtended()
 
   //const path = require('path')
   //const fs = require('fs')
   //fs.mkdirSync(path.join(__dirname, './algo'))
 
-  const obrasWithSlug = await Promise.all(
-    obras.data.map(async (obra) => {
-      let banner = null
-      if (obra.banner) {
-        const imageData = await getImage(obra.banner)
-        banner = imageData.data.full_url
-      }
-      const { slug } = students.find((student) => obra.user === student.id)
-      return { ...obra, slug, banner }
-    }),
-  )
-
-  return { props: { obras: obrasWithSlug, students } }
+  return { props: { students } }
 }
 
 export default Obras

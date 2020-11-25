@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import { AlumnesProps } from '../pages/alumnes'
 import Container from './Container'
 
-const AlumnesBios: React.FC<AlumnesProps> = ({ students, bios }) => {
+const AlumnesBios: React.FC<AlumnesProps> = ({ students }) => {
   const router = useRouter()
 
   const releaseFocus = () => {
@@ -48,23 +48,23 @@ const AlumnesBios: React.FC<AlumnesProps> = ({ students, bios }) => {
     <Container>
       <Flex direction="row" wrap="wrap" w="100%" pt="2rem">
         {students.map((student) => {
-          const bio = bios.find((b) => b.user == student.id)
-
           return (
             <Flex
               w="calc(33.33% - 2rem)"
               mx="1rem"
               direction="column"
               wrap="nowrap"
-              key={student.slug}
-              id={student.slug}
+              key={student.alumne_slug}
+              id={student.alumne_slug}
               pb="2rem"
               pt="2rem"
-              opacity={getOpacity(student.slug)}
+              opacity={getOpacity(student.alumne_slug)}
               transition="opacity 0.3s ease"
             >
               <CloseButton
-                visibility={router.query.alumne === student.slug ? 'visible' : 'hidden'}
+                visibility={
+                  router.query.alumne === student.alumne_slug ? 'visible' : 'hidden'
+                }
                 alignSelf="flex-end"
                 color="white"
                 size="lg"
@@ -83,8 +83,8 @@ const AlumnesBios: React.FC<AlumnesProps> = ({ students, bios }) => {
                 </Heading>
               </Flex>
               <Text pb="2rem">
-                {bio.texto
-                  ? bio.texto
+                {student.bio.texto
+                  ? student.bio.texto
                   : `Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus
                 sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus
                 dolor purus non enim praesent elementum facilisis leo, vel fringilla est

@@ -3,6 +3,7 @@ import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
 import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
 
 const studentsRole = 'Alumn@'
+const guestRole = 'Invitad@'
 const teachersRole = 'Docente'
 
 const client = new DirectusSDK({
@@ -18,15 +19,16 @@ export async function login() {
   })
 }
 
-interface IObra {
+export interface IObra {
   id: number
   titulo: string
   descripcion: string
   user: number
-  tipo_contenido_personalizado: 'external' | 'video' | 'download'
+  tipo_contenido_personalizado: 'external' | 'video' | 'downloadable'
   link_contenido_personalizado: string
   ayuda_contenido_personalizado: string
   banner: number
+  user2: number
 }
 
 export async function getAllObras() {
@@ -55,49 +57,78 @@ export async function getAllStudents() {
   return client.getUsers({ filter: { role: { eq: role } } })
 }
 
-export interface IStudentWithObra {
-  slug: string
-  obra_url: string
-  id: number
-  first_name: string
-  last_name: string
-  full_name: string
-  avatar: number
-}
-
-export async function getAllStudentsWithObra() {
-  const students = await getAllStudents()
-  const studentsWithObra: IStudentWithObra[] = students.data.map((student) => {
-    const { first_name, last_name, avatar, id } = student
-    const full_name = `${first_name} ${last_name}`
-    const slug = student.last_name.toLowerCase().replace(' ', '_')
-    const obra_url = `/obras?obra=${slug}`
-
-    return {
-      id,
-      first_name,
-      last_name,
-      full_name,
-      slug,
-      obra_url,
-      avatar,
-    }
-  })
-  return studentsWithObra
+export async function getAllGuests() {
+  const role = await getRoleIdByName(guestRole)
+  return client.getUsers({ filter: { role: { eq: role } } })
 }
 
 export interface IBio {
   id: number
   user: number
   texto: string
-  carrera: 'multimedia' | 'musica_popular'
+  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales'
 }
 
 export async function getAllBios() {
   return client.getItems<IBio[]>('biografias')
 }
 
-interface IGeneralInfo {
+export interface IParticipantExtended {
+  obra_slug: string
+  obra_url: string
+  alumne_url: string
+  alumne_slug: string
+  id: number
+  first_name: string
+  last_name: string
+  full_name: string
+  avatar: number
+  guest: boolean
+  bio: IBio
+  obra: IObra
+}
+
+export async function getAllParticipantsExtended() {
+  const students = await getAllStudents()
+  const guests = await getAllGuests()
+  const allBios = await getAllBios()
+  const allObras = await getAllObras()
+
+  const participants = [...students.data, ...guests.data]
+
+  const participantsExtended: IParticipantExtended[] = participants.map((person) => {
+    const { first_name, last_name, avatar, id } = person
+    const obra = allObras.data.find((o) => o.user === id || o.user2 === id)
+    const bio = allBios.data.find((b) => b.user === id)
+
+    let guest = bio.carrera !== 'multimedia' ? true : false
+
+    const full_name = `${first_name} ${last_name}`
+    const alumne_slug = last_name.toLowerCase().replace(/ /gi, '_')
+    const alumne_url = `/alumnes?alumne=${alumne_slug}`
+    const obra_slug = obra.titulo.toLowerCase().replace(/ /gi, '_')
+    const obra_url = `/obras?obra=${obra_slug}`
+
+    return {
+      id,
+      first_name,
+      last_name,
+      full_name,
+      alumne_slug,
+      alumne_url,
+      obra_slug,
+      obra_url,
+      avatar,
+      guest,
+      bio,
+      obra,
+    }
+  })
+
+  return participantsExtended
+}
+
+export interface IGeneralInfo {
   texto_descripcion_columna_1: string
   texto_descripcion_columna_2: string
 }
@@ -106,7 +137,7 @@ export async function getGeneralInfo() {
   return client.getItems<IGeneralInfo[]>('general')
 }
 
-interface IFileWithData extends IFile {
+export interface IFileWithData extends IFile {
   data: {
     full_url: string
   }

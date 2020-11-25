@@ -1,17 +1,47 @@
 import { Box, Flex, Link as ChakraLink, List, ListItem } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import React from 'react'
+import { useEffect } from 'react'
 
 import { AlumnesProps } from '../pages/alumnes'
 import { navBarHeight } from './NavBar'
+import { IParticipantExtended } from '../lib/api'
 
 const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
   const router = useRouter()
+
+  useEffect(() => {
+    if (router.query.alumne) {
+      const element = document.querySelector(`#{router.query.alumne}`)
+      if (element) {
+        element.scrollIntoView()
+      }
+    }
+  }, [])
 
   const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
     e.preventDefault()
     router.push(`/alumnes?alumne=${to}`, undefined, { shallow: true })
     document.querySelector(`#${to}`).scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const getCarrera = (student: IParticipantExtended): JSX.Element => {
+    let text = ''
+    switch (student.bio.carrera) {
+      case 'multimedia':
+        return null // Hide
+      // text = '— Lic. en Diseño Multimedial'
+      // break
+      case 'musica_popular':
+        text = '— Música Popular'
+        break
+      case 'artes_audiovisuales':
+        text = '— Artes Audiovisuales'
+        break
+      default:
+        return null
+    }
+
+    return <span style={{ opacity: 0.4, fontSize: '0.7em' }}> {text} </span>
   }
 
   return (
@@ -70,12 +100,12 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
       >
         <List fontSize="3xl" fontWeight={700}>
           {students.map((student) => (
-            <ListItem key={student.slug}>
+            <ListItem key={student.alumne_slug}>
               <ChakraLink
-                href={`/alumnes?alumne=${student.slug}`}
-                onClick={(e) => handleClick(e, student.slug)}
+                href={student.alumne_url}
+                onClick={(e) => handleClick(e, student.alumne_slug)}
               >
-                {student.full_name}
+                {student.full_name} {getCarrera(student)}
               </ChakraLink>
             </ListItem>
           ))}
