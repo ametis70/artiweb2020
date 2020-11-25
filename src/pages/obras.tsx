@@ -40,10 +40,10 @@ const StudentSidebarLink: React.FC<{
   current: boolean
   linkCallback: (e: any) => void
   lastItem: boolean
-  color: 'green' | 'magenta'
+  color?: 'green' | 'magenta'
 }> = ({ student, current, linkCallback, lastItem, color = 'magenta' }) => {
   return (
-    <ListItem mb="1.5rem">
+    <ListItem mb="1.5rem" id={student.alumne_slug}>
       <Link href={student.obra_url} onClick={linkCallback}>
         <Flex align="center">
           <Box
@@ -87,9 +87,17 @@ const StudentSidebarLink: React.FC<{
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   const router = useRouter()
 
-  const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
+  const handleClick = (
+    e: React.MouseEvent<Element, MouseEvent>,
+    to: string,
+    scrollId: string,
+  ) => {
     e.preventDefault()
     router.push(to, undefined, { shallow: true })
+
+    document
+      .querySelector(`#${scrollId}`)
+      .scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 
   const getLinkText = (obra: IObra): string => {
@@ -108,12 +116,9 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     }
   }
   const Content: React.FC = () => {
-    const selectedStudent = students.find((student) => {
-      if (!student.obra) {
-        return false
-      }
-      return student.obra_slug === (router.query.obra as string)
-    })
+    const selectedStudent = students.find(
+      (student) => student.obra && student.obra_slug === (router.query.obra as string),
+    )
 
     if (!selectedStudent) {
       return null
@@ -121,10 +126,15 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     const { obra } = selectedStudent
 
+    let secondUser
+    if (obra.user2) {
+      secondUser = students.find((student) => student.id === obra.user2)
+    }
+
     if (obra) {
       return (
         <Box key={selectedStudent.obra_slug} flex="1 1 0" p="2rem">
-          <Stack maxW="840px" m="0 auto" spacing="1rem">
+          <Stack maxW="840px" m="0 auto" spacing="2rem">
             <Image
               src={
                 obra.banner
@@ -135,10 +145,44 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
               maxH="300px"
               objectFit={obra.banner ? 'contain' : 'cover'}
             />
-            <Heading> {obra.titulo} </Heading>
-            <Text as={ReactMarkdown} source={obra.descripcion} />
+            <Box>
+              <Heading> {obra.titulo} </Heading>
+              <Text
+                as="small"
+                color="gray.500"
+                sx={{
+                  '& a': {
+                    color: 'gray.300',
+                  },
+                }}
+              >
+                Obra realizada por{' '}
+                <Link href={selectedStudent.alumne_url}>{selectedStudent.full_name}</Link>
+                {secondUser ? (
+                  <>
+                    {' '}
+                    y <Link href={secondUser.alumne_url}>{secondUser.full_name}</Link>
+                  </>
+                ) : null}
+              </Text>
+              {selectedStudent.guest ? (
+                <Text as="small" color="gray.500">
+                  {' '}
+                  — Obra invitada
+                </Text>
+              ) : null}
+            </Box>
+            <Text
+              as={ReactMarkdown}
+              source={obra.descripcion}
+              sx={{
+                '& p': {
+                  pb: '2rem',
+                },
+              }}
+            />
             <Link href={obra.link_contenido_personalizado} isExternal>
-              <Flex w="100%" py="1rem" bg="magenta" justify="center" mb="1rem">
+              <Flex w="100%" py="1rem" bg="magenta" justify="center">
                 <Text textTransform="uppercase" fontWeight="bold">
                   {getLinkText(obra)}
                 </Text>
@@ -147,9 +191,14 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
             <Text
               as={ReactMarkdown}
               source={obra.ayuda_contenido_personalizado}
-              opacity={0.52}
+              color="gray.500"
               fontSize="md"
               textAlign="center"
+              sx={{
+                '& a': {
+                  color: 'gray.300',
+                },
+              }}
             />
           </Stack>
         </Box>
@@ -174,22 +223,23 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
         position="relative"
         minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
       >
-        <Box flex="0 0 400px" />
         <Stack
-          as={UnorderedList}
+          id="students-list"
+          as="ul"
           w="400px"
-          position="absolute"
+          position="sticky"
           zIndex="0"
-          h="100%"
-          overflow="hidden auto"
           direction="column"
           py="2rem"
+          h={`calc(var(--vh, 1vh) * 100)`}
+          overflow="hidden scroll"
+          top="1px"
         >
           {subjectStudents.map((student, index) => (
             <StudentSidebarLink
-              key={student.obra_url}
+              key={student.alumne_slug}
               student={student}
-              linkCallback={(e) => handleClick(e, student.obra_url)}
+              linkCallback={(e) => handleClick(e, student.obra_url, student.alumne_slug)}
               current={router.query.obra === student.obra_slug}
               lastItem={index !== subjectStudents.length - 1}
             />
@@ -197,9 +247,9 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           <Box w="100%" pb="2em" />
           {guestStudents.map((student, index) => (
             <StudentSidebarLink
-              key={student.obra_url}
+              key={student.alumne_slug}
               student={student}
-              linkCallback={(e) => handleClick(e, student.obra_url)}
+              linkCallback={(e) => handleClick(e, student.obra_url, student.alumne_slug)}
               current={router.query.obra === student.obra_slug}
               lastItem={index !== guestStudents.length - 1}
               color="green"

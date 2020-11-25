@@ -38,7 +38,7 @@ const StudentBio: React.FC<{
       alignSelf="flex-end"
       color="white"
       size="lg"
-      onClick={() => releaseFocusCallback}
+      onClick={releaseFocusCallback}
     />
     <Flex direction="row" wrap="nowrap" align="flex-start" mb="2rem">
       <Box bg={color} borderRadius="50%" flex="0 0 30%" pt="30%" mr="1rem" />
