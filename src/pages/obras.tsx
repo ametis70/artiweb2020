@@ -35,6 +35,55 @@ type ObrasPageProps = {
   students: IParticipantExtended[]
 }
 
+const StudentSidebarLink: React.FC<{
+  student: IParticipantExtended
+  current: boolean
+  linkCallback: (e: any) => void
+  lastItem: boolean
+  color: 'green' | 'magenta'
+}> = ({ student, current, linkCallback, lastItem, color = 'magenta' }) => {
+  return (
+    <ListItem mb="1.5rem">
+      <Link href={student.obra_url} onClick={linkCallback}>
+        <Flex align="center">
+          <Box
+            bg={current ? color : 'gray.400'}
+            h="128px"
+            flex="0 0 128px"
+            borderRadius="50%"
+            display="inline-block"
+            position="relative"
+            overflow="visible"
+          >
+            {lastItem ? (
+              <Box
+                position="absolute"
+                h="150%"
+                w="10px"
+                bg="gray.400"
+                zIndex="-1"
+                top="50%"
+                left="50%"
+                transform="translateX(-50%)"
+              />
+            ) : null}
+          </Box>
+
+          <Text
+            textTransform="uppercase"
+            fontWeight="bold"
+            style={{ wordSpacing: 'calc(400px - 128px)' }}
+            lineHeight={1.1}
+            pl="1rem"
+          >
+            {student.full_name}
+          </Text>
+        </Flex>
+      </Link>
+    </ListItem>
+  )
+}
+
 const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
   const router = useRouter()
 
@@ -63,7 +112,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       if (!student.obra) {
         return false
       }
-      return student.slug === (router.query.obra as string)
+      return student.obra_slug === (router.query.obra as string)
     })
 
     if (!selectedStudent) {
@@ -74,7 +123,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     if (obra) {
       return (
-        <Box key={selectedStudent.slug} flex="1 1 0" p="2rem">
+        <Box key={selectedStudent.obra_slug} flex="1 1 0" p="2rem">
           <Stack maxW="840px" m="0 auto" spacing="1rem">
             <Image
               src={
@@ -114,6 +163,9 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     )
   }
 
+  const subjectStudents = students.filter((student) => !student.guest)
+  const guestStudents = students.filter((student) => student.guest)
+
   return (
     <>
       <SEO title="Obras" />
@@ -133,48 +185,25 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           direction="column"
           py="2rem"
         >
-          {students.map((student, index) => (
-            <ListItem key={student.obra_url} mb="1.5rem">
-              <Link
-                href={student.obra_url}
-                onClick={(e) => handleClick(e, student.obra_url)}
-              >
-                <Flex align="center">
-                  <Box
-                    bg={router.query.obra === student.slug ? 'green' : 'gray.400'}
-                    h="128px"
-                    flex="0 0 128px"
-                    borderRadius="50%"
-                    display="inline-block"
-                    position="relative"
-                    overflow="visible"
-                  >
-                    {index !== students.length - 1 ? (
-                      <Box
-                        position="absolute"
-                        h="150%"
-                        w="10px"
-                        bg="gray.400"
-                        zIndex="-1"
-                        top="50%"
-                        left="50%"
-                        transform="translateX(-50%)"
-                      />
-                    ) : null}
-                  </Box>
-
-                  <Text
-                    textTransform="uppercase"
-                    fontWeight="bold"
-                    style={{ wordSpacing: 'calc(400px - 128px)' }}
-                    lineHeight={1.1}
-                    pl="1rem"
-                  >
-                    {student.full_name}
-                  </Text>
-                </Flex>
-              </Link>
-            </ListItem>
+          {subjectStudents.map((student, index) => (
+            <StudentSidebarLink
+              key={student.obra_url}
+              student={student}
+              linkCallback={(e) => handleClick(e, student.obra_url)}
+              current={router.query.obra === student.obra_slug}
+              lastItem={index !== subjectStudents.length - 1}
+            />
+          ))}
+          <Box w="100%" pb="2em" />
+          {guestStudents.map((student, index) => (
+            <StudentSidebarLink
+              key={student.obra_url}
+              student={student}
+              linkCallback={(e) => handleClick(e, student.obra_url)}
+              current={router.query.obra === student.obra_slug}
+              lastItem={index !== guestStudents.length - 1}
+              color="green"
+            />
           ))}
         </Stack>
         <Content />

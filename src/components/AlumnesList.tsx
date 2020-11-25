@@ -44,6 +44,9 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
     return <span style={{ opacity: 0.4, fontSize: '0.7em' }}> {text} </span>
   }
 
+  const subjectStudents = students.filter((student) => !student.guest)
+  const guestStudents = students.filter((student) => student.guest)
+
   return (
     <Box
       w="100vw"
@@ -92,14 +95,28 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
         />
       </Box>
       <Flex
-        align="center"
+        justify="center"
         minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
         px="4rem"
         position="relative"
         zIndex="1"
+        direction="column"
       >
+        <List fontSize="3xl" fontWeight={700} pb="2em">
+          {subjectStudents.map((student) => (
+            <ListItem key={student.alumne_slug}>
+              <ChakraLink
+                href={student.alumne_url}
+                onClick={(e) => handleClick(e, student.alumne_slug)}
+              >
+                {student.full_name} {getCarrera(student)}
+              </ChakraLink>
+            </ListItem>
+          ))}
+        </List>
+
         <List fontSize="3xl" fontWeight={700}>
-          {students.map((student) => (
+          {guestStudents.map((student) => (
             <ListItem key={student.alumne_slug}>
               <ChakraLink
                 href={student.alumne_url}
