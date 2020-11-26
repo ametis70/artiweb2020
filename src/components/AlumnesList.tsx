@@ -12,7 +12,7 @@ const FloatingCircles: React.FC = () => {
   const circles = Array(15)
     .fill(null)
     .map((_, index) => {
-      const size = random(10, 40)
+      const size = random(5, 30)
       const parallaxMin = random(-150, 0)
       const parallaxMax = random(0, 150)
       const x = random(-10, 110)

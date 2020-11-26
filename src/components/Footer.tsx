@@ -21,16 +21,13 @@ const Footer: React.FC = () => {
         />
         <Spacer />
         <Stack
+          mx="auto"
           color="black"
           direction="row"
           spacing="1rem"
           pb={['3rem', '3rem', '0']}
           order={[-1, -1, 0]}
         >
-          <Text fontWeight="bold" lineHeight="1" fontSize="md" pr="1rem">
-            Seguinos <br /> en nuestras <br />
-            redes
-          </Text>
           <SocialNetworkIcon
             siteName="Facebook"
             link="https://www.facebook.com/festival.de.artimanas"

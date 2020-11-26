@@ -14,12 +14,12 @@ const SocialNetworkIcon: React.FC<SocialNetworkIconProps> = ({
     as={Link}
     size="lg"
     borderRadius="50%"
-    _hover={{ bg: 'white', color: 'green' }}
+    _hover={{ bg: 'white', color: 'magenta' }}
     borderWidth="2px"
     borderStyle="solid"
-    borderColor="green"
+    borderColor="magenta"
     fontSize="1.5em"
-    bg="green"
+    bg="magenta"
     color="white"
     isExternal
     href={link}
