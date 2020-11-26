@@ -1,4 +1,5 @@
 import {
+  Icon,
   Box,
   Flex,
   Heading,
@@ -7,16 +8,22 @@ import {
   ListItem,
   Stack,
   Text,
-  UnorderedList,
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 // import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
+import ReactPlayer from 'react-player'
+
+import { GrCirclePlay, GrDocumentPdf, GrBrush } from 'react-icons/gr'
 
 import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
 import {
-  getAllObras,
   getAllParticipantsExtended,
   getImage,
   login,
@@ -141,10 +148,12 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       secondUser = students.find((student) => student.id === obra.user2)
     }
 
-    if (obra) {
-      return (
-        <Box key={selectedStudent.obra_slug} flex="1 1 0" p="2rem">
-          <Stack maxW="840px" m="0 auto" spacing="2rem">
+    const width = '840px'
+
+    const ObraComponent = () => (
+      <Box key={selectedStudent.obra_slug} p="2rem" flex="1 0 0">
+        <Stack maxW={width} m="0 auto" spacing="2rem">
+          <Box w="100%" h="0" pb="37.5%" overflow="hidden">
             <Image
               src={
                 obra.banner
@@ -152,66 +161,129 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
                   : 'https://source.unsplash.com/random/800x'
               }
               alt={`Imagen de banner de ${obra.titulo} `}
-              maxH="300px"
-              objectFit={obra.banner ? 'contain' : 'cover'}
             />
-            <Box>
-              <Heading> {obra.titulo} </Heading>
-              <Text
-                as="small"
-                color="gray.500"
-                sx={{
-                  '& a': {
-                    color: 'gray.300',
-                  },
-                }}
-              >
-                Obra realizada por{' '}
-                <Link href={selectedStudent.alumne_url}>{selectedStudent.full_name}</Link>
-                {secondUser ? (
-                  <>
-                    {' '}
-                    y <Link href={secondUser.alumne_url}>{secondUser.full_name}</Link>
-                  </>
-                ) : null}
-              </Text>
-              {selectedStudent.guest ? (
-                <Text as="small" color="gray.500">
-                  {' '}
-                  — Obra invitada
-                </Text>
-              ) : null}
-            </Box>
+          </Box>
+          <Box>
+            <Heading> {obra.titulo} </Heading>
             <Text
-              as={ReactMarkdown}
-              source={obra.descripcion}
-              sx={{
-                '& p': {
-                  pb: '2rem',
-                },
-              }}
-            />
-            <Link href={obra.link_contenido_personalizado} isExternal>
-              <Flex w="100%" py="1rem" bg="magenta" justify="center">
-                <Text textTransform="uppercase" fontWeight="bold">
-                  {getLinkText(obra)}
-                </Text>
-              </Flex>
-            </Link>
-            <Text
-              as={ReactMarkdown}
-              source={obra.ayuda_contenido_personalizado}
+              as="small"
               color="gray.500"
-              fontSize="md"
-              textAlign="center"
               sx={{
                 '& a': {
                   color: 'gray.300',
                 },
               }}
-            />
-          </Stack>
-        </Box>
+            >
+              Obra realizada por{' '}
+              <Link href={selectedStudent.alumne_url}>{selectedStudent.full_name}</Link>
+              {secondUser ? (
+                <>
+                  {' '}
+                  y <Link href={secondUser.alumne_url}>{secondUser.full_name}</Link>
+                </>
+              ) : null}
+            </Text>
+            {selectedStudent.guest ? (
+              <Text as="small" color="gray.500">
+                {' '}
+                — Obra invitada
+              </Text>
+            ) : null}
+          </Box>
+          <Text
+            as={ReactMarkdown}
+            source={obra.descripcion}
+            sx={{
+              '& p': {
+                pb: '2rem',
+              },
+            }}
+          />
+          <Link href={obra.link_contenido_personalizado} isExternal>
+            <Flex w="100%" py="1rem" bg="magenta" justify="center">
+              <Text
+                textTransform="uppercase"
+                fontWeight="bold"
+                textAlign="center"
+                px="2rem"
+              >
+                {getLinkText(obra)}
+              </Text>
+            </Flex>
+          </Link>
+          <Text
+            as={ReactMarkdown}
+            source={obra.ayuda_contenido_personalizado}
+            color="gray.500"
+            fontSize="md"
+            textAlign="center"
+            sx={{
+              '& a': {
+                color: 'gray.300',
+              },
+            }}
+          />
+        </Stack>
+      </Box>
+    )
+
+    const tabProps = {
+      _selected: { color: 'white', bg: 'magenta', '& svg path': { stroke: 'white' } },
+      borderColor: 'magenta',
+      color: 'gray.500',
+      sx: { '& svg': { mr: '0.5rem' }, '& svg path': { stroke: 'gray.500' } },
+    }
+
+    if (obra) {
+      return selectedStudent.guest ? (
+        <ObraComponent />
+      ) : (
+        <Tabs flex="1 0 0" isFitted isLazy>
+          <TabList maxW={width} m="0 auto">
+            <Tab {...tabProps}>
+              <Icon as={GrBrush} />
+              Obra
+            </Tab>
+            <Tab {...tabProps}>
+              <Icon as={GrDocumentPdf} />
+              Investigación
+            </Tab>
+            <Tab {...tabProps}>
+              <Icon as={GrCirclePlay} />
+              Video-defensa
+            </Tab>
+          </TabList>
+
+          <TabPanels>
+            <TabPanel>
+              <ObraComponent />
+            </TabPanel>
+            <TabPanel>
+              <Box
+                maxW={width}
+                m="0 auto"
+                position="relative"
+                display="block"
+                h={`calc(${width} * 1.41)`}
+                overflow="hidden"
+              >
+                <object
+                  type="application/pdf"
+                  data="https://trackr-media.tangiblemedia.org/publishedmedia/Papers/331-Tangible%20Bits%20Towards%20Seamless/Published/PDF"
+                  width="100%"
+                  height="100%"
+                />
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              <Box maxW={width} m="0 auto">
+                <Flex mt="3rem" align="center" justify="center">
+                  <ReactPlayer pip url="https://www.youtube.com/watch?v=0tdyU_gW6WE" />
+                </Flex>
+              </Box>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       )
     }
 
