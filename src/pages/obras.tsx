@@ -43,13 +43,20 @@ const StudentSidebarLink: React.FC<{
   color?: 'green' | 'magenta'
 }> = ({ student, current, linkCallback, lastItem, color = 'magenta' }) => {
   return (
-    <ListItem mb="1.5rem" id={student.alumne_slug}>
+    <ListItem
+      px="1rem"
+      mb={['0', '0', '1.5rem']}
+      id={student.alumne_slug}
+      w="190px"
+      ml="0"
+    >
       <Link href={student.obra_url} onClick={linkCallback}>
-        <Flex align="center">
+        <Flex align="center" direction={['column', 'column', 'row']}>
           <Box
             bg={current ? color : 'gray.400'}
-            h="128px"
-            flex="0 0 128px"
+            w={['96px', '96px', '128px']}
+            h={['96px', '96px', '128px']}
+            flex={['0 0 96px', '0 0 96px', '0 0 128px']}
             borderRadius="50%"
             display="inline-block"
             position="relative"
@@ -58,13 +65,13 @@ const StudentSidebarLink: React.FC<{
             {lastItem ? (
               <Box
                 position="absolute"
-                h="150%"
-                w="10px"
+                h={['10px', '10px', '150%']}
+                w={['150%', '150%', '10px']}
                 bg="gray.400"
                 zIndex="-1"
                 top="50%"
                 left="50%"
-                transform="translateX(-50%)"
+                transform={['none', 'none', 'translateX(-50%)']}
               />
             ) : null}
           </Box>
@@ -72,9 +79,12 @@ const StudentSidebarLink: React.FC<{
           <Text
             textTransform="uppercase"
             fontWeight="bold"
-            style={{ wordSpacing: 'calc(400px - 128px)' }}
+            style={{ wordSpacing: '999px' }}
             lineHeight={1.1}
-            pl="1rem"
+            pt={['1rem', '1rem', '0']}
+            pl={['0', '0', '1rem']}
+            textAlign={['center', 'center', 'left']}
+            fontSize={['md', 'lg', 'lg']}
           >
             {student.full_name}
           </Text>
@@ -221,19 +231,21 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       <Flex
         mt="1rem"
         position="relative"
-        minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
+        minH={['auto', 'auto', `calc(var(--vh, 1vh) * 100 - ${navBarHeight})`]}
+        direction={['column', 'column', 'row']}
       >
         <Stack
           id="students-list"
           as="ul"
-          w="400px"
-          position="sticky"
+          w={['100%', '100%', '400px']}
+          position={['static', 'static', 'sticky']}
           zIndex="0"
-          direction="column"
-          py="2rem"
-          h={`calc(var(--vh, 1vh) * 100)`}
-          overflow="hidden scroll"
+          direction={['row', 'row', 'column']}
+          py={['.5rem', '.5rem', '2rem']}
+          h={['auto', 'auto', `calc(var(--vh, 1vh) * 100)`]}
+          overflow={['scroll hidden', 'scroll hidden', 'hidden scroll']}
           top="1px"
+          listStyleType="none"
         >
           {subjectStudents.map((student, index) => (
             <StudentSidebarLink
@@ -244,7 +256,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
               lastItem={index !== subjectStudents.length - 1}
             />
           ))}
-          <Box w="100%" pb="2em" />
+          <Box w="100%" pb="2em" pr="2em" />
           {guestStudents.map((student, index) => (
             <StudentSidebarLink
               key={student.alumne_slug}

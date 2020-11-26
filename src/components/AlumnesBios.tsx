@@ -20,10 +20,10 @@ const StudentBio: React.FC<{
   opacity: number
   focused: boolean
   releaseFocusCallback: () => void
-  color: 'green' | 'magenta'
+  color?: 'green' | 'magenta'
 }> = ({ student, opacity, focused, releaseFocusCallback, color = 'magenta' }) => (
   <Flex
-    w="calc(33.33% - 2rem)"
+    w={['100%', 'calc(33.33% - 2rem)']}
     mx="1rem"
     direction="column"
     wrap="nowrap"

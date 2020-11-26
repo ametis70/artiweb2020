@@ -1,16 +1,39 @@
 import { Box, Flex, Link as ChakraLink, List, ListItem } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { Parallax } from 'react-scroll-parallax'
+import { random } from 'lodash'
 
 import { AlumnesProps } from '../pages/alumnes'
 import { navBarHeight } from './NavBar'
 import { IParticipantExtended } from '../lib/api'
 
+const FloatingCircles: React.FC = () => {
+  const circles = Array(15)
+    .fill(null)
+    .map((_, index) => {
+      const size = random(10, 40)
+      const parallaxMin = random(-150, 0)
+      const parallaxMax = random(0, 150)
+      const x = random(-10, 110)
+      const y = random(-10, 110)
+
+      return (
+        <Box position="absolute" key={index} left={`${x}%`} top={`${y}%`}>
+          <Parallax y={[parallaxMin, parallaxMax]}>
+            <Box borderRadius="50%" bg="white" w={`${size}vw`} h={`${size}vw`} />
+          </Parallax>
+        </Box>
+      )
+    })
+  return <>{circles}</>
+}
+
 const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
   const router = useRouter()
 
   useEffect(() => {
-    if (router.query.alumne) {
+    if (router.query?.alumne) {
       const element = document.querySelector(`#{router.query.alumne}`)
       if (element) {
         element.scrollIntoView()
@@ -49,62 +72,31 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
 
   return (
     <Box
-      w="100vw"
+      w="100%"
       bg="magenta"
       position="relative"
       color="white"
       overflow="hidden"
       py="2rem"
     >
-      <Box
-        position="absolute"
-        w="100%"
-        h="100%"
-        opacity="0.1"
-        transform="translateY(-100%)"
-        zIndex="0"
-      >
-        <Box
-          position="absolute"
-          borderRadius="50%"
-          bg="white"
-          w="80%"
-          pt="80%"
-          left="-25%"
-          top="30%"
-        />
-        <Flex
-          align="center"
-          justify="center"
-          position="absolute"
-          borderRadius="50%"
-          bg="white"
-          w="40%"
-          pt="40%"
-          right="-5%"
-          top="-20%"
-        ></Flex>
-        <Box
-          position="absolute"
-          bg="white"
-          w="120%"
-          pt="10%"
-          right="-20%"
-          top="65%"
-          transform="translate(0, -100%) rotate(-35deg)"
-        />
+      <Box position="absolute" w="100%" h="100%" opacity="0.1" zIndex="0">
+        <FloatingCircles />
       </Box>
       <Flex
         justify="center"
         minH={`calc(var(--vh, 1vh) * 100 - ${navBarHeight})`}
-        px="4rem"
+        px={['1rem', '1rem', '4rem']}
         position="relative"
         zIndex="1"
         direction="column"
       >
-        <List fontSize="3xl" fontWeight={700} pb="2em">
+        <List fontSize={['md', 'md', '3xl']} fontWeight={700} pb="2em">
           {subjectStudents.map((student) => (
-            <ListItem key={student.alumne_slug}>
+            <ListItem
+              key={student.alumne_slug}
+              pb={['1rem', '1rem', '1.5rem']}
+              lineHeight="1"
+            >
               <ChakraLink
                 href={student.alumne_url}
                 onClick={(e) => handleClick(e, student.alumne_slug)}
@@ -115,9 +107,13 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
           ))}
         </List>
 
-        <List fontSize="3xl" fontWeight={700}>
+        <List fontSize={['md', 'md', '3xl']} fontWeight={700}>
           {guestStudents.map((student) => (
-            <ListItem key={student.alumne_slug}>
+            <ListItem
+              key={student.alumne_slug}
+              pb={['1rem', '1rem', '1.5rem']}
+              lineHeight="1"
+            >
               <ChakraLink
                 href={student.alumne_url}
                 onClick={(e) => handleClick(e, student.alumne_slug)}

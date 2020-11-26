@@ -37,19 +37,33 @@ const Hero: React.FC = () => {
       <Box h="100vh" />
       <Box h="50vh" w="100%" justify="center" direction="column" align="center">
         <Parallax x={[50, -50]}>
-          <Heading textTransform="uppercase" fontSize="7xl">
+          <Heading
+            textWrap="none"
+            textTransform="uppercase"
+            fontSize={['5xl', '5xl', '8xl']}
+            whiteSpace="nowrap"
+            lineHeight="1"
+          >
             Festival
           </Heading>
         </Parallax>
-        <Box w="100%" h="2rem" />
         <Parallax x={[-50, 50]}>
-          <Heading textTransform="uppercase" fontSize="7xl">
+          <Heading
+            textTransform="uppercase"
+            fontSize={['5xl', '5xl', '8xl']}
+            whiteSpace="nowrap"
+            lineHeight="1"
+          >
             Artimañas
           </Heading>
         </Parallax>
-        <Box w="100%" h="2rem" />
         <Parallax x={[75, -75]}>
-          <Heading textTransform="uppercase" fontSize="7xl">
+          <Heading
+            textTransform="uppercase"
+            fontSize={['5xl', '5xl', '8xl']}
+            whiteSpace="nowrap"
+            lineHeight="1"
+          >
             2020
           </Heading>
         </Parallax>

@@ -32,6 +32,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "focus-visible": "^5.2.0",
     "framer-motion": "^2.9.4",
+    "lodash": "^4.17.20",
     "next": "^10.0.2",
     "next-compose-plugins": "^2.2.1",
     "prettier": "^2.1.2",
