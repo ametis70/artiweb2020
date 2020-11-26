@@ -1,10 +1,64 @@
+import getConfig from 'next/config'
 import DirectusSDK from '@directus/sdk-js'
 import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
 import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
+import bent from 'bent'
+
+import path from 'path'
+import fs from 'fs'
+import { promisify } from 'util'
+
+const { serverRuntimeConfig } = getConfig()
+const writeFile = promisify(fs.writeFile)
+const getBuffer = bent('buffer')
+
+const assetsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/assets/')
+const avatarsDir = path.join(assetsDir, '/avatars/')
+const bannersDir = path.join(assetsDir, '/banners/')
+
+const createDir = (dir: string) => {
+  if (!fs.existsSync(dir)) {
+    console.info(`Creating directory ${dir}`)
+    fs.mkdirSync(dir)
+  }
+}
+
+createDir(assetsDir)
+createDir(avatarsDir)
+createDir(bannersDir)
 
 const studentsRole = 'Alumn@'
 const guestRole = 'Invitad@'
 const teachersRole = 'Docente'
+
+export interface IFileWithData extends IFile {
+  filename_disk: string
+  data: {
+    full_url: string
+  }
+}
+
+export async function getImage(id: number) {
+  const images = ((await client.getFiles()) as unknown) as { data: Array<IFileWithData> }
+  return images.data.find((file) => file.id === id)
+}
+
+export async function downloadImage(id: number, dir: string): Promise<string | null> {
+  const imageData = await getImage(id)
+  if (!imageData) return null
+  const fileDir = path.join(dir, imageData.filename_disk)
+
+  if (!fs.existsSync(fileDir)) {
+    console.info(`Downloading image with id ${id} as ${fileDir}`)
+    const buffer = await getBuffer(imageData.data.full_url.replace('http', 'https'))
+    await writeFile(fileDir, buffer)
+    console.info(`Succesfully downloaded image with ${fileDir}`)
+  } else {
+    console.info(`Image ${fileDir} exists. Skipping download`)
+  }
+
+  return imageData.filename_disk
+}
 
 const client = new DirectusSDK({
   mode: 'jwt',
@@ -103,6 +157,14 @@ export async function getAllParticipantsExtended() {
 
     let guest = bio.carrera !== 'multimedia' ? true : false
 
+    if (avatar) {
+      downloadImage(avatar, avatarsDir)
+    }
+
+    if (obra && obra.banner) {
+      downloadImage(obra.banner, bannersDir)
+    }
+
     const full_name = `${first_name} ${last_name}`
     const alumne_slug = last_name.toLowerCase().replace(/ /gi, '_')
     const alumne_url = `/alumnes?alumne=${alumne_slug}`
@@ -135,17 +197,6 @@ export interface IGeneralInfo {
 
 export async function getGeneralInfo() {
   return client.getItems<IGeneralInfo[]>('general')
-}
-
-export interface IFileWithData extends IFile {
-  data: {
-    full_url: string
-  }
-}
-
-export async function getImage(id: number) {
-  const images = ((await client.getFiles()) as unknown) as { data: Array<IFileWithData> }
-  return images.data.find((file) => file.id === id)
 }
 
 export default client

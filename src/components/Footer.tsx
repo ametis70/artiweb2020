@@ -22,7 +22,6 @@ const Footer: React.FC = () => {
         <Spacer />
         <Stack
           mx="auto"
-          color="black"
           direction="row"
           spacing="1rem"
           pb={['3rem', '3rem', '0']}

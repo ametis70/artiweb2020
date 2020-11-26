@@ -15,7 +15,6 @@ import {
   TabPanels,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-// import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
 import ReactPlayer from 'react-player'
 
@@ -30,8 +29,6 @@ import {
   IObra,
   IParticipantExtended,
 } from '../lib/api'
-
-//const { serverRuntimeConfig } = getConfig()
 
 interface IObraWithSlug extends IObra {
   slug: string
@@ -349,10 +346,6 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 export async function getStaticProps() {
   await login()
   const students = await getAllParticipantsExtended()
-
-  //const path = require('path')
-  //const fs = require('fs')
-  //fs.mkdirSync(path.join(__dirname, './algo'))
 
   return { props: { students } }
 }
