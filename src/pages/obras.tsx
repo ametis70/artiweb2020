@@ -76,8 +76,8 @@ const StudentSidebarLink: React.FC<{
                   borderRadius="50%"
                   url={`avatars/${student.avatarUrl}`}
                   alt={`Avatar de ${student.full_name}`}
-                  avatar
                   imageStyle={{ filter: 'grayscale()' }}
+                  avatar
                 >
                   {current ? (
                     <Box
@@ -179,7 +179,10 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
         <Stack maxW={width} m="0 auto" spacing="2rem">
           <ResponsiveImage
             w="100%"
-            h="fit-content"
+            h="0"
+            pb="37.5%"
+            overflow="hidden"
+            maxH="300px"
             url={
               selectedStudent.bannerUrl ? `banners/${selectedStudent.bannerUrl}` : null
             }
