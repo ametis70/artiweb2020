@@ -51,7 +51,7 @@ export async function downloadImage(id: number, dir: string): Promise<string | n
   if (!fs.existsSync(fileDir)) {
     console.info(`Downloading image with id ${id} as ${fileDir}`)
     const buffer = await getBuffer(imageData.data.full_url.replace('http', 'https'))
-    await writeFile(fileDir, buffer)
+    await writeFile(fileDir, buffer as Buffer)
     console.info(`Succesfully downloaded image with ${fileDir}`)
   } else {
     console.info(`Image ${fileDir} exists. Skipping download`)
@@ -140,6 +140,8 @@ export interface IParticipantExtended {
   guest: boolean
   bio: IBio
   obra: IObra
+  bannerUrl: string | null
+  avatarUrl: string | null
 }
 
 export async function getAllParticipantsExtended() {
@@ -150,42 +152,48 @@ export async function getAllParticipantsExtended() {
 
   const participants = [...students.data, ...guests.data]
 
-  const participantsExtended: IParticipantExtended[] = participants.map((person) => {
-    const { first_name, last_name, avatar, id } = person
-    const obra = allObras.data.find((o) => o.user === id || o.user2 === id)
-    const bio = allBios.data.find((b) => b.user === id)
+  const participantsExtended: IParticipantExtended[] = await Promise.all(
+    participants.map(async (person) => {
+      const { first_name, last_name, avatar, id } = person
+      const obra = allObras.data.find((o) => o.user === id || o.user2 === id)
+      const bio = allBios.data.find((b) => b.user === id)
 
-    let guest = bio.carrera !== 'multimedia' ? true : false
+      let guest = bio.carrera !== 'multimedia' ? true : false
 
-    if (avatar) {
-      downloadImage(avatar, avatarsDir)
-    }
+      let avatarUrl = null
+      if (avatar) {
+        avatarUrl = await downloadImage(avatar, avatarsDir)
+      }
 
-    if (obra && obra.banner) {
-      downloadImage(obra.banner, bannersDir)
-    }
+      let bannerUrl = null
+      if (obra && obra.banner) {
+        bannerUrl = await downloadImage(obra.banner, bannersDir)
+      }
 
-    const full_name = `${first_name} ${last_name}`
-    const alumne_slug = last_name.toLowerCase().replace(/ /gi, '_')
-    const alumne_url = `/alumnes?alumne=${alumne_slug}`
-    const obra_slug = obra.titulo.toLowerCase().replace(/ /gi, '_')
-    const obra_url = `/obras?obra=${obra_slug}`
+      const full_name = `${first_name} ${last_name}`
+      const alumne_slug = last_name.toLowerCase().replace(/ /gi, '_')
+      const alumne_url = `/alumnes?alumne=${alumne_slug}`
+      const obra_slug = obra.titulo.toLowerCase().replace(/ /gi, '_')
+      const obra_url = `/obras?obra=${obra_slug}`
 
-    return {
-      id,
-      first_name,
-      last_name,
-      full_name,
-      alumne_slug,
-      alumne_url,
-      obra_slug,
-      obra_url,
-      avatar,
-      guest,
-      bio,
-      obra,
-    }
-  })
+      return {
+        id,
+        first_name,
+        last_name,
+        full_name,
+        alumne_slug,
+        alumne_url,
+        obra_slug,
+        obra_url,
+        avatar,
+        guest,
+        bio,
+        obra,
+        avatarUrl,
+        bannerUrl,
+      }
+    }),
+  )
 
   return participantsExtended
 }

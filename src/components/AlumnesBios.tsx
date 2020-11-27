@@ -9,11 +9,13 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import React from 'react'
 import { useEffect } from 'react'
 import { IParticipantExtended } from '../lib/api'
 
 import { AlumnesProps } from '../pages/alumnes'
 import Container from './Container'
+import ResponsiveImage from './ResponsiveImage'
 
 const StudentBio: React.FC<{
   student: IParticipantExtended
@@ -41,7 +43,29 @@ const StudentBio: React.FC<{
       onClick={releaseFocusCallback}
     />
     <Flex direction="row" wrap="nowrap" align="flex-start" mb="2rem">
-      <Box bg={color} borderRadius="50%" flex="0 0 30%" pt="30%" mr="1rem" />
+      {!student.avatarUrl ? (
+        <Box bg={color} flex="0 0 30%" pt="30%" mr="1rem" borderRadius="50%" />
+      ) : (
+        <ResponsiveImage
+          overflow="hidden"
+          w="100%"
+          h="100%"
+          borderRadius="50%"
+          url={`avatars/${student.avatarUrl}`}
+          alt={`Avatar de ${student.full_name}`}
+          avatar
+          imageStyle={{ filter: 'grayscale()' }}
+        >
+          <Box
+            position="absolute"
+            w="100%"
+            h="100%"
+            bg="magenta"
+            sx={{ mixBlendMode: 'screen' }}
+            zIndex="1"
+          />
+        </ResponsiveImage>
+      )}
       <Heading fontSize="xl" flex="0 0 calc(70% - 1rem)">
         {student.full_name}
       </Heading>

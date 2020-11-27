@@ -24,11 +24,12 @@ import { navBarHeight } from '../components/NavBar'
 import SEO from '../components/SEO'
 import {
   getAllParticipantsExtended,
-  getImage,
   login,
   IObra,
   IParticipantExtended,
 } from '../lib/api'
+import React from 'react'
+import ResponsiveImage from '../components/ResponsiveImage'
 
 interface IObraWithSlug extends IObra {
   slug: string
@@ -57,7 +58,7 @@ const StudentSidebarLink: React.FC<{
       <Link href={student.obra_url} onClick={linkCallback}>
         <Flex align="center" direction={['column', 'column', 'row']}>
           <Box
-            bg={current ? color : 'gray.400'}
+            bg={student.avatarUrl ? 'none' : 'gray.400'}
             w={['96px', '96px', '128px']}
             h={['96px', '96px', '128px']}
             flex={['0 0 96px', '0 0 96px', '0 0 128px']}
@@ -66,6 +67,31 @@ const StudentSidebarLink: React.FC<{
             position="relative"
             overflow="visible"
           >
+            {student.avatarUrl ? (
+              <>
+                <ResponsiveImage
+                  overflow="hidden"
+                  w="100%"
+                  h="100%"
+                  borderRadius="50%"
+                  url={`avatars/${student.avatarUrl}`}
+                  alt={`Avatar de ${student.full_name}`}
+                  avatar
+                  imageStyle={{ filter: 'grayscale()' }}
+                >
+                  {current ? (
+                    <Box
+                      position="absolute"
+                      w="100%"
+                      h="100%"
+                      bg="magenta"
+                      sx={{ mixBlendMode: 'screen' }}
+                      zIndex="1"
+                    />
+                  ) : null}
+                </ResponsiveImage>
+              </>
+            ) : null}
             {lastItem ? (
               <Box
                 position="absolute"
@@ -145,21 +171,20 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       secondUser = students.find((student) => student.id === obra.user2)
     }
 
+    console.log(selectedStudent)
     const width = '840px'
 
     const ObraComponent = () => (
       <Box key={selectedStudent.obra_slug} p="2rem" flex="1 0 0">
         <Stack maxW={width} m="0 auto" spacing="2rem">
-          <Box w="100%" h="0" pb="37.5%" overflow="hidden">
-            <Image
-              src={
-                obra.banner
-                  ? obra.banner.toString()
-                  : 'https://source.unsplash.com/random/800x'
-              }
-              alt={`Imagen de banner de ${obra.titulo} `}
-            />
-          </Box>
+          <ResponsiveImage
+            w="100%"
+            h="fit-content"
+            url={
+              selectedStudent.bannerUrl ? `banners/${selectedStudent.bannerUrl}` : null
+            }
+            alt={`Imagen de banner de ${obra.titulo}`}
+          />
           <Box>
             <Heading> {obra.titulo} </Heading>
             <Text
