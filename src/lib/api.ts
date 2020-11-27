@@ -12,7 +12,7 @@ const { serverRuntimeConfig } = getConfig()
 const writeFile = promisify(fs.writeFile)
 const getBuffer = bent('buffer')
 
-const assetsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/assets/')
+const assetsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/src/assets/')
 const avatarsDir = path.join(assetsDir, '/avatars/')
 const bannersDir = path.join(assetsDir, '/banners/')
 

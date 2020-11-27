@@ -9,7 +9,7 @@ export type AlumnesProps = {
   students: IParticipantExtended[]
 }
 
-const Alumnes: React.FC<AlumnesProps> = ({ students, bios }) => {
+const Alumnes: React.FC<AlumnesProps> = ({ students }) => {
   return (
     <>
       <SEO title="Alumnes" />

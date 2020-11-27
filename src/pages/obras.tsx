@@ -175,7 +175,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     const width = '840px'
 
     const ObraComponent = () => (
-      <Box key={selectedStudent.obra_slug} p="2rem" flex="1 0 0">
+      <Box key={selectedStudent.obra_slug} p={['1rem', '1rem', '2rem']} flex="1 0 0">
         <Stack maxW={width} m="0 auto" spacing="2rem">
           <ResponsiveImage
             w="100%"
