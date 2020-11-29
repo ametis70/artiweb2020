@@ -163,7 +163,11 @@ const NavBar: React.FC = () => {
                   top="0"
                   left="0"
                 >
-                  <Flex direction="row" align="flex-end" justify="flex-end">
+                  <Flex
+                    direction="row"
+                    justify="flex-end"
+                    minH="calc(var(--vh, 1vh) * 100)"
+                  >
                     <Flex
                       w="fit-content"
                       maxH="calc(var(--vh, 1vh) * 100)"
@@ -184,6 +188,7 @@ const NavBar: React.FC = () => {
                         icon={<AiOutlineClose />}
                         onClick={() => closeNav()}
                       />
+                      <Spacer />
                       {paths.map((path) => {
                         const currentLocation =
                           router.pathname === '/' ? '/' : router.pathname.substring(1)
@@ -202,7 +207,7 @@ const NavBar: React.FC = () => {
                           >
                             <Link href={path.path} passHref>
                               <ChakraLink
-                                fontSize={['3xl', '3xl', '5xl']}
+                                fontSize={['4xl', '4xl', '5xl']}
                                 color="magenta"
                                 fontWeight="bold"
                                 position="relative"
@@ -232,6 +237,7 @@ const NavBar: React.FC = () => {
                           </MotionBox>
                         )
                       })}
+                      <Spacer />
                     </Flex>
                   </Flex>
                 </MotionBox>

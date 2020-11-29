@@ -84,8 +84,8 @@ const StudentSidebarLink: React.FC<{
                       position="absolute"
                       w="100%"
                       h="100%"
-                      bg="magenta"
-                      sx={{ mixBlendMode: 'screen' }}
+                      bg={color}
+                      sx={{ mixBlendMode: color === 'magenta' ? 'screen' : 'soft-light' }}
                       zIndex="1"
                     />
                   ) : null}
@@ -97,7 +97,7 @@ const StudentSidebarLink: React.FC<{
                 position="absolute"
                 h={['10px', '10px', '150%']}
                 w={['150%', '150%', '10px']}
-                bg="gray.400"
+                bg={color}
                 zIndex="-1"
                 top="50%"
                 left="50%"
@@ -175,7 +175,12 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
     const width = '840px'
 
     const ObraComponent = () => (
-      <Box key={selectedStudent.obra_slug} p={['1rem', '1rem', '2rem']} flex="1 0 0">
+      <Box
+        key={selectedStudent.obra_slug}
+        p={['1rem', '1rem', '2rem']}
+        flex="1 0 0"
+        fontSize={['md', 'lg', 'lg']}
+      >
         <Stack maxW={width} m="0 auto" spacing="2rem">
           <ResponsiveImage
             w="100%"
@@ -264,7 +269,12 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
         <ObraComponent />
       ) : (
         <Tabs flex="1 0 0" isFitted isLazy>
-          <TabList maxW={width} m="0 auto">
+          <TabList
+            maxW={width}
+            m="0 auto"
+            display="flex"
+            flexDirection={['column-reverse', 'row', 'row']}
+          >
             <Tab {...tabProps}>
               <Icon as={GrBrush} />
               Obra

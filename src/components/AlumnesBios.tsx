@@ -25,7 +25,7 @@ const StudentBio: React.FC<{
   color?: 'green' | 'magenta'
 }> = ({ student, opacity, focused, releaseFocusCallback, color = 'magenta' }) => (
   <Flex
-    w={['100%', 'calc(33.33% - 2rem)']}
+    w={['100%', '100%', 'calc(33.33% - 2rem)']}
     mx="1rem"
     direction="column"
     wrap="nowrap"
@@ -50,10 +50,11 @@ const StudentBio: React.FC<{
           overflow="hidden"
           w="100%"
           h="100%"
-          borderRadius="50%"
+          mr="1rem"
           url={`avatars/${student.avatarUrl}`}
           alt={`Avatar de ${student.full_name}`}
           avatar
+          borderRadius="50%"
           imageStyle={{ filter: 'grayscale()' }}
         >
           <Box
