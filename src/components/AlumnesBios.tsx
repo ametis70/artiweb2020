@@ -61,8 +61,8 @@ const StudentBio: React.FC<{
             position="absolute"
             w="100%"
             h="100%"
-            bg="magenta"
-            sx={{ mixBlendMode: 'screen' }}
+            bg={color}
+            sx={{ mixBlendMode: color === 'magenta' ? 'screen' : 'soft-light' }}
             zIndex="1"
           />
         </ResponsiveImage>
