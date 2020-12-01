@@ -198,6 +198,22 @@ export async function getAllParticipantsExtended() {
   return participantsExtended
 }
 
+export interface IEvent {
+  id: number
+  dia_entero: boolean
+  fecha: string
+  hora_comienzo: string
+  hora_fin: string
+  mostrar_user_asociado: boolean
+  titulo: string
+  url: string
+  user_asociado: number
+}
+
+export async function getAllEvents() {
+  return client.getItems<IEvent[]>('cronograma')
+}
+
 export interface IGeneralInfo {
   texto_descripcion_columna_1: string
   texto_descripcion_columna_2: string

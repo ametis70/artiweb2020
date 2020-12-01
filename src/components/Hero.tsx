@@ -38,7 +38,6 @@ const Hero: React.FC = () => {
       <Box h="50vh" w="100%" justify="center" direction="column" align="center">
         <Parallax x={[50, -50]}>
           <Heading
-            textWrap="none"
             textTransform="uppercase"
             fontSize={['5xl', '5xl', '8xl']}
             whiteSpace="nowrap"
