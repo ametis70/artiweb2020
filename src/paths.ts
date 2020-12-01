@@ -21,10 +21,6 @@ const paths: Array<Path> = [
     path: '/obras',
   },
   {
-    name: 'Charlas',
-    path: '/charlas',
-  },
-  {
     name: 'Cronograma',
     path: '/cronograma',
   },
