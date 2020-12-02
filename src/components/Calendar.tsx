@@ -22,7 +22,16 @@ const Calendar: React.FC<CalendarProps> = ({ start, end, events }) => {
   const days = getDaysArray(start, end)
 
   const Rows = days.map((d) => {
-    return <CalendarRow date={d} key={d.toISOString()} />
+    const ISOsliced = d.toISOString().slice(0, 10)
+    const dayEvents = events.filter((e) => e.fecha === ISOsliced)
+    const sortedDayEvents = dayEvents.sort((a, b) => {
+      const aStart = new Date(`${a.fecha}T${a.hora_comienzo}`)
+      const bStart = new Date(`${b.fecha}T${b.hora_comienzo}`)
+      if (aStart === bStart) return 0
+      if (aStart < bStart) return -1
+      return 1
+    })
+    return <CalendarRow date={d} key={d.toISOString()} events={sortedDayEvents} />
   })
 
   return (

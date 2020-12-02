@@ -25,6 +25,7 @@ const CalendarRowDay: React.FC<CalendarRowDayProps> = ({ weekDay, monthDay }) =>
       fontWeight={700}
       lineHeight="1"
       textTransform="uppercase"
+      pr="2rem"
     >
       <Text fontSize="8xl" pr="2rem">
         {monthDay}
