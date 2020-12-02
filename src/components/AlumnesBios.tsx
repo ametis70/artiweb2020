@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useEffect } from 'react'
 import { IParticipantExtended } from '../lib/api'
+import ReactMarkdown from 'react-markdown'
 
 import { AlumnesProps } from '../pages/alumnes'
 import Container from './Container'
@@ -71,7 +72,14 @@ const StudentBio: React.FC<{
         {student.full_name}
       </Heading>
     </Flex>
-    <Text pb="2rem">
+    <Text
+      as={ReactMarkdown}
+      sx={{
+        '& p': {
+          pb: '2rem',
+        },
+      }}
+    >
       {student.bio.texto
         ? student.bio.texto
         : `Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus
