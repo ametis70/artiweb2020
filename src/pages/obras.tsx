@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Heading,
-  Image,
   Link,
   ListItem,
   Stack,
@@ -166,7 +165,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
 
     const { obra } = selectedStudent
 
-    let secondUser
+    let secondUser: IParticipantExtended | null = null
     if (obra.user2) {
       secondUser = students.find((student) => student.id === obra.user2)
     }
