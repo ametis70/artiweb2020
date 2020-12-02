@@ -1,3 +1,4 @@
+const path = require('path')
 const withPlugins = require('next-compose-plugins')
 const withSourceMaps = require('@zeit/next-source-maps')
 const optimizedImages = require('next-optimized-images')
@@ -23,6 +24,7 @@ module.exports = withPlugins(
       {
         responsive: {
           adapter: require('responsive-loader/sharp'),
+          publicPath: path.join(basePath, '_next/static/images/'),
         },
       },
     ],
