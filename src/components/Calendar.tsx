@@ -1,8 +1,10 @@
 import { Box } from '@chakra-ui/react'
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 import { IEvent } from '../lib/api'
 import CalendarRow from './CalendarRow'
 import events from '../events.json'
+import { navBarHeight } from './NavBar'
 
 type CalendarProps = {
   start: string
@@ -31,14 +33,15 @@ const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
       if (aStart < bStart) return -1
       return 1
     })
-    console.log(ISOsliced, sortedDayEvents)
     return <CalendarRow date={d} key={d.toISOString()} events={sortedDayEvents} />
   })
 
   return (
-    <Box w="100%" overflowX="scroll">
-      {Rows}
-    </Box>
+    <ScrollContainer hideScrollbars={false}>
+      <Box w="100%" h={`calc(var(--vh, 1vh) * 100 - ${navBarHeight} - 10px)`}>
+        {Rows}
+      </Box>
+    </ScrollContainer>
   )
 }
 

@@ -12,12 +12,12 @@ const CalendarRow: React.FC<CalendarRowProps> = ({ date, events }) => {
   const weekDay = date.getDay()
   const monthDay = date.getDate()
   return (
-    <Box pl="2rem" pb="1rem">
-      <Flex pb="1rem">
+    <Box pl="2rem" pb="1rem" w="100%">
+      <Flex pb="1rem" justify="flex-start">
         <CalendarRowDay weekDay={weekDay} monthDay={monthDay} />
         {events ? events.map((e) => <EventCard key={e.id} event={e} />) : null}
       </Flex>
-      <Divider />
+      <Divider w="120%" />
     </Box>
   )
 }
