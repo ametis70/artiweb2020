@@ -1,3 +1,4 @@
+import { useRef, useEffect, useState } from 'react'
 import { Flex } from '@chakra-ui/react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
@@ -22,6 +23,13 @@ const getDaysArray = (start: string, end: string): Date[] => {
 const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
   const days = getDaysArray(start, end)
 
+  const ref = useRef()
+  const [biggerRow, setBiggerRow] = useState(0)
+
+  useEffect(() => {
+    if (ref.current) setBiggerRow(ref.current.scrollWidth)
+  }, [ref, ref.current])
+
   const Rows = days.map((d) => {
     const ISOsliced = d.toISOString().slice(0, 10)
     const dayEvents = events.filter((e) => e.fecha === ISOsliced)
@@ -36,11 +44,17 @@ const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
   })
 
   return (
-    <ScrollContainer hideScrollbars={false}>
+    <ScrollContainer hideScrollbars={true}>
       <Flex
-        minW="2000px"
-        wrap="wrap"
-        h={`calc(var(--vh, 1vh) * 100 - ${navBarHeight} - 10px)`}
+        flexDirection="column"
+        h={[
+          `calc(var(--vh, 1vh) * 100 - 72px)`,
+          `calc(var(--vh, 1vh) * 100 - 72px)`,
+          `calc(var(--vh, 1vh) * 100 - ${navBarHeight})`,
+        ]}
+        w={`${biggerRow}px`}
+        cursor="grab"
+        ref={ref}
       >
         {Rows}
       </Flex>

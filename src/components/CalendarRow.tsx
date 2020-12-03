@@ -1,4 +1,4 @@
-import { Flex, Divider, Box } from '@chakra-ui/react'
+import { Flex, Box, Spacer } from '@chakra-ui/react'
 import { IEvent } from '../lib/api'
 import CalendarRowDay from './CalendarRowDay'
 import EventCard from './EventCard'
@@ -12,8 +12,8 @@ const CalendarRow: React.FC<CalendarRowProps> = ({ date, events }) => {
   const weekDay = date.getDay()
   const monthDay = date.getDate()
   return (
-    <Box pb="1rem" minW="fit-content" flex="1 0 calc(100% + 350px / 2)">
-      <Flex pb="1rem" justify="flex-start" minW="100%">
+    <Box py={['0.5rem', '1rem', '1rem']}>
+      <Flex>
         <CalendarRowDay weekDay={weekDay} monthDay={monthDay} />
         {events ? events.map((e) => <EventCard key={e.id} event={e} />) : null}
       </Flex>

@@ -20,7 +20,7 @@ const CalendarRowDay: React.FC<CalendarRowDayProps> = ({ weekDay, monthDay }) =>
 
   return (
     <Flex
-      flex="0 0 350px"
+      flex={['0 0 120px', '0 0 120px', '0 0 360px']}
       direction="row"
       align="center"
       fontWeight={700}
@@ -29,10 +29,15 @@ const CalendarRowDay: React.FC<CalendarRowDayProps> = ({ weekDay, monthDay }) =>
       bg="black"
       lineHeight="1"
       textTransform="uppercase"
-      pr="2rem"
+      pr={['0', '0', '2rem']}
       justify="flex-end"
     >
-      <Text fontSize="9xl" pr="1rem">
+      <Text
+        flex="1 0 0"
+        fontSize={['4xl', '4xl', '9xl']}
+        pr={['0.5rem', '0.5rem', '1rem']}
+        textAlign="right"
+      >
         {monthDay}
       </Text>
       <Flex
@@ -40,8 +45,8 @@ const CalendarRowDay: React.FC<CalendarRowDayProps> = ({ weekDay, monthDay }) =>
         h="100%"
         justify="center"
         align="flex-start"
-        fontSize="2xl"
-        w="72px"
+        fontSize={['sm', 'sm', '2xl']}
+        flex={['0 0 55px', '0 0 55px', '0 0 72px']}
       >
         {dayStrings.map((syllable, index) => (
           <Text key={`${monthDay}-${syllable}`} order={dayStrings.length - 1 - index}>

@@ -33,37 +33,42 @@ const EventCard = ({ event, onClick = undefined }) => {
   }
 
   return (
-    <Link href={event.url} passHref>
-      <ChakraLink flex="0 0 600px" onClick={onClick}>
-        <Flex
-          direction="column"
-          {...cardColors}
-          mx="1rem"
-          p="1rem 2rem"
-          h="100%"
-          align="flex-start"
-          fontWeight={700}
-        >
-          <Text fontSize="5xl" w="100%">
-            {event.hora_comienzo.slice(0, -3)} hs
-          </Text>
-          <Heading
-            fontSize="2xl"
-            overflow="hidden"
-            pb="1rem"
-            w="100%"
-            textTransform="uppercase"
+    <Box px={['0.5rem', '0.5rem', '1rem']}>
+      <Link href={event.url} passHref>
+        <ChakraLink onClick={onClick}>
+          <Flex
+            flex={['0 0 250px', '0 0 250px', '0 0 600px']}
+            direction="column"
+            {...cardColors}
+            p={['0.5rem 1rem', '0.5rem 1rem', '1rem 2rem']}
+            h="100%"
+            align="space-between"
+            fontWeight={700}
+            h="100%"
           >
-            {event.titulo}
-          </Heading>
+            <Text fontSize={['lg', 'lg', '5xl']} minW="100%">
+              {event.hora_comienzo.slice(0, -3)} hs
+            </Text>
+            <Text
+              lineHeight="1.2"
+              fontSize={['md', 'md', '2xl']}
+              pb="1rem"
+              w="100%"
+              textTransform="uppercase"
+            >
+              {event.titulo}
+            </Text>
 
-          <Spacer />
-          {event.mostrar_user_asociado && event.user_name ? (
-            <Text> por {event.user_name} </Text>
-          ) : null}
-        </Flex>
-      </ChakraLink>
-    </Link>
+            <Spacer />
+            {event.mostrar_user_asociado && event.user_name ? (
+              <Text lineHeight="1.2" fontSize={['sm', 'sm', 'lg']}>
+                por {event.user_name}
+              </Text>
+            ) : null}
+          </Flex>
+        </ChakraLink>
+      </Link>
+    </Box>
   )
 }
 

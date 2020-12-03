@@ -71,22 +71,32 @@ const LiveIndicator = () => {
           display={!showIndicator ? 'none' : 'flex'}
           bg="magenta"
           h="2em"
-          px="1rem"
-          fontSize="lg"
+          px={['0.5rem', '0.5rem', '1rem']}
+          fontSize={['sm', 'sm', 'lg']}
           fontWeight={700}
           textTransform="uppercase"
           align="center"
           cursor="pointer"
         >
-          <Box bg="#ff0000" borderRadius="50%" w="16px" h="0" pb="16px" mr="1rem" />
+          <Box
+            bg="#ff0000"
+            borderRadius="50%"
+            w="16px"
+            h="0"
+            pb="16px"
+            mr={['0.5rem', '0.5rem', '1rem']}
+          />
           <Text>En Vivo</Text>
         </Flex>
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent bg="none" borderRadius="none">
-          <ModalCloseButton size="lg" />
+        <ModalOverlay
+          backgroundColor="rgba(0, 0, 0, 0.9)"
+          style={{ backdropFilter: 'blur(5px)' }}
+        />
+        <ModalContent bg="none" borderRadius="none" shadow="none">
+          <ModalCloseButton size="lg" transform="translateY(-50%)" />
           <ModalBody bg="none" borderRadius="none" pb="2rem" mt="2rem">
             <EventCard event={currentEvent} onClick={onClose} />
           </ModalBody>
@@ -102,6 +112,7 @@ const LiveIndicator = () => {
                   p="0.5rem 1rem"
                   textTransform="uppercase"
                   fontWeight={700}
+                  fontSize={['sm', 'md', 'md']}
                 >
                   Ver cronograma
                 </Box>

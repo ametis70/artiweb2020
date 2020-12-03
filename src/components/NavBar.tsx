@@ -124,7 +124,8 @@ const NavBar: React.FC = () => {
                 src={`${publicRuntimeConfig.basePath}/images/logo.svg`}
                 h="100%"
                 p="0.5rem"
-                mx={['0.5rem', '2rem', '2rem']}
+                ml={['0.5rem', '2rem', '2rem']}
+                mr={['0', '0', '2rem']}
                 transition="transform 0.1s ease-in-out"
                 _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
               />
@@ -137,7 +138,12 @@ const NavBar: React.FC = () => {
             mr={['1rem', '1rem', '2rem']}
             fontSize={['xl', 'xl', '3xl']}
           >
-            <Text fontWeight={700} color="magenta" mr={['1rem', '1rem', '3rem']}>
+            <Text
+              fontWeight={700}
+              color="magenta"
+              mr={['1rem', '1rem', '3rem']}
+              display={['none', 'none', 'inline-block']}
+            >
               {currentPathTitle()}
             </Text>
             <IconButton
