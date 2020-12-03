@@ -24,6 +24,9 @@ const CalendarRowDay: React.FC<CalendarRowDayProps> = ({ weekDay, monthDay }) =>
       direction="row"
       align="center"
       fontWeight={700}
+      position="sticky"
+      left="0px"
+      bg="black"
       lineHeight="1"
       textTransform="uppercase"
       pr="2rem"

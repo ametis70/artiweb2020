@@ -15,6 +15,8 @@ import Headroom from 'react-headroom'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import getConfig from 'next/config'
 
+import LiveIndicator from './LiveIndicator'
+
 const { publicRuntimeConfig } = getConfig()
 
 import paths from '../paths'
@@ -116,16 +118,19 @@ const NavBar: React.FC = () => {
           bg="black"
           position="relative"
         >
-          <Link href="/">
-            <Image
-              src={`${publicRuntimeConfig.basePath}/images/logo.svg`}
-              h="100%"
-              p="0.5rem"
-              ml={['0.5rem', '2rem', '2rem']}
-              transition="transform 0.1s ease-in-out"
-              _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
-            />
+          <Link href="/" passHref>
+            <ChakraLink>
+              <Image
+                src={`${publicRuntimeConfig.basePath}/images/logo.svg`}
+                h="100%"
+                p="0.5rem"
+                mx={['0.5rem', '2rem', '2rem']}
+                transition="transform 0.1s ease-in-out"
+                _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
+              />
+            </ChakraLink>
           </Link>
+          <LiveIndicator />
           <Spacer />
           <Flex
             align="center"
@@ -140,6 +145,8 @@ const NavBar: React.FC = () => {
               aria-label="Abrir menu de navegación"
               color="magenta"
               bg="none"
+              _hover={{ bg: 'none' }}
+              _active={{ bg: 'none' }}
               icon={<AiOutlineMenu />}
               onClick={() => toggleNav()}
             />
@@ -181,10 +188,12 @@ const NavBar: React.FC = () => {
                       <IconButton
                         align="flex-start"
                         fontSize={['3xl', '3xl', '5xl']}
-                        bg="none"
                         mb="2rem"
                         aria-label="Cerrar menu de navegación"
                         color="magenta"
+                        bg="none"
+                        _hover={{ bg: 'none' }}
+                        _active={{ bg: 'none' }}
                         icon={<AiOutlineClose />}
                         onClick={() => closeNav()}
                       />

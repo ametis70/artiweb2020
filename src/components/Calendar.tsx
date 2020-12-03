@@ -1,7 +1,6 @@
-import { Box } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-import { IEvent } from '../lib/api'
 import CalendarRow from './CalendarRow'
 import events from '../events.json'
 import { navBarHeight } from './NavBar'
@@ -38,9 +37,13 @@ const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
 
   return (
     <ScrollContainer hideScrollbars={false}>
-      <Box w="100%" h={`calc(var(--vh, 1vh) * 100 - ${navBarHeight} - 10px)`}>
+      <Flex
+        minW="2000px"
+        wrap="wrap"
+        h={`calc(var(--vh, 1vh) * 100 - ${navBarHeight} - 10px)`}
+      >
         {Rows}
-      </Box>
+      </Flex>
     </ScrollContainer>
   )
 }
