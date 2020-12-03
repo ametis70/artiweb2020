@@ -5,7 +5,7 @@ import EventCard from './EventCard'
 
 type CalendarRowProps = {
   date: Date
-  events?: IEvent[] | null
+  events?: IEvent[] | undefined
 }
 
 const CalendarRow: React.FC<CalendarRowProps> = ({ date, events }) => {

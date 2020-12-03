@@ -208,6 +208,7 @@ export interface IEvent {
   titulo: string
   url: string
   user_asociado: number
+  user_name?: string
 }
 
 export async function getAllEvents() {

@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react'
 
 import { IEvent } from '../lib/api'
 import CalendarRow from './CalendarRow'
+import events from '../events.json'
 
 type CalendarProps = {
   start: string
@@ -18,7 +19,7 @@ const getDaysArray = (start: string, end: string): Date[] => {
   return arr
 }
 
-const Calendar: React.FC<CalendarProps> = ({ start, end, events }) => {
+const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
   const days = getDaysArray(start, end)
 
   const Rows = days.map((d) => {

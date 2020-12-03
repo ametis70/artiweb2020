@@ -8,20 +8,13 @@ export type CronogramaProps = {
   events: IEvent[]
 }
 
-const Cronograma: React.FC<CronogramaProps> = ({ events }) => {
+const Cronograma: React.FC<CronogramaProps> = () => {
   return (
     <>
       <SEO title="Cronograma" />
-      <Calendar start="2020-11-25" end="2020-12-09" events={events} />
+      <Calendar start="2020-11-25" end="2020-12-14" />
     </>
   )
-}
-
-export async function getStaticProps() {
-  await login()
-  const events = await getAllEvents()
-
-  return { props: { events: events.data } }
 }
 
 export default Cronograma

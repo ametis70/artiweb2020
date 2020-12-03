@@ -27,7 +27,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
             {event.titulo}
           </Heading>
 
-          {event.mostrar_user_asociado ? <Text> por {event.user_asociado} </Text> : null}
+          {event.mostrar_user_asociado && event.user_name ? (
+            <Text> por {event.user_name} </Text>
+          ) : null}
         </Flex>
       </ChakraLink>
     </Link>
