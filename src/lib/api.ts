@@ -120,7 +120,7 @@ export interface IBio {
   id: number
   user: number
   texto: string
-  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales'
+  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
 }
 
 export async function getAllBios() {

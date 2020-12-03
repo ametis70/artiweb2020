@@ -60,6 +60,9 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
       case 'artes_audiovisuales':
         text = '— Artes Audiovisuales'
         break
+      case 'composicion':
+        text = '— Composición'
+        break
       default:
         return null
     }
