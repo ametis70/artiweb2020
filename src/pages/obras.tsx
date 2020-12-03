@@ -170,7 +170,6 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       secondUser = students.find((student) => student.id === obra.user2)
     }
 
-    console.log(selectedStudent)
     const width = '840px'
 
     const ObraComponent = () => (

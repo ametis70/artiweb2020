@@ -7,14 +7,13 @@ import events from '../events.json'
 type CalendarProps = {
   start: string
   end: string
-  events: IEvent[]
 }
 
 const getDaysArray = (start: string, end: string): Date[] => {
   const arr = []
   const endDate = new Date(end)
-  for (let dt = new Date(start); dt < endDate; dt.setDate(dt.getDate() + 1)) {
-    arr.push(new Date(dt))
+  for (let dt = new Date(start); dt <= endDate; dt.setDate(dt.getDate() + 1)) {
+    arr.push(new Date(new Date(dt).getTime() + dt.getTimezoneOffset() * 60000))
   }
   return arr
 }
@@ -32,6 +31,7 @@ const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
       if (aStart < bStart) return -1
       return 1
     })
+    console.log(ISOsliced, sortedDayEvents)
     return <CalendarRow date={d} key={d.toISOString()} events={sortedDayEvents} />
   })
 

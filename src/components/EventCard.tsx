@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   return (
     <Link href={event.url} passHref>
       <ChakraLink>
-        <Flex direction="column" {...colors[0]} mx="1rem" p="1rem" h="100%" w="300px">
+        <Flex direction="column" {...colors[0]} mx="1rem" p="1rem" h="100%" w="350px">
           <Text>{event.hora_comienzo}</Text>
           <Heading
             fontSize="2xl"

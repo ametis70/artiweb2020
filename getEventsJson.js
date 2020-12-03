@@ -60,8 +60,6 @@ async function main() {
     }
   })
 
-  console.log(allEventsWithUserNames)
-
   fs.writeFileSync(
     path.join(__dirname, 'src/events.json'),
     JSON.stringify(allEventsWithUserNames),
