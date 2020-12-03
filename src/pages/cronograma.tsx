@@ -7,7 +7,7 @@ const Cronograma: React.FC<CronogramaProps> = () => {
   return (
     <>
       <SEO title="Cronograma" />
-      <Calendar start="2020-12-02" end="2020-12-13" />
+      <Calendar start="2020-12-03" end="2020-12-13" />
     </>
   )
 }

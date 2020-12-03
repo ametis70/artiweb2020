@@ -17,7 +17,7 @@ const colors: { bg: string; color: string }[] = [
   { bg: 'green', color: 'black' },
 ]
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, onClick = undefined }) => {
   let cardColors
 
   switch (event.tipo_de_evento) {
@@ -34,7 +34,7 @@ const EventCard = ({ event }) => {
 
   return (
     <Link href={event.url} passHref>
-      <ChakraLink flex="0 0 600px">
+      <ChakraLink flex="0 0 600px" onClick={onClick}>
         <Flex
           direction="column"
           {...cardColors}

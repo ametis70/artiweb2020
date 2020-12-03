@@ -40,15 +40,19 @@ const customTheme = extendTheme({
       },
 
       '*::-webkit-scrollbar': {
-        width: '20px',
+        width: '12px',
+        height: '12px',
       },
       '*::-webkit-scrollbar-track': {
-        background: 'orange',
+        background: `#000000`,
       },
       '*::-webkit-scrollbar-thumb': {
-        backgroundColor: 'green',
-        borderRadius: '20px',
-        border: '5px solid black',
+        backgroundColor: `${green}`,
+        borderRadius: '12px',
+        border: '2px solid black',
+      },
+      '*::-webkit-scrollbar-corner': {
+        backgroundColor: `#000000`,
       },
     },
   },

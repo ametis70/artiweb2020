@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5000",
+    "dev": "node getEventsJson.js && next dev -p 5000",
     "build": "node getEventsJson.js && next build",
     "export": "next export",
     "start": "node getEventsJson && next start",
