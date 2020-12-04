@@ -33,27 +33,25 @@ const EventCard = ({ event, onClick = undefined }) => {
   }
 
   return (
-    <Box px={['0.5rem', '0.5rem', '1rem']}>
+    <Box px={['0.5rem', '0.5rem', '1rem']} flex="1 0 0" minW="220px">
       <Link href={event.url} passHref>
         <ChakraLink onClick={onClick}>
           <Flex
             flex={['0 0 250px', '0 0 250px', '0 0 600px']}
             direction="column"
-            {...cardColors}
             p={['0.5rem 1rem', '0.5rem 1rem', '1rem 2rem']}
             h="100%"
             align="space-between"
             fontWeight={700}
-            h="100%"
+            {...cardColors}
           >
-            <Text fontSize={['lg', 'lg', '5xl']} minW="100%">
+            <Text fontSize={['lg', 'lg', '5xl']} minW={['110px']} whiteSpace="nowrap">
               {event.hora_comienzo.slice(0, -3)} hs
             </Text>
             <Text
               lineHeight="1.2"
               fontSize={['md', 'md', '2xl']}
               pb="1rem"
-              w="100%"
               textTransform="uppercase"
             >
               {event.titulo}

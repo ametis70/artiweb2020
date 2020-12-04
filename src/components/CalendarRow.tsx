@@ -12,7 +12,7 @@ const CalendarRow: React.FC<CalendarRowProps> = ({ date, events }) => {
   const weekDay = date.getDay()
   const monthDay = date.getDate()
   return (
-    <Box py={['0.5rem', '1rem', '1rem']}>
+    <Box py={['0.5rem', '1rem', '1rem']} minW="100vw">
       <Flex>
         <CalendarRowDay weekDay={weekDay} monthDay={monthDay} />
         {events ? events.map((e) => <EventCard key={e.id} event={e} />) : null}

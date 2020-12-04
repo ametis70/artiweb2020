@@ -44,10 +44,10 @@ const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
   })
 
   return (
-    <ScrollContainer hideScrollbars={true}>
+    <ScrollContainer hideScrollbars={true} vertical={false}>
       <Flex
         flexDirection="column"
-        h={[
+        minH={[
           `calc(var(--vh, 1vh) * 100 - 72px)`,
           `calc(var(--vh, 1vh) * 100 - 72px)`,
           `calc(var(--vh, 1vh) * 100 - ${navBarHeight})`,
