@@ -4,10 +4,10 @@ import ResponsiveImage from './ResponsiveImage'
 import { IParticipantExtended, IObra } from '../lib/api'
 import ReactMarkdown from 'react-markdown'
 
-type ObraComponentProps = {
+export type ObraComponentProps = {
   student: IParticipantExtended
   secondStudent: IParticipantExtended
-  maxW: string | number
+  maxW: string
 }
 
 const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) => {

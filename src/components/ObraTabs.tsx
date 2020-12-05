@@ -11,11 +11,11 @@ import {
   Icon,
 } from '@chakra-ui/react'
 import { GrCirclePlay, GrDocumentPdf, GrBrush } from 'react-icons/gr'
-import ReactPlayer from 'react-player'
 
 import type { ObraComponentProps } from './Obra'
 import Obra from './Obra'
 import Investigacion from './Investigacion'
+import ObraVideo from './ObraVideo'
 
 const tabProps = {
   _selected: { color: 'white', bg: 'magenta', '& svg path': { stroke: 'white' } },
@@ -67,7 +67,7 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
         </Tab>
         <Tab {...tabProps}>
           <Icon as={GrCirclePlay} />
-          Video-defensa
+          Presentación
         </Tab>
       </TabList>
 
@@ -79,11 +79,7 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
           <Investigacion maxW={maxW} student={student} />
         </TabPanel>
         <TabPanel>
-          <Box maxW={maxW} m="0 auto">
-            <Flex mt="3rem" align="center" justify="center">
-              <ReactPlayer pip url="https://www.youtube.com/watch?v=0tdyU_gW6WE" />
-            </Flex>
-          </Box>
+          <ObraVideo maxW={maxW} student={student} />
         </TabPanel>
       </TabPanels>
     </Tabs>

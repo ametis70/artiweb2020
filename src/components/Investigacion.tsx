@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown'
 
 const { publicRuntimeConfig } = getConfig()
 
-type InvestigacionProps = {
+export type InvestigacionProps = {
   student: IParticipantExtended
   maxW: string
 }
