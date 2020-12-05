@@ -12,11 +12,11 @@ import {
   TabList,
   TabPanel,
   TabPanels,
+  HeadingProps,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import ReactPlayer from 'react-player'
-
 import { GrCirclePlay, GrDocumentPdf, GrBrush } from 'react-icons/gr'
 
 import { navBarHeight } from '../components/NavBar'
@@ -37,6 +37,23 @@ interface IObraWithSlug extends IObra {
 type ObrasPageProps = {
   obras: IObraWithSlug[]
   students: IParticipantExtended[]
+}
+
+const navHeaderStyle: HeadingProps = {
+  fontSize: ['md', 'md', '2xl'],
+  textAlign: 'center',
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  color: 'gray.500',
+  pb: [0, 0, '3rem'],
+  pl: ['0.5rem', 0, 0],
+  lineHeight: 1,
+  height: '1rem',
+  transform: [
+    'translate(0.5rem, calc(96px / 2 - 50%))',
+    'translate(0.5rem, calc(96px / 2 - 50%))',
+    'none',
+  ],
 }
 
 const StudentSidebarLink: React.FC<{
@@ -100,7 +117,7 @@ const StudentSidebarLink: React.FC<{
                 zIndex="-1"
                 top="50%"
                 left="50%"
-                transform={['none', 'none', 'translateX(-50%)']}
+                transform={['translateY(-50%)', 'translateY(-50%)', 'translateX(-50%)']}
               />
             ) : null}
           </Box>
@@ -266,7 +283,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       return selectedStudent.guest ? (
         <ObraComponent />
       ) : (
-        <Tabs flex="1 0 0" isFitted isLazy>
+        <Tabs flex="1 0 0" isFitted isLazy pt="1rem">
           <TabList
             maxW={width}
             m="0 auto"
@@ -352,6 +369,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           top="1px"
           listStyleType="none"
         >
+          <Heading {...navHeaderStyle}>Multimedia</Heading>
           {subjectStudents.map((student, index) => (
             <StudentSidebarLink
               key={student.alumne_slug}
@@ -362,6 +380,9 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
             />
           ))}
           <Box w="100%" pb="2em" pr="2em" />
+          <Flex align="center" justify="center" h="100%">
+            <Heading {...navHeaderStyle}> Invitad·s</Heading>
+          </Flex>
           {guestStudents.map((student, index) => (
             <StudentSidebarLink
               key={student.alumne_slug}

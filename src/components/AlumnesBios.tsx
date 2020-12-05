@@ -3,6 +3,7 @@ import {
   CloseButton,
   Flex,
   Heading,
+  HeadingProps,
   Link as ChakraLink,
   Spacer,
   Text,
@@ -17,6 +18,14 @@ import ReactMarkdown from 'react-markdown'
 import { AlumnesProps } from '../pages/alumnes'
 import Container from './Container'
 import ResponsiveImage from './ResponsiveImage'
+
+const headerStyle: HeadingProps = {
+  fontSize: ['lg', 'lg', '2xl'],
+  pt: '2em',
+  textAlign: 'center',
+  fontWeight: 700,
+  textTransform: 'uppercase',
+}
 
 const StudentBio: React.FC<{
   student: IParticipantExtended
@@ -93,7 +102,15 @@ const StudentBio: React.FC<{
     <Spacer />
     <Link href={student.obra_url} passHref>
       <ChakraLink>
-        <Flex w="100%" py="0.5rem" justify="center" mb="1rem" cursor="pointer" bg={color}>
+        <Flex
+          w="100%"
+          py="0.5rem"
+          justify="center"
+          mb="1rem"
+          cursor="pointer"
+          bg={color}
+          color={color === 'green' ? 'black' : 'white'}
+        >
           <Text textTransform="uppercase" fontWeight="bold">
             Ver Obra
           </Text>
@@ -138,6 +155,7 @@ const AlumnesBios: React.FC<AlumnesProps> = ({ students }) => {
 
   return (
     <Container>
+      <Heading {...headerStyle}>Multimedia</Heading>
       <Flex direction="row" wrap="wrap" w="100%" pt="2rem">
         {subjectStudents.map((student) => (
           <StudentBio
@@ -149,6 +167,7 @@ const AlumnesBios: React.FC<AlumnesProps> = ({ students }) => {
           />
         ))}
       </Flex>
+      <Heading {...headerStyle}>Invitad·s</Heading>
       <Flex direction="row" wrap="wrap" w="100%" pt="2rem">
         {guestStudents.map((student) => (
           <StudentBio

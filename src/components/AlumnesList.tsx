@@ -1,12 +1,28 @@
-import { Box, Flex, Link as ChakraLink, List, ListItem } from '@chakra-ui/react'
+import {
+  Heading,
+  Box,
+  Flex,
+  Link as ChakraLink,
+  List,
+  ListItem,
+  HeadingProps,
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Parallax } from 'react-scroll-parallax'
 import { random } from 'lodash'
 
 import { AlumnesProps } from '../pages/alumnes'
 import { navBarHeight } from './NavBar'
 import { IParticipantExtended } from '../lib/api'
+
+const headerStyle: HeadingProps = {
+  fontSize: ['sm', 'sm', '2xl'],
+  pb: '1em',
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  opacity: '0.4',
+}
 
 const FloatingCircles: React.FC = () => {
   const circles = Array(15)
@@ -30,21 +46,25 @@ const FloatingCircles: React.FC = () => {
 }
 
 const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
+  const [floatingCircles, setFloatingCircles] = useState<JSX.Element>(null)
   const router = useRouter()
 
   useEffect(() => {
+    setFloatingCircles(<FloatingCircles />)
+  }, [])
+
+  useEffect(() => {
     if (router.query?.alumne) {
-      const element = document.querySelector(`#{router.query.alumne}`)
+      const element = document.querySelector(`#${router.query.alumne}`)
       if (element) {
-        element.scrollIntoView()
+        element.scrollIntoView({ behavior: 'smooth' })
       }
     }
-  }, [])
+  }, [router.query.alumne])
 
   const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
     e.preventDefault()
     router.push(`/alumnes?alumne=${to}`, undefined, { shallow: true })
-    document.querySelector(`#${to}`).scrollIntoView({ behavior: 'smooth' })
   }
 
   const getCarrera = (student: IParticipantExtended): JSX.Element => {
@@ -83,7 +103,7 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
       py="2rem"
     >
       <Box position="absolute" w="100%" h="100%" opacity="0.1" zIndex="0">
-        <FloatingCircles />
+        {floatingCircles}
       </Box>
       <Flex
         justify="center"
@@ -93,6 +113,7 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
         zIndex="1"
         direction="column"
       >
+        <Heading {...headerStyle}>Multimedia</Heading>
         <List fontSize={['md', 'md', '3xl']} fontWeight={700} pb="2em">
           {subjectStudents.map((student) => (
             <ListItem
@@ -110,6 +131,7 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
           ))}
         </List>
 
+        <Heading {...headerStyle}>Invitad·s</Heading>
         <List fontSize={['md', 'md', '3xl']} fontWeight={700}>
           {guestStudents.map((student) => (
             <ListItem
