@@ -15,6 +15,7 @@ import ReactPlayer from 'react-player'
 
 import type { ObraComponentProps } from './Obra'
 import Obra from './Obra'
+import Investigacion from './Investigacion'
 
 const tabProps = {
   _selected: { color: 'white', bg: 'magenta', '& svg path': { stroke: 'white' } },
@@ -75,21 +76,7 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
           <Obra maxW={maxW} student={student} secondStudent={secondStudent} />
         </TabPanel>
         <TabPanel>
-          <Box
-            maxW={maxW}
-            m="0 auto"
-            position="relative"
-            display="block"
-            h={`calc(${maxW} * 1.41)`}
-            overflow="hidden"
-          >
-            <object
-              type="application/pdf"
-              data="https://trackr-media.tangiblemedia.org/publishedmedia/Papers/331-Tangible%20Bits%20Towards%20Seamless/Published/PDF"
-              width="100%"
-              height="100%"
-            />
-          </Box>
+          <Investigacion maxW={maxW} student={student} />
         </TabPanel>
         <TabPanel>
           <Box maxW={maxW} m="0 auto">

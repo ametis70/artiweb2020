@@ -15,6 +15,7 @@ const getBuffer = bent('buffer')
 const assetsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/src/assets/')
 const avatarsDir = path.join(assetsDir, '/avatars/')
 const bannersDir = path.join(assetsDir, '/banners/')
+const papersDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/public/papers/')
 
 const createDir = (dir: string) => {
   if (!fs.existsSync(dir)) {
@@ -26,6 +27,7 @@ const createDir = (dir: string) => {
 createDir(assetsDir)
 createDir(avatarsDir)
 createDir(bannersDir)
+createDir(papersDir)
 
 const studentsRole = 'Alumn@'
 const guestRole = 'Invitad@'
@@ -43,7 +45,7 @@ export async function getImage(id: number) {
   return images.data.find((file) => file.id === id)
 }
 
-export async function downloadImage(id: number, dir: string): Promise<string | null> {
+export async function downloadFile(id: number, dir: string): Promise<string | null> {
   const imageData = await getImage(id)
   if (!imageData) return null
   const fileDir = path.join(dir, imageData.filename_disk)
@@ -85,7 +87,7 @@ export interface IObra {
   user2: number
   investigacion_titulo: string
   investigacion_abstract: string
-  investigacion_archivo: string
+  investigacion_archivo: number
   video_link: string
 }
 
@@ -146,6 +148,7 @@ export interface IParticipantExtended {
   obra: IObra
   bannerUrl: string | null
   avatarUrl: string | null
+  paperUrl: string | null
 }
 
 export async function getAllParticipantsExtended() {
@@ -162,16 +165,21 @@ export async function getAllParticipantsExtended() {
       const obra = allObras.data.find((o) => o.user === id || o.user2 === id)
       const bio = allBios.data.find((b) => b.user === id)
 
-      let guest = bio.carrera !== 'multimedia' ? true : false
+      const guest = bio.carrera !== 'multimedia' ? true : false
 
       let avatarUrl = null
       if (avatar) {
-        avatarUrl = await downloadImage(avatar, avatarsDir)
+        avatarUrl = await downloadFile(avatar, avatarsDir)
       }
 
       let bannerUrl = null
       if (obra && obra.banner) {
-        bannerUrl = await downloadImage(obra.banner, bannersDir)
+        bannerUrl = await downloadFile(obra.banner, bannersDir)
+      }
+
+      let paperUrl = null
+      if (obra && obra.investigacion_archivo) {
+        paperUrl = await downloadFile(obra.investigacion_archivo, papersDir)
       }
 
       const full_name = `${first_name} ${last_name}`
@@ -195,6 +203,7 @@ export async function getAllParticipantsExtended() {
         obra,
         avatarUrl,
         bannerUrl,
+        paperUrl,
       }
     }),
   )
