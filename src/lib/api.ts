@@ -83,6 +83,10 @@ export interface IObra {
   ayuda_contenido_personalizado: string
   banner: number
   user2: number
+  investigacion_titulo: string
+  investigacion_abstract: string
+  investigacion_archivo: string
+  video_link: string
 }
 
 export async function getAllObras() {

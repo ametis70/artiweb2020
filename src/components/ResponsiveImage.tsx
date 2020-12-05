@@ -5,9 +5,10 @@ type ResponsiveImageProps = {
   avatar?: boolean
   alt: string
   imageStyle?: SystemStyleObject
+  filter?: string
 }
 
-const defaultSizes = 'sizes[]=300,sizes[]=600,sizes[]=900,sizes[]=1200,sizes[]=1800'
+// const defaultSizes = 'sizes[]=300,sizes[]=600,sizes[]=900,sizes[]=1200,sizes[]=1800'
 
 const ResponsiveImage: React.FC<ResponsiveImageProps & BoxProps> = ({
   url,
@@ -15,6 +16,7 @@ const ResponsiveImage: React.FC<ResponsiveImageProps & BoxProps> = ({
   alt,
   children,
   imageStyle,
+  filter,
   ...rest
 }) => {
   if (url === null) return null
@@ -40,9 +42,13 @@ const ResponsiveImage: React.FC<ResponsiveImageProps & BoxProps> = ({
     <Box
       height={responsiveImage.height}
       width={responsiveImage.width}
+      background={`url(${placeholder})`}
       backgroundSize="cover"
       position="relative"
-      sx={{ '& picture img': { ...imageStyle } }}
+      filter={filter}
+      sx={{
+        '& picture img': imageStyle,
+      }}
       {...rest}
     >
       {children}
