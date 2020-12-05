@@ -27,7 +27,7 @@ import {
   IObra,
   IParticipantExtended,
 } from '../lib/api'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import ResponsiveImage from '../components/ResponsiveImage'
 
 interface IObraWithSlug extends IObra {
@@ -140,20 +140,28 @@ const StudentSidebarLink: React.FC<{
   )
 }
 
-const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
+const Obras: React.FC<ObrasPageProps> = ({ students }) => {
   const router = useRouter()
+  const navRef = useRef<HTMLDivElement>()
 
-  const handleClick = (
-    e: React.MouseEvent<Element, MouseEvent>,
-    to: string,
-    scrollId: string,
-  ) => {
+  useEffect(() => {
+    if (navRef.current && router.query.obra) {
+      const { alumne_slug } = students.find(
+        (student) => student.obra_slug === router.query.obra,
+      )
+
+      const element = navRef.current.querySelector<HTMLDivElement>(`#${alumne_slug}`)
+      navRef.current.scroll({
+        top: element.offsetTop - window.innerHeight / 2 + 100,
+        left: element.offsetLeft - window.innerWidth / 2 + element.offsetWidth / 2,
+        behavior: 'smooth',
+      })
+    }
+  }, [navRef, navRef.current, router.query.obra])
+
+  const handleClick = (e: React.MouseEvent<Element, MouseEvent>, to: string) => {
     e.preventDefault()
     router.push(to, undefined, { shallow: true })
-
-    document
-      .querySelector(`#${scrollId}`)
-      .scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 
   const getLinkText = (obra: IObra): string => {
@@ -283,7 +291,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
       return selectedStudent.guest ? (
         <ObraComponent />
       ) : (
-        <Tabs flex="1 0 0" isFitted isLazy pt="1rem">
+        <Tabs flex="1 0 0" isFitted isLazy pt="2rem">
           <TabList
             maxW={width}
             m="0 auto"
@@ -368,6 +376,7 @@ const Obras: React.FC<ObrasPageProps> = ({ obras, students }) => {
           overflow={['scroll hidden', 'scroll hidden', 'hidden scroll']}
           top="1px"
           listStyleType="none"
+          ref={navRef}
         >
           <Heading {...navHeaderStyle}>Multimedia</Heading>
           {subjectStudents.map((student, index) => (
