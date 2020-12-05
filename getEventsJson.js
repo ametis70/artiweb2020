@@ -40,18 +40,8 @@ async function main() {
 
     if (!user) return event
 
-    let user2_name = ''
-    if (event.user2) {
-      const user2Data = usersFiltered.find((user) => user.id === event.user2)
-      if (user2Data) {
-        user2_name = ` y ${user2Data.first_name.split(/[ ,]+/)[0]} ${
-          user2Data.last_name.split(/[ ,]+/)[0]
-        }`
-      }
-    }
-
     const user_name = `${user.first_name.split(/[ ,]+/)[0]} ${
-      user.last_name.split(/[ ,]+/)[0] + user2_name
+      user.last_name.split(/[ ,]+/)[0]
     }`
 
     return {
