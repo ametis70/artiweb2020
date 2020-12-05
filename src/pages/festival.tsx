@@ -1,10 +1,13 @@
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Textfit } from 'react-textfit'
 
 import Container from '../components/Container'
+import FestivalVideo from '../components/FestivalVideo'
 import SEO from '../components/SEO'
-import { getGeneralInfo, login } from '../lib/api'
+import { getGeneralInfo, login, IGeneralInfo } from '../lib/api'
+
+import events from '../events.json'
 
 const profesores: Array<string> = [
   'Federico Joselevich Puiggrós',
@@ -12,15 +15,24 @@ const profesores: Array<string> = [
   'Nicolas Mata Lastra',
 ]
 
-type FestivalProps = {
-  generalInfo: {
-    texto_descripcion_columna_1: string
-    texto_descripcion_columna_2: string
-  }
-}
+const Festival: React.FC<IGeneralInfo> = ({
+  texto_descripcion_columna_1,
+  texto_descripcion_columna_2,
+  video_apertura,
+  video_cierre,
+}) => {
+  const [eventoCierreTime, setEventoCierreTime] = useState(null)
+  const [currentDate] = useState(new Date())
 
-const Festival: React.FC<FestivalProps> = ({ generalInfo }) => {
-  const { texto_descripcion_columna_1, texto_descripcion_columna_2 } = generalInfo
+  useEffect(() => {
+    const e = events.find((e) => e.video_cierre)
+
+    if (e) {
+      const eventTime = new Date(`${e.fecha}T${e.hora_comienzo}`)
+      setEventoCierreTime(eventTime)
+    }
+  }, [])
+
   return (
     <>
       <SEO title="Festival" />
@@ -45,6 +57,7 @@ const Festival: React.FC<FestivalProps> = ({ generalInfo }) => {
             spacing="1rem"
             justify="space-between"
             padding="1rem"
+            mb="4rem"
           >
             <Text flex="0 0 calc(33.33% - 2rem)" textAlign="justify">
               {texto_descripcion_columna_1}
@@ -84,6 +97,17 @@ const Festival: React.FC<FestivalProps> = ({ generalInfo }) => {
               </Box>
             </Flex>
           </Stack>
+
+          <FestivalVideo
+            heading="Video de apertura de Artimañas 2020"
+            url={video_apertura}
+          />
+          {currentDate > eventoCierreTime ? (
+            <FestivalVideo
+              heading="Video de cierre de Artimañas 2020"
+              url={video_cierre}
+            />
+          ) : null}
         </Container>
       </Flex>
     </>
@@ -94,7 +118,7 @@ export async function getStaticProps() {
   await login()
   const generalInfo = await getGeneralInfo()
 
-  return { props: { generalInfo: generalInfo.data[0] } }
+  return { props: { ...generalInfo.data[0] } }
 }
 
 export default Festival
