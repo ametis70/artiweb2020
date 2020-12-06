@@ -89,6 +89,7 @@ export interface IObra {
   investigacion_abstract: string
   investigacion_archivo: number
   video_link: string
+  video2_link: string
 }
 
 export async function getAllObras() {

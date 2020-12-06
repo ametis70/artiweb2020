@@ -17,14 +17,7 @@ import Obra from './Obra'
 import Investigacion from './Investigacion'
 import ObraVideo from './ObraVideo'
 
-const tabProps = {
-  _selected: { color: 'white', bg: 'magenta', '& svg path': { stroke: 'white' } },
-  borderColor: 'magenta',
-  color: 'gray.500',
-  sx: { '& svg': { mr: '0.5rem' }, '& svg path': { stroke: 'gray.500' } },
-}
-
-const tabNames: string[] = ['obra', 'investigación', 'video']
+const tabNames: string[] = ['obra', 'video', 'investigación']
 
 const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) => {
   const router = useRouter()
@@ -40,6 +33,16 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
     router.push(`/obras?obra=${router.query.obra}&ver=${tabNames[index]}`, undefined, {
       shallow: true,
     })
+  }
+
+  const bg = student.guest ? 'green' : 'magenta'
+  const fg = student.guest ? 'black' : 'white'
+
+  const tabProps = {
+    _selected: { color: fg, bg: bg, '& svg path': { stroke: fg } },
+    borderColor: bg,
+    color: 'gray.500',
+    sx: { '& svg': { mr: '0.5rem' }, '& svg path': { stroke: 'gray.500' } },
   }
 
   return (
@@ -62,13 +65,15 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
           Obra
         </Tab>
         <Tab {...tabProps}>
-          <Icon as={GrDocumentPdf} />
-          Investigación
-        </Tab>
-        <Tab {...tabProps}>
           <Icon as={GrCirclePlay} />
           Presentación
         </Tab>
+        {!student.guest ? (
+          <Tab {...tabProps}>
+            <Icon as={GrDocumentPdf} />
+            Investigación
+          </Tab>
+        ) : null}
       </TabList>
 
       <TabPanels>
@@ -76,11 +81,13 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
           <Obra maxW={maxW} student={student} secondStudent={secondStudent} />
         </TabPanel>
         <TabPanel>
-          <Investigacion maxW={maxW} student={student} />
+          <ObraVideo maxW={maxW} student={student} secondStudent={secondStudent} />
         </TabPanel>
-        <TabPanel>
-          <ObraVideo maxW={maxW} student={student} />
-        </TabPanel>
+        {!student.guest ? (
+          <TabPanel>
+            <Investigacion maxW={maxW} student={student} />
+          </TabPanel>
+        ) : null}
       </TabPanels>
     </Tabs>
   )

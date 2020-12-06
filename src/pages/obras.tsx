@@ -76,9 +76,12 @@ const Obras: React.FC<ObrasPageProps> = ({ students }) => {
       )
     }
 
+    console.log(selectedStudent)
     let secondStudent: IParticipantExtended | null = null
-    if (selectedStudent?.obra.user2) {
-      secondStudent = students.find((student) => student.id === obra.user2)
+    if (selectedStudent.obra.user2) {
+      secondStudent = students.find(
+        (student) => student.id === selectedStudent.obra.user2,
+      )
     }
 
     const { obra } = selectedStudent
@@ -86,9 +89,7 @@ const Obras: React.FC<ObrasPageProps> = ({ students }) => {
     const width = '840px'
 
     if (selectedStudent) {
-      return selectedStudent.guest ? (
-        <Obra maxW={width} student={selectedStudent} secondStudent={secondStudent} />
-      ) : (
+      return (
         <ObraTabs maxW={width} student={selectedStudent} secondStudent={secondStudent} />
       )
     }
