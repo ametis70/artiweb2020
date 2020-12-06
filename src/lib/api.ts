@@ -232,7 +232,9 @@ export async function getAllEvents() {
 export interface IGeneralInfo {
   texto_descripcion_columna_1: string
   texto_descripcion_columna_2: string
+  video_apertura_titulo: string
   video_apertura: string
+  video_cierre_titulo: string
   video_cierre: string
 }
 

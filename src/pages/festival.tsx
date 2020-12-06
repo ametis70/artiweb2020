@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Textfit } from 'react-textfit'
 
 import Container from '../components/Container'
@@ -8,6 +8,7 @@ import SEO from '../components/SEO'
 import { getGeneralInfo, login, IGeneralInfo } from '../lib/api'
 
 import events from '../events.json'
+import { useRouter } from 'next/router'
 
 const profesores: Array<string> = [
   'Federico Joselevich Puiggrós',
@@ -18,11 +19,34 @@ const profesores: Array<string> = [
 const Festival: React.FC<IGeneralInfo> = ({
   texto_descripcion_columna_1,
   texto_descripcion_columna_2,
+  video_apertura_titulo,
   video_apertura,
   video_cierre,
+  video_cierre_titulo,
 }) => {
   const [eventoCierreTime, setEventoCierreTime] = useState(null)
   const [currentDate] = useState(new Date())
+
+  const aperturaRef = useRef<HTMLDivElement>(null)
+  const cierreRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.query.video) {
+      if (router.query.video === 'apertura' && aperturaRef.current) {
+        window.scroll({
+          top: aperturaRef.current.offsetTop,
+          behavior: 'smooth',
+        })
+      }
+      if (router.query.video === 'cierre' && cierreRef.current) {
+        window.scroll({
+          top: cierreRef.current.offsetTop,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }, [aperturaRef, aperturaRef.current, cierreRef, cierreRef.current, router.query.video])
 
   useEffect(() => {
     const e = events.find((e) => e.video_cierre)
@@ -99,13 +123,15 @@ const Festival: React.FC<IGeneralInfo> = ({
           </Stack>
 
           <FestivalVideo
-            heading="Video de apertura de Artimañas 2020"
+            heading={video_apertura_titulo}
             url={video_apertura}
+            ref={aperturaRef}
           />
           {currentDate > eventoCierreTime ? (
             <FestivalVideo
-              heading="Video de cierre de Artimañas 2020"
+              heading={video_cierre_titulo}
               url={video_cierre}
+              ref={cierreRef}
             />
           ) : null}
         </Container>
