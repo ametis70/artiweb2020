@@ -2,7 +2,10 @@ import { Box, ChakraProvider } from '@chakra-ui/react'
 import { AppProps } from 'next/app'
 import { useEffect } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
+import { useRouter } from 'next/router'
 import smoothscroll from 'smoothscroll-polyfill'
+
+import NProgress from 'nprogress'
 
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
@@ -16,14 +19,25 @@ import 'focus-visible/dist/focus-visible'
 import theme from '../theme'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const router = useRouter()
   useEffect(() => {
-    const setDocHeight = () => {
-      if (typeof window !== undefined) {
-        smoothscroll.polyfill()
-      }
+    if (typeof window !== undefined) {
+      smoothscroll.polyfill()
+    }
 
+    const setDocHeight = () => {
       document.documentElement.style.setProperty('--vh', `${window.innerHeight / 100}px`)
     }
+
+    const load = () => {
+      NProgress.start()
+    }
+    const stop = () => {
+      NProgress.done()
+    }
+    router.events.on('routeChangeStart', load)
+    router.events.on('routeChangeComplete', stop)
+    router.events.on('routeChangeError', stop)
 
     setDocHeight()
     window.addEventListener('resize', function () {

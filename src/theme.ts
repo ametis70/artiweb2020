@@ -16,6 +16,19 @@ const customTheme = extendTheme({
       '.headroom': {
         zIndex: '99 !important',
       },
+      '#nprogress': {
+        pointerEvents: 'none',
+      },
+
+      '#nprogress .bar': {
+        background: 'green',
+        position: 'fixed',
+        zIndex: 1031,
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '3px',
+      },
       a: {
         textDecoration: 'none !important',
       },
