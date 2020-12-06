@@ -55,9 +55,9 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
 
   useEffect(() => {
     if (router.query?.alumne) {
-      const element = document.querySelector(`#${router.query.alumne}`)
+      const element = document.querySelector<HTMLDivElement>(`#${router.query.alumne}`)
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
+        window.scroll({ top: element.offsetTop, behavior: 'smooth' })
       }
     }
   }, [router.query.alumne])
