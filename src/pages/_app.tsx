@@ -1,12 +1,11 @@
 import { Box, ChakraProvider } from '@chakra-ui/react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { AppProps } from 'next/app'
-import { useEffect } from 'react'
-import { ParallaxProvider } from 'react-scroll-parallax'
 import { useRouter } from 'next/router'
-import { motion, AnimatePresence } from 'framer-motion'
-import smoothscroll from 'smoothscroll-polyfill'
-
 import NProgress from 'nprogress'
+import { useEffect, useState } from 'react'
+import { ParallaxProvider } from 'react-scroll-parallax'
+import smoothscroll from 'smoothscroll-polyfill'
 
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
@@ -20,6 +19,7 @@ import 'focus-visible/dist/focus-visible'
 import theme from '../theme'
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+  const [hideOverflow, setHideOverflow] = useState(true)
   const router = useRouter()
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -32,9 +32,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
     const load = () => {
       NProgress.start()
+      setHideOverflow(true)
     }
     const stop = () => {
       NProgress.done()
+      setHideOverflow(false)
     }
     router.events.on('routeChangeStart', load)
     router.events.on('routeChangeComplete', stop)
@@ -52,7 +54,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={theme} resetCSS>
       <ParallaxProvider>
-        <Box minH="calc(var(--vh, 1vh) * 100)" w="100%" overflow="hidden">
+        <Box
+          minH="calc(var(--vh, 1vh) * 100)"
+          w="100%"
+          overflow={hideOverflow ? 'hidden' : 'auto'}
+        >
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
             <motion.div

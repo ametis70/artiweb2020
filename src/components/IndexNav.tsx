@@ -1,6 +1,7 @@
-import paths from '../paths'
-import Link from 'next/link'
 import { Flex, Link as ChakraLink, Stack, Text } from '@chakra-ui/react'
+import Link from 'next/link'
+
+import paths from '../paths'
 
 const IndexNav = () => {
   const Links = paths.map((p) => {

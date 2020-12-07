@@ -1,14 +1,5 @@
-import {
-  Spacer,
-  Flex,
-  Divider,
-  Box,
-  Heading,
-  Text,
-  Link as ChakraLink,
-} from '@chakra-ui/react'
+import { Box, Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { IEvent } from '../lib/api'
 
 const colors: { bg: string; color: string }[] = [
   { bg: 'magenta', color: 'white' },

@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react'
-import events from '../events.json'
-import EventCard from '../components/EventCard'
-import Link from 'next/link'
-
 import {
-  Flex,
   Box,
-  Text,
+  Flex,
+  Link as ChakraLink,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  Text,
   useDisclosure,
-  Link as ChakraLink,
 } from '@chakra-ui/react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
+import EventCard from '../components/EventCard'
+import events from '../events.json'
 
 const getDuration = (event): [Date, Date] => {
   return [
@@ -27,6 +27,7 @@ const getDuration = (event): [Date, Date] => {
 const LiveIndicator = () => {
   const [currentEvent, setCurrentEvent] = useState(null)
   const [showIndicator, setShowIndicator] = useState<boolean>(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [[currentEventStart, currentEventEnd], setCurrentDuration] = useState([
     null,
     null,

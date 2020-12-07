@@ -1,7 +1,8 @@
-import { Text, ListItem, Link as ChakraLink, Flex, Box } from '@chakra-ui/react'
+import { Box, Flex, Link as ChakraLink, ListItem, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { IParticipantExtended } from '../lib/api'
+
 import ResponsiveImage from '../components/ResponsiveImage'
+import { IParticipantExtended } from '../lib/api'
 
 type StudentNavbarLinkProps = {
   student: IParticipantExtended
@@ -16,6 +17,8 @@ const StudentNavbarLink: React.FC<StudentNavbarLinkProps> = ({
   lastItem,
   color = 'magenta',
 }) => {
+  if (!student) return null
+
   return (
     <ListItem
       px="1rem"

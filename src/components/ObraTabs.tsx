@@ -1,20 +1,11 @@
-import { useEffect, useState } from 'react'
+import { Icon, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import {
-  Box,
-  Flex,
-  Tab,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Icon,
-} from '@chakra-ui/react'
-import { GrCirclePlay, GrDocumentPdf, GrBrush } from 'react-icons/gr'
+import { useEffect, useState } from 'react'
+import { GrBrush, GrCirclePlay, GrDocumentPdf } from 'react-icons/gr'
 
+import Investigacion from './Investigacion'
 import type { ObraComponentProps } from './Obra'
 import Obra from './Obra'
-import Investigacion from './Investigacion'
 import ObraVideo from './ObraVideo'
 
 const tabNames: string[] = ['obra', 'video', 'investigación']

@@ -1,11 +1,10 @@
-import getConfig from 'next/config'
 import DirectusSDK from '@directus/sdk-js'
 import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
 import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
 import bent from 'bent'
-
-import path from 'path'
 import fs from 'fs'
+import getConfig from 'next/config'
+import path from 'path'
 import { promisify } from 'util'
 
 const { serverRuntimeConfig } = getConfig()

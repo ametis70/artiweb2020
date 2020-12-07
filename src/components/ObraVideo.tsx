@@ -1,5 +1,4 @@
-import { Flex, Heading, Text, Stack, Box } from '@chakra-ui/react'
-
+import { Box, Flex, Heading, Stack } from '@chakra-ui/react'
 import ReactPlayer from 'react-player'
 
 import type { ObraComponentProps } from './Obra'

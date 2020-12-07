@@ -8,12 +8,12 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import getConfig from 'next/config'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Headroom from 'react-headroom'
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
-import getConfig from 'next/config'
 
 import LiveIndicator from './LiveIndicator'
 

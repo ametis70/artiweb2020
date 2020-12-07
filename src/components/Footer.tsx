@@ -1,6 +1,7 @@
-import { Box, Flex, Image, Spacer, Stack, Text } from '@chakra-ui/react'
-import { FaFacebookF, FaInstagram } from 'react-icons/fa'
+import { Box, Flex, Image, Spacer, Stack } from '@chakra-ui/react'
 import getConfig from 'next/config'
+import { FaFacebookF, FaInstagram } from 'react-icons/fa'
+
 import SocialNetworkIcon from './SocialNetworkIcon'
 
 const { publicRuntimeConfig } = getConfig()

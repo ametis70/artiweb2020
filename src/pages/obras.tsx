@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Box, Flex, Heading, Stack, Text, HeadingProps } from '@chakra-ui/react'
+import { Box, Flex, Heading, HeadingProps, Stack, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-
-import StudentNavbarLink from '../components/StudentNavbarLink'
-import Obra from '../components/Obra'
-import ObraTabs from '../components/ObraTabs'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { navBarHeight } from '../components/NavBar'
+import ObraTabs from '../components/ObraTabs'
 import SEO from '../components/SEO'
-
-import { getAllParticipantsExtended, login, IParticipantExtended } from '../lib/api'
+import StudentNavbarLink from '../components/StudentNavbarLink'
+import { getAllParticipantsExtended, IParticipantExtended, login } from '../lib/api'
 
 const navHeaderStyle: HeadingProps = {
   fontSize: ['md', 'md', '2xl'],
@@ -31,6 +28,8 @@ const navHeaderStyle: HeadingProps = {
 type ObrasPageProps = {
   students: IParticipantExtended[]
 }
+
+const width = '840px'
 
 const Obras: React.FC<ObrasPageProps> = ({ students }) => {
   const router = useRouter()
@@ -83,10 +82,6 @@ const Obras: React.FC<ObrasPageProps> = ({ students }) => {
         (student) => student.id === selectedStudent.obra.user2,
       )
     }
-
-    const { obra } = selectedStudent
-
-    const width = '840px'
 
     if (selectedStudent) {
       return (

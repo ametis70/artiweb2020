@@ -1,9 +1,7 @@
-import { Box } from '@chakra-ui/react'
-
-import SEO from '../components/SEO'
 import Calendar from '../components/Calendar'
+import SEO from '../components/SEO'
 
-const Cronograma: React.FC<CronogramaProps> = () => {
+const Cronograma: React.FC = () => {
   return (
     <>
       <SEO title="Cronograma" />

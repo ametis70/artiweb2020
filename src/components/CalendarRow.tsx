@@ -1,4 +1,5 @@
-import { Flex, Box, Spacer } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
+
 import { IEvent } from '../lib/api'
 import CalendarRowDay from './CalendarRowDay'
 import EventCard from './EventCard'

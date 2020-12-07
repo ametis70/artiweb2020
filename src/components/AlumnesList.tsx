@@ -1,20 +1,20 @@
 import {
-  Heading,
   Box,
   Flex,
+  Heading,
+  HeadingProps,
   Link as ChakraLink,
   List,
   ListItem,
-  HeadingProps,
 } from '@chakra-ui/react'
+import { random } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Parallax } from 'react-scroll-parallax'
-import { random } from 'lodash'
 
+import { IParticipantExtended } from '../lib/api'
 import { AlumnesProps } from '../pages/alumnes'
 import { navBarHeight } from './NavBar'
-import { IParticipantExtended } from '../lib/api'
 
 const headerStyle: HeadingProps = {
   fontSize: ['sm', 'sm', '2xl'],

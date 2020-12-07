@@ -1,7 +1,8 @@
-import { Heading, Text, Stack, Box } from '@chakra-ui/react'
-import { IParticipantExtended } from '../lib/api'
+import { Box, Heading, Stack, Text } from '@chakra-ui/react'
 import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
+
+import { IParticipantExtended } from '../lib/api'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -13,7 +14,7 @@ export type InvestigacionProps = {
 const Investigacion: React.FC<InvestigacionProps> = ({ student, maxW }) => {
   const { obra } = student
 
-  const { investigacion_titulo, investigacion_abstract, investigacion_archivo } = obra
+  const { investigacion_titulo, investigacion_abstract } = obra
 
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
@@ -39,6 +40,7 @@ const Investigacion: React.FC<InvestigacionProps> = ({ student, maxW }) => {
           {student.paperUrl ? (
             <object
               type="application/pdf"
+              aria-label={`Investigación de ${student.full_name}`}
               data={`${publicRuntimeConfig.basePath}/papers/${student.paperUrl}`}
               width="100%"
               height="100%"

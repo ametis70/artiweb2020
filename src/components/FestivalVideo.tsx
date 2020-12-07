@@ -1,5 +1,5 @@
+import { Box, Flex, Heading } from '@chakra-ui/react'
 import { forwardRef } from 'react'
-import { Heading, Box, Flex } from '@chakra-ui/react'
 import ReactPlayer from 'react-player'
 
 type FestivalVideoProps = {
@@ -28,5 +28,6 @@ const FestivalVideo = forwardRef<HTMLDivElement, FestivalVideoProps>(
     )
   },
 )
+FestivalVideo.displayName = 'FestivalVideo'
 
 export default FestivalVideo

@@ -1,5 +1,5 @@
-import Document, { Head, Html, Main, NextScript } from 'next/document'
 import getConfig from 'next/config'
+import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 const { publicRuntimeConfig } = getConfig()
 

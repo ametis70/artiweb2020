@@ -1,8 +1,9 @@
-import { Flex, Heading, Text, Stack, Box, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Flex, Heading, Link as ChakraLink, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import ResponsiveImage from './ResponsiveImage'
-import { IParticipantExtended, IObra } from '../lib/api'
 import ReactMarkdown from 'react-markdown'
+
+import { IObra, IParticipantExtended } from '../lib/api'
+import ResponsiveImage from './ResponsiveImage'
 
 export type ObraComponentProps = {
   student: IParticipantExtended

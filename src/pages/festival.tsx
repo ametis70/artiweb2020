@@ -1,14 +1,12 @@
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/react'
-import React, { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
+import React, { useEffect, useRef } from 'react'
 import { Textfit } from 'react-textfit'
 
 import Container from '../components/Container'
 import FestivalVideo from '../components/FestivalVideo'
 import SEO from '../components/SEO'
-import { getGeneralInfo, login, IGeneralInfo } from '../lib/api'
-
-import events from '../events.json'
-import { useRouter } from 'next/router'
+import { getGeneralInfo, IGeneralInfo, login } from '../lib/api'
 
 const profesores: Array<string> = [
   'Federico Joselevich Puiggrós',
@@ -24,9 +22,6 @@ const Festival: React.FC<IGeneralInfo> = ({
   video_cierre,
   video_cierre_titulo,
 }) => {
-  const [eventoCierreTime, setEventoCierreTime] = useState(null)
-  const [currentDate] = useState(new Date())
-
   const aperturaRef = useRef<HTMLDivElement>(null)
   const cierreRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -47,15 +42,6 @@ const Festival: React.FC<IGeneralInfo> = ({
       }
     }
   }, [aperturaRef, aperturaRef.current, cierreRef, cierreRef.current, router.query.video])
-
-  useEffect(() => {
-    const e = events.find((e) => e.video_cierre)
-
-    if (e) {
-      const eventTime = new Date(`${e.fecha}T${e.hora_comienzo}`)
-      setEventoCierreTime(eventTime)
-    }
-  }, [])
 
   return (
     <>
