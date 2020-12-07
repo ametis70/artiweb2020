@@ -29,7 +29,7 @@ const IndexNav = () => {
         pb="2rem"
         opacity="0.5"
       >
-        Artiamañas 2020
+        Artimañas 2020
       </Text>
       <Stack
         direction={['column', 'column', 'row']}

@@ -57,7 +57,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <Box
           minH="calc(var(--vh, 1vh) * 100)"
           w="100%"
-          overflow={hideOverflow ? 'hidden' : 'auto'}
+          overflow={hideOverflow ? 'hidden' : 'scroll'}
         >
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
