@@ -127,13 +127,11 @@ const Festival: React.FC<IGeneralInfo> = ({
             url={video_apertura}
             ref={aperturaRef}
           />
-          {currentDate > eventoCierreTime ? (
-            <FestivalVideo
-              heading={video_cierre_titulo}
-              url={video_cierre}
-              ref={cierreRef}
-            />
-          ) : null}
+          <FestivalVideo
+            heading={video_cierre_titulo}
+            url={video_cierre}
+            ref={cierreRef}
+          />
         </Container>
       </Flex>
     </>
