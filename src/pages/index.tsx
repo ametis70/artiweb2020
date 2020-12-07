@@ -1,11 +1,11 @@
-import Hero from '../components/Hero'
+import IndexNav from '../components/IndexNav'
 import SEO from '../components/SEO'
 
 const Home: React.FC = () => {
   return (
     <>
       <SEO />
-      <Hero />
+      <IndexNav />
     </>
   )
 }

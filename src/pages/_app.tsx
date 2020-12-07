@@ -52,7 +52,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={theme} resetCSS>
       <ParallaxProvider>
-        <Box minH="calc(var(--vh, 1vh) * 100)">
+        <Box minH="calc(var(--vh, 1vh) * 100)" w="100%" overflow="hidden">
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
             <motion.div
@@ -61,6 +61,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
               animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
               exit={{ opacity: 0, scale: 0, y: '-50%' }}
               transition={{ ease: 'easeOut', duration: 0.5 }}
+              style={{ width: '100%' }}
             >
               <Component {...pageProps} />
             </motion.div>
