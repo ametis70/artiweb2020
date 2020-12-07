@@ -3,6 +3,7 @@ import { AppProps } from 'next/app'
 import { useEffect } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import { useRouter } from 'next/router'
+import { motion, AnimatePresence } from 'framer-motion'
 import smoothscroll from 'smoothscroll-polyfill'
 
 import NProgress from 'nprogress'
@@ -52,8 +53,18 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     <ChakraProvider theme={theme} resetCSS>
       <ParallaxProvider>
         <Box minH="calc(var(--vh, 1vh) * 100)">
-          <NavBar />
-          <Component {...pageProps} />
+          {router.pathname !== '/' ? <NavBar /> : null}
+          <AnimatePresence exitBeforeEnter>
+            <motion.div
+              key={router.pathname}
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+              exit={{ opacity: 0, scale: 0, y: '-50%' }}
+              transition={{ ease: 'easeOut', duration: 0.5 }}
+            >
+              <Component {...pageProps} />
+            </motion.div>
+          </AnimatePresence>
         </Box>
         <Footer />
       </ParallaxProvider>
