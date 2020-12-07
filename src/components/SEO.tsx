@@ -27,7 +27,7 @@ const SEO: React.FC<SEOProps> = ({ title }) => {
       <meta property="og:image" content="android-chrome-512x512.png" key="ogimage" />
       <meta
         property="og:image"
-        content={`${baseUrl}/anroid-chrome-512x512.png`}
+        content={`${baseUrl}/android-chrome-512x512.png`}
         key="ogimage"
       />
     </Head>
