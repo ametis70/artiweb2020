@@ -19,7 +19,12 @@ const customTheme = extendTheme({
       '#nprogress': {
         pointerEvents: 'none',
       },
-
+      '.hide-scrollbar, #__next': {
+        '::webkit-scrollbar': {
+          display: 'none',
+        },
+        scrollbarWidth: 'none !important',
+      },
       '#nprogress .bar': {
         background: 'green',
         position: 'fixed',

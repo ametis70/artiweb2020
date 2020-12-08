@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import smoothscroll from 'smoothscroll-polyfill'
 
+const algo: CSSProperties = {}
+
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
 
@@ -17,6 +19,7 @@ import '../styles/typeface-futura.css'
 import 'focus-visible/dist/focus-visible'
 
 import theme from '../theme'
+import { CSSProperties } from 'react'
 
 const variants = {
   initial: { opacity: 0, x: '100%' },
@@ -90,7 +93,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <Box
           minH="calc(var(--vh, 1vh) * 100)"
           w="100%"
-          overflow={['hidden visible', 'visible', 'visible']}
+          overflow={['hidden visible', 'hidden visible', 'visible visible']}
+          className="hide-scrollbar"
         >
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
