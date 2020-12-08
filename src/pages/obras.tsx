@@ -75,7 +75,6 @@ const Obras: React.FC<ObrasPageProps> = ({ students }) => {
       )
     }
 
-    console.log(selectedStudent)
     let secondStudent: IParticipantExtended | null = null
     if (selectedStudent.obra.user2) {
       secondStudent = students.find(

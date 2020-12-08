@@ -17,6 +17,10 @@ const SEO: React.FC<SEOProps> = ({ title }) => {
     <Head>
       <title>{t}</title>
       <link rel="icon" href="/favicon.ico" />
+      <meta
+        name="description"
+        content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"
+      />
       <meta property="og:title" content={t} key="ogtitle" />
       <meta property="og:url" content={`${baseUrl}${router.pathname}`} />
       <meta

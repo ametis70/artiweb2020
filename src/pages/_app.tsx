@@ -18,9 +18,27 @@ import 'focus-visible/dist/focus-visible'
 
 import theme from '../theme'
 
+const variants = {
+  initial: { opacity: 0, x: '100%' },
+  enter: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    x: 0,
+    transition: { ease: 'easeOut', duration: 0.5 },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0,
+    y: '-50%',
+    transition: { ease: 'easeOut', duration: 0.3 },
+  },
+}
+
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const [hideOverflow, setHideOverflow] = useState(true)
   const router = useRouter()
+  const [previousPath, setPreviousPath] = useState(router.pathname)
+
   useEffect(() => {
     if (typeof window !== undefined) {
       smoothscroll.polyfill()
@@ -32,11 +50,26 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
     const load = () => {
       NProgress.start()
-      setHideOverflow(true)
     }
+
     const stop = () => {
       NProgress.done()
-      setHideOverflow(false)
+
+      if (typeof window !== undefined) {
+        setTimeout(() => {
+          const { pathname } = router
+
+          const { _paq } = window as any
+
+          if (previousPath) {
+            _paq.push(['setReferrerUrl', `${previousPath}`])
+          }
+          _paq.push(['setCustomUrl', pathname])
+          _paq.push(['setDocumentTitle', document.title])
+          _paq.push(['trackPageView'])
+          setPreviousPath(pathname)
+        }, 0)
+      }
     }
     router.events.on('routeChangeStart', load)
     router.events.on('routeChangeComplete', stop)
@@ -57,16 +90,16 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         <Box
           minH="calc(var(--vh, 1vh) * 100)"
           w="100%"
-          overflow={hideOverflow ? 'hidden' : 'scroll'}
+          overflow={['hidden visible', 'visible', 'visible']}
         >
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
             <motion.div
               key={router.pathname}
-              initial={{ opacity: 0, x: '100%' }}
-              animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-              exit={{ opacity: 0, scale: 0, y: '-50%' }}
-              transition={{ ease: 'easeOut', duration: 0.5 }}
+              variants={variants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
               style={{ width: '100%' }}
             >
               <Component {...pageProps} />

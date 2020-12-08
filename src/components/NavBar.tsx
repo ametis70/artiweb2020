@@ -128,6 +128,7 @@ const NavBar: React.FC = () => {
                 mr={['0', '0', '2rem']}
                 transition="transform 0.1s ease-in-out"
                 _hover={{ cursor: 'pointer', transform: 'scale(1.1)' }}
+                alt="Logo de Artimañas"
               />
             </ChakraLink>
           </Link>
