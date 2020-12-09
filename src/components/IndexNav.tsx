@@ -1,4 +1,4 @@
-import { Flex, Link as ChakraLink, Stack, Text } from '@chakra-ui/react'
+import { Link as ChakraLink, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
 
 import paths from '../paths'
@@ -15,31 +15,14 @@ const IndexNav = () => {
     )
   })
   return (
-    <Flex
-      direction="column"
-      h="calc(var(--vh, 1h) * 100)"
+    <Stack
+      direction={['column', 'column', 'row']}
+      spacing={['1rem', '1rem', '2rem']}
       align="center"
       justify="center"
-      w="100%"
     >
-      <Text
-        fontSize={['3xl', '3xl', '5xl']}
-        textTransform="uppercase"
-        fontWeight="700"
-        pb="2rem"
-        opacity="0.5"
-      >
-        Artimañas 2020
-      </Text>
-      <Stack
-        direction={['column', 'column', 'row']}
-        spacing="2rem"
-        align="center"
-        justify="center"
-      >
-        {Links}
-      </Stack>
-    </Flex>
+      {Links}
+    </Stack>
   )
 }
 

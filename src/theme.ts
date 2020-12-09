@@ -1,11 +1,12 @@
 import { extendTheme } from '@chakra-ui/react'
 
-const green = '#99ff00'
+export const green = '#99ff00'
+export const magenta = '#9800BF'
 
 const customTheme = extendTheme({
   colors: {
     green,
-    magenta: '#9800BF',
+    magenta,
   },
   fonts: {
     body: 'Futura PT, sans-serif',

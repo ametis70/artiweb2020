@@ -11,7 +11,7 @@ const Cronograma: React.FC = () => {
 }
 
 export async function getStaticProps() {
-  return { props: { nothing: true } }
+  return { props: {} }
 }
 
 export default Cronograma
