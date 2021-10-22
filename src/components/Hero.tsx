@@ -326,7 +326,6 @@ const Hero: React.FC<{ students: IParticipantExtended[] }> = ({ students }) => {
       const rows = divideGetClosestInteger(numberOfAvatars, maxRows)
       const avatarsPerRow = numberOfAvatars / rows
       const offsetY = 1 - (Math.ceil(p5.height / spacingY) - p5.height / spacingY)
-      console.log(offsetY)
 
       graphics = p5.createGraphics(spacingX * avatarsPerRow, p5.height)
       graphics.imageMode(p5.CENTER)
