@@ -1,5 +1,8 @@
+import getConfig from 'next/config'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+
+const { publicRuntimeConfig } = getConfig()
 
 const defaultTitle = 'Artimañas 2020'
 
@@ -16,7 +19,8 @@ const SEO: React.FC<SEOProps> = ({ title }) => {
   return (
     <Head>
       <title>{t}</title>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href={`${publicRuntimeConfig.basePath}/favicon.ico`} />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta
         name="description"
         content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"

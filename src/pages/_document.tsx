@@ -26,8 +26,11 @@ class MyDocument extends Document {
                 `,
             }}
           />
-
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta charSet="UTF-8" />
+          <meta
+            name="description"
+            content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
@@ -49,6 +52,18 @@ class MyDocument extends Document {
             rel="manifest"
             href={`${publicRuntimeConfig.basePath}/site.webmanifest`}
           />
+
+          <meta
+            property="og:description"
+            content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"
+            key="ogdesc"
+          />
+          <meta
+            property="og:image"
+            content={`${publicRuntimeConfig.basePath}/android-chrome-512x512.png`}
+            key="ogimage"
+          />
+          <link rel="icon" href={`${publicRuntimeConfig.basePath}/favicon.ico`} />
         </Head>
         <body>
           <Main />
