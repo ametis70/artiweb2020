@@ -1,6 +1,4 @@
-import DirectusSDK from '@directus/sdk-js'
-import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
-import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
+import { Directus, ID } from '@directus/sdk'
 import bent from 'bent'
 import fs from 'fs'
 import getConfig from 'next/config'
@@ -32,7 +30,7 @@ const studentsRole = 'Alumn@'
 const guestRole = 'Invitad@'
 const teachersRole = 'Docente'
 
-export interface IFileWithData extends IFile {
+export interface IFileWithData {
   filename_disk: string
   data: {
     full_url: string
@@ -40,7 +38,7 @@ export interface IFileWithData extends IFile {
 }
 
 export async function getImage(id: number) {
-  const images = ((await client.getFiles()) as unknown) as { data: Array<IFileWithData> }
+  const images = (await client.getFiles()) as unknown as { data: Array<IFileWithData> }
   return images.data.find((file) => file.id === id)
 }
 
@@ -61,38 +59,82 @@ export async function downloadFile(id: number, dir: string): Promise<string | nu
   return imageData.filename_disk
 }
 
-const client = new DirectusSDK({
-  mode: 'jwt',
-  project: '_',
-  url: process.env.DIRECTUS_HOST,
-})
+type APITypes = {
+  biografias: {
+    id: ID
+    user: number
+    texto: string
+    carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
+  }
+  obras: {
+    id: ID
+    titulo: string
+    descripcion: string
+    user: number
+    tipo_contenido_personalizado: 'external' | 'video' | 'downloadable'
+    link_contenido_personalizado: string
+    ayuda_contenido_personalizado: string
+    banner: number
+    user2: number
+    investigacion_titulo: string
+    investigacion_abstract: string
+    investigacion_archivo: number
+    video_link: string
+    video2_link: string
+  }
+  participant: {
+    id: ID
+    obra_slug: string
+    obra_url: string
+    alumne_url: string
+    alumne_slug: string
+    first_name: string
+    last_name: string
+    full_name: string
+    avatar: number
+    guest: boolean
+    bannerUrl: string | null
+    avatarUrl: string | null
+    paperUrl: string | null
+  }
+  general: {
+    texto_descripcion_columna_1: string
+    texto_descripcion_columna_2: string
+    video_apertura_titulo: string
+    video_apertura: string
+    video_cierre_titulo: string
+    video_cierre: string
+  }
+  cronograma: {
+    id: ID
+    dia_entero: boolean
+    fecha: string
+    hora_comienzo: string
+    hora_fin: string
+    mostrar_user_asociado: boolean
+    titulo: string
+    url: string
+    user_asociado: number
+    user_name?: string
+  }
+}
+
+const client = new Directus<APITypes>(process.env.DIRECTUS_HOST)
 
 export async function login() {
-  return client.login({
+  return client.auth.login({
     email: process.env.DIRECTUS_API_USER,
     password: process.env.DIRECTUS_API_PASSWORD,
   })
 }
 
-export interface IObra {
-  id: number
-  titulo: string
-  descripcion: string
-  user: number
-  tipo_contenido_personalizado: 'external' | 'video' | 'downloadable'
-  link_contenido_personalizado: string
-  ayuda_contenido_personalizado: string
-  banner: number
-  user2: number
-  investigacion_titulo: string
-  investigacion_abstract: string
-  investigacion_archivo: number
-  video_link: string
-  video2_link: string
-}
+const obras = client.items('obras')
+const cronograma = client.items('cronograma')
+const general = client.items('general')
+const biografias = client.items('biografias')
 
 export async function getAllObras() {
-  return client.getItems<IObra[]>('obras')
+  return obras.readMany()
 }
 
 export async function getObraByUserId(id: number) {
@@ -101,9 +143,9 @@ export async function getObraByUserId(id: number) {
 }
 
 export async function getRoleIdByName(roleName: string) {
-  const role = ((await client.getRoles({
+  const role = (await client.getRoles({
     filter: { name: { eq: roleName } },
-  })) as unknown) as IRoleResponse
+  })) as unknown as IRoleResponse
   return role.data[0].id
 }
 
@@ -122,34 +164,11 @@ export async function getAllGuests() {
   return client.getUsers({ filter: { role: { eq: role } } })
 }
 
-export interface IBio {
-  id: number
-  user: number
-  texto: string
-  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
-}
-
 export async function getAllBios() {
   return client.getItems<IBio[]>('biografias')
 }
 
-export interface IParticipantExtended {
-  obra_slug: string
-  obra_url: string
-  alumne_url: string
-  alumne_slug: string
-  id: number
-  first_name: string
-  last_name: string
-  full_name: string
-  avatar: number
-  guest: boolean
-  bio: IBio
-  obra: IObra
-  bannerUrl: string | null
-  avatarUrl: string | null
-  paperUrl: string | null
-}
+export interface IParticipantExtended {}
 
 export async function getAllParticipantsExtended() {
   const students = await getAllStudents()
@@ -211,34 +230,12 @@ export async function getAllParticipantsExtended() {
   return participantsExtended
 }
 
-export interface IEvent {
-  id: number
-  dia_entero: boolean
-  fecha: string
-  hora_comienzo: string
-  hora_fin: string
-  mostrar_user_asociado: boolean
-  titulo: string
-  url: string
-  user_asociado: number
-  user_name?: string
-}
-
 export async function getAllEvents() {
-  return client.getItems<IEvent[]>('cronograma')
-}
-
-export interface IGeneralInfo {
-  texto_descripcion_columna_1: string
-  texto_descripcion_columna_2: string
-  video_apertura_titulo: string
-  video_apertura: string
-  video_cierre_titulo: string
-  video_cierre: string
+  return client.items('cronograma').readMany()
 }
 
 export async function getGeneralInfo() {
-  return client.getItems<IGeneralInfo[]>('general')
+  return client.items('general')
 }
 
 export default client

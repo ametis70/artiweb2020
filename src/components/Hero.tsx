@@ -8,6 +8,12 @@ import { useRouter } from 'next/router'
 
 import { green, magenta } from '../theme'
 
+import alumnesImage from '../img/sketch_icons/alumnes.png'
+import obrasImage from '../img/sketch_icons/obras.png'
+import calendarImage from '../img/sketch_icons/calendar.png'
+import festivalImage from '../img/sketch_icons/festival.png'
+import tallerImage from '../img/sketch_icons/t5.png'
+
 type AvatarData = {
   image: p5Types.Image
   name: string
@@ -21,43 +27,28 @@ const siteData = [
   {
     url: '/alumnes',
     name: 'Alumnes',
-    image: require('../img/sketch_icons/alumnes.png?size=200'),
+    image: alumnesImage,
   },
   {
     url: '/obras',
     name: 'Obras',
-    image: require('../img/sketch_icons/obras.png?size=200'),
+    image: obrasImage,
   },
   {
     url: '/cronograma',
     name: 'Cronograma',
-    image: require('../img/sketch_icons/calendar.png?size=200'),
+    image: calendarImage,
   },
   {
     url: '/festival',
     name: 'Festival',
-    image: require('../img/sketch_icons/festival.png?size=200'),
+    image: festivalImage,
   },
-  // {
-  //   url: 'https://www.facebook.com/festival.de.artimanas',
-  //   name: 'Facebook',
-  //   image: require('../img/sketch_icons/fb.png?size=200'),
-  // },
-  // {
-  //   url: 'https://www.instagram.com/festivalartimanas/',
-  //   name: 'Instagram',
-  //   image: require('../img/sketch_icons/ig.png?size=200'),
-  // },
   {
     url: 'https://taller5.ludic.cc.com/',
     name: 'Taller de Diseño Multimedial V',
-    image: require('../img/sketch_icons/t5.png?size=200'),
+    image: tallerImage,
   },
-  // {
-  //     url: 'https://fba.unlp.edu.ar/',
-  //     name: 'Facultad de Artes',
-  //     image: require('../img/sketch_icons/fda.png?size=200'),
-  // },
 ]
 
 function divideGetClosestInteger(input: number, max: number): number {
