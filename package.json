@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "setup:env": "./setup-env.sh",
+    "setup:db": "directus bootstrap",
+    "setup": "npm run setup:env && npm run setup:db",
     "dev:cms": "directus start",
     "dev:web": "next dev -p 5000",
-    "dev": "concurrently -n cms,web -c 'cyan.bgGray.bold,magenta.bgGray.bold' 'npm:dev:cms' 'npm:dev:next'",
+    "dev": "concurrently -n cms,web -c 'cyan.bgGray.bold,magenta.bgGray.bold' 'npm:dev:cms' 'npm:dev:web'",
     "build": "next build",
     "export": "next export",
     "start": "next start",
