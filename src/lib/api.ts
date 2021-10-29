@@ -148,7 +148,6 @@ export type ImageTransform = {
   quality?: number
   withoutEnlargement?: boolean
   format: 'jpg' | 'png' | 'webp' | 'tiff'
-  transforms?: unknown[]
 }
 
 export type DownloadedImage = {
@@ -163,7 +162,21 @@ type ImageDownloader = (
   params?: ImageTransform,
 ) => Promise<DownloadedImage>
 
-export const downloadImage: ImageDownloader = async (id, directory, params) => {
+function parseParams(params: ImageTransform) {
+  let transform = ''
+  if (params) {
+    transform = '?'
+    const entries = Object.entries(params)
+    entries.forEach((entry, i) => {
+      const [key, value] = entry
+      transform = `${transform}${key}=${value}${i < entries.length - 1 ? '&' : ''}`
+    })
+  }
+
+  return transform
+}
+
+async function getImageMeta(id: ID) {
   let fileMeta: FileItem
 
   try {
@@ -176,6 +189,31 @@ export const downloadImage: ImageDownloader = async (id, directory, params) => {
     throw new Error('Tried to transform a file that is not an image')
   }
 
+  return fileMeta
+}
+
+export const downloadBase64Image = async (id: ID, params: ImageTransform) => {
+  await getImageMeta(id)
+  const transform = parseParams(params)
+
+  const bearer = 'Bearer ' + client.auth.token
+  const url = `${process.env.PUBLIC_URL}/assets/${id}${transform}`
+  const response = await fetch(url, { headers: { Authorization: bearer } })
+
+  if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`)
+
+  // @ts-ignore
+  const data = await response.buffer()
+  const b64 = data.toString('base64')
+
+  console.info(`Downloaded base64 image ${id}`)
+
+  return b64
+}
+
+export const downloadImage: ImageDownloader = async (id, directory, params) => {
+  const fileMeta = await getImageMeta(id)
+
   const filename = params
     ? `${id}-${params.width}w.${params.format}`
     : fileMeta.filename_disk
@@ -183,18 +221,8 @@ export const downloadImage: ImageDownloader = async (id, directory, params) => {
   const filePath = path.join(directory, filename)
   const relativePath = path.relative(publicDir, filePath)
 
-  let transform = ''
-
   if (!fs.existsSync(filePath)) {
-    if (params) {
-      transform = '?'
-      const entries = Object.entries(params)
-      entries.forEach((entry, i) => {
-        const [key, value] = entry
-        transform = `${transform}${key}=${value}${i < entries.length - 1 ? '&' : ''}`
-      })
-    }
-
+    const transform = parseParams(params)
     await downloadFile(`/assets/${id}${transform}`, filePath)
   }
 
@@ -208,6 +236,7 @@ export const downloadImage: ImageDownloader = async (id, directory, params) => {
 export type ResponsiveImageUrls = {
   jpg: DownloadedImage[]
   webp: DownloadedImage[]
+  lqip: string
 }
 
 export const downloadAvatar = async (id: ID) => {
@@ -228,5 +257,7 @@ export const downloadAvatar = async (id: ID) => {
     ),
   )
 
-  return { jpg, webp }
+  const lqip = await downloadBase64Image(id, { width: 16, format: 'jpg', quality: 20 })
+
+  return { jpg, webp, lqip }
 }
