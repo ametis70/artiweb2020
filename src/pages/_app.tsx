@@ -55,7 +55,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     const stop = () => {
       NProgress.done()
 
-      if (typeof window !== undefined) {
+      if (typeof window !== undefined && process.env.NODE_ENV === 'production') {
         setTimeout(() => {
           const { pathname } = router
 
