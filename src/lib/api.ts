@@ -1,5 +1,9 @@
 import fs from 'fs'
 import path from 'path'
+import { pipeline } from 'stream'
+import { promisify } from 'util'
+
+const streamPipeline = promisify(pipeline)
 
 import { Directus, ID, FileItem, QueryOne, FieldItem, QueryMany } from '@directus/sdk'
 
@@ -129,10 +133,11 @@ export async function downloadFile(
   const bearer = 'Bearer ' + client.auth.token
   const url = `${process.env.PUBLIC_URL}${resource}`
   const response = await fetch(url, { headers: { Authorization: bearer } })
-  const arrayBuffer = await response.arrayBuffer()
-  const buffer = Buffer.from(arrayBuffer)
 
-  fs.createWriteStream(downloadPath).write(buffer)
+  if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`)
+
+  await streamPipeline(response.body, fs.createWriteStream(downloadPath))
+
   console.info(`Downloaded ${downloadPath}`)
 }
 
