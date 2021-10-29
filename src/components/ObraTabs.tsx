@@ -2,32 +2,38 @@ import { Icon, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { GrBrush, GrCirclePlay, GrDocumentPdf } from 'react-icons/gr'
+import { ObraType } from '../lib/api'
+import { ObrasPageObra } from '../pages/obras/[slug]'
 
 import Investigacion from './Investigacion'
-import type { ObraComponentProps } from './Obra'
 import Obra from './Obra'
 import ObraVideo from './ObraVideo'
 
 const tabNames: string[] = ['obra', 'video', 'investigación']
 
-const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) => {
+const maxW = '840px'
+
+const ObraTabs: React.FC<{ obra: ObrasPageObra }> = ({ obra }) => {
+  if (typeof obra.alumnes[0] !== 'object') return
+
   const router = useRouter()
 
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
+    console.log(router)
     const index = tabNames.indexOf(router.query.ver as string)
     setTabIndex(index !== -1 ? index : 0)
   }, [router.query.ver])
 
   const handleTabsChange = (index) => {
-    router.push(`/obras?obra=${router.query.obra}&ver=${tabNames[index]}`, undefined, {
+    router.push(`/obras/${obra.slug}?ver=${tabNames[index]}`, undefined, {
       shallow: true,
     })
   }
 
-  const bg = student.guest ? 'green' : 'magenta'
-  const fg = student.guest ? 'black' : 'white'
+  const bg = obra.alumnes[0].carrera !== 'multimedia' ? 'green' : 'magenta'
+  const fg = obra.alumnes[0].carrera !== 'multimedia' ? 'black' : 'white'
 
   const tabProps = {
     _selected: { color: fg, bg: bg, '& svg path': { stroke: fg } },
@@ -59,7 +65,7 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
           <Icon as={GrCirclePlay} />
           Presentación
         </Tab>
-        {!student.guest ? (
+        {obra.alumnes[0].carrera === 'multimedia' ? (
           <Tab {...tabProps}>
             <Icon as={GrDocumentPdf} />
             Investigación
@@ -69,14 +75,14 @@ const ObraTabs: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }
 
       <TabPanels>
         <TabPanel>
-          <Obra maxW={maxW} student={student} secondStudent={secondStudent} />
+          <Obra maxW={maxW} obra={obra} />
         </TabPanel>
         <TabPanel>
-          <ObraVideo maxW={maxW} student={student} secondStudent={secondStudent} />
+          <ObraVideo maxW={maxW} obra={obra} />
         </TabPanel>
-        {!student.guest ? (
+        {obra.alumnes[0].carrera === 'multimedia' ? (
           <TabPanel>
-            <Investigacion maxW={maxW} student={student} />
+            <Investigacion maxW={maxW} obra={obra} />
           </TabPanel>
         ) : null}
       </TabPanels>
