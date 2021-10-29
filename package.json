@@ -20,7 +20,6 @@
     "@directus/sdk": "^9.0.0-rc.99",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "bent": "^7.3.12",
     "concurrently": "^6.3.0",
     "directus": "^9.0.0-rc.99",
     "focus-visible": "^5.2.0",
@@ -42,7 +41,8 @@
     "react-scroll-parallax": "^2.4.0",
     "react-textfit": "^1.1.1",
     "smoothscroll-polyfill": "^0.4.4",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.2",
+    "use-http": "^1.0.26"
   },
   "devDependencies": {
     "@types/bent": "^7.3.2",
