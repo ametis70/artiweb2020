@@ -11,9 +11,8 @@ import { random } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Parallax } from 'react-scroll-parallax'
+import { AlumnesPageAlumne } from '../pages/alumnes'
 
-import { IParticipantExtended } from '../lib/api'
-import { AlumnesProps } from '../pages/alumnes'
 import { navBarHeight } from './NavBar'
 
 const headerStyle: HeadingProps = {
@@ -45,7 +44,7 @@ const FloatingCircles: React.FC = () => {
   return <>{circles}</>
 }
 
-const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
+const AlumnesList: React.FC<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) => {
   const [floatingCircles, setFloatingCircles] = useState<JSX.Element>(null)
   const router = useRouter()
 
@@ -67,9 +66,9 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
     router.push(`/alumnes?alumne=${to}`, undefined, { shallow: true })
   }
 
-  const getCarrera = (student: IParticipantExtended): JSX.Element => {
+  const printCarrera = (alumne: AlumnesPageAlumne): JSX.Element => {
     let text = ''
-    switch (student.bio.carrera) {
+    switch (alumne.carrera) {
       case 'multimedia':
         return null // Hide
       // text = '— Lic. en Diseño Multimedial'
@@ -90,8 +89,8 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
     return <span style={{ opacity: 0.4, fontSize: '0.7em' }}> {text} </span>
   }
 
-  const subjectStudents = students.filter((student) => !student.guest)
-  const guestStudents = students.filter((student) => student.guest)
+  const alumnesMultimedia = alumnes.filter((alumne) => alumne.carrera === 'multimedia')
+  const alumnesInvitades = alumnes.filter((alumne) => alumne.carrera !== 'multimedia')
 
   return (
     <Box
@@ -115,17 +114,13 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
       >
         <Heading {...headerStyle}>Multimedia</Heading>
         <List fontSize={['md', 'md', '3xl']} fontWeight={700} pb="2em">
-          {subjectStudents.map((student) => (
-            <ListItem
-              key={student.alumne_slug}
-              pb={['1rem', '1rem', '1.5rem']}
-              lineHeight="1"
-            >
+          {alumnesMultimedia.map((alumne) => (
+            <ListItem key={alumne.slug} pb={['1rem', '1rem', '1.5rem']} lineHeight="1">
               <ChakraLink
-                href={student.alumne_url}
-                onClick={(e) => handleClick(e, student.alumne_slug)}
+                href={`/alumnes?alumne=${alumne.slug}`}
+                onClick={(e) => handleClick(e, alumne.slug)}
               >
-                {student.full_name} {getCarrera(student)}
+                {alumne.nombre} {alumne.apellido} {printCarrera(alumne)}
               </ChakraLink>
             </ListItem>
           ))}
@@ -133,17 +128,13 @@ const AlumnesList: React.FC<AlumnesProps> = ({ students }) => {
 
         <Heading {...headerStyle}>Invitad·s</Heading>
         <List fontSize={['md', 'md', '3xl']} fontWeight={700}>
-          {guestStudents.map((student) => (
-            <ListItem
-              key={student.alumne_slug}
-              pb={['1rem', '1rem', '1.5rem']}
-              lineHeight="1"
-            >
+          {alumnesInvitades.map((alumne) => (
+            <ListItem key={alumne.slug} pb={['1rem', '1rem', '1.5rem']} lineHeight="1">
               <ChakraLink
-                href={student.alumne_url}
-                onClick={(e) => handleClick(e, student.alumne_slug)}
+                href={`/alumnes?alumne=${alumne.slug}`}
+                onClick={(e) => handleClick(e, alumne.slug)}
               >
-                {student.full_name} {getCarrera(student)}
+                {alumne.nombre} {alumne.apellido} {printCarrera(alumne)}
               </ChakraLink>
             </ListItem>
           ))}
