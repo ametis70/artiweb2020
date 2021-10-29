@@ -6,7 +6,7 @@ import { Textfit } from 'react-textfit'
 import Container from '../components/Container'
 import FestivalVideo from '../components/FestivalVideo'
 import SEO from '../components/SEO'
-import { getGeneralInfo, IGeneralInfo, login } from '../lib/api'
+import { GeneralInfoType, getGeneralInfo, login } from '../lib/api'
 
 const profesores: Array<string> = [
   'Federico Joselevich Puiggrós',
@@ -14,7 +14,7 @@ const profesores: Array<string> = [
   'Nicolas Mata Lastra',
 ]
 
-const Festival: React.FC<IGeneralInfo> = ({
+const Festival: React.FC<GeneralInfoType> = ({
   texto_descripcion_columna_1,
   texto_descripcion_columna_2,
   video_apertura_titulo,
@@ -128,7 +128,9 @@ export async function getStaticProps() {
   await login()
   const generalInfo = await getGeneralInfo()
 
-  return { props: { ...generalInfo.data[0] } }
+  console.log(generalInfo)
+
+  return { props: { ...generalInfo.data } }
 }
 
 export default Festival
