@@ -14,7 +14,7 @@ import React from 'react'
 import { useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 
-import { AlumnesPageAlumne } from '../pages/alumnes'
+import { AlumneData } from '../pages/alumnes'
 import Container from './Container'
 import ResponsiveImage from './ResponsiveImage'
 
@@ -27,7 +27,7 @@ const headerStyle: HeadingProps = {
 }
 
 const AlumneBio: React.FC<{
-  alumne: AlumnesPageAlumne
+  alumne: AlumneData
   opacity: number
   focused: boolean
   releaseFocusCallback: () => void
@@ -119,7 +119,7 @@ const AlumneBio: React.FC<{
   </Flex>
 )
 
-const AlumnesBios: React.FC<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) => {
+const AlumnesBios: React.FC<{ alumnes: AlumneData[] }> = ({ alumnes }) => {
   const router = useRouter()
 
   const releaseFocus = () => {

@@ -261,3 +261,15 @@ export const downloadAvatar = async (id: ID) => {
 
   return { jpg, webp, lqip }
 }
+
+export const extendWithAvatars = async <T extends Pick<AlumneType, 'avatar'>>(
+  alumne: T,
+): Promise<Omit<T, 'avatar'> & { avatar: ResponsiveImageUrls }> => {
+  if (!alumne.avatar) {
+    throw new Error('Called extendWithAvatars but alumne has not propierty avatar')
+  }
+
+  const avatar = await downloadAvatar(alumne.avatar)
+
+  return { ...alumne, avatar }
+}

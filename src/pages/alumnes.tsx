@@ -4,24 +4,21 @@ import { Box } from '@chakra-ui/react'
 import AlumnesBios from '../components/AlumnesBios'
 import AlumnesList from '../components/AlumnesList'
 import SEO from '../components/SEO'
-import {
-  getAllAlumnes,
-  AlumneType,
-  ObraType,
-  login,
-  downloadAvatar,
-  ResponsiveImageUrls,
-} from '../lib/api'
+import { getAllAlumnes, AlumneType, login } from '../lib/api'
 
-export type AlumnesPageAlumne = Pick<
-  AlumneType,
-  'nombre' | 'apellido' | 'bio' | 'carrera' | 'slug'
-> & {
-  obra: Pick<ObraType, 'slug'>
-  avatar: ResponsiveImageUrls
-}
+import global, { GlobalAlumnesData } from '../lib/global.preval'
 
-const Alumnes: NextPage<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) => {
+type AlumnesPageAlumne = Pick<AlumneType, 'id' | 'bio'>
+export type AlumneData = GlobalAlumnesData & AlumnesPageAlumne
+
+const Alumnes: NextPage<{ _alumnes: AlumnesPageAlumne[] }> = ({
+  _alumnes,
+}) => {
+  const alumnes: AlumneData[] = _alumnes.map((_a) => ({
+    ...global.alumnes.find((a) => a.id === _a.id),
+    ..._a,
+  }))
+
   return (
     <>
       <SEO title="Alumnes" />
@@ -36,15 +33,11 @@ const Alumnes: NextPage<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) => {
 export const getStaticProps: GetStaticProps = async () => {
   await login()
 
-  const alumnes = await getAllAlumnes({
-    fields: 'nombre,avatar,apellido,bio,carrera,slug,obra.slug',
+  const _alumnes = await getAllAlumnes({
+    fields: 'id,bio',
   })
 
-  const alumnesWithAvatars = await Promise.all(
-    alumnes.data.map(async (a) => ({ ...a, avatar: await downloadAvatar(a.avatar) })),
-  )
-
-  return { props: { alumnes: alumnesWithAvatars } }
+  return { props: { _alumnes: _alumnes.data } }
 }
 
 export default Alumnes

@@ -1,14 +1,16 @@
+const createNextPluginPreval = require('next-plugin-preval/config')
+const withNextPluginPreval = createNextPluginPreval()
+
 const basePath = process.env.NODE_ENV === 'development' ? '' : '/artimanias/2020'
 
-module.exports = {
+const settings = {
   images: {
     disableStaticImages: false,
   },
   publicRuntimeConfig: {
     basePath,
   },
-  serverRuntimeConfig: {
-    PROJECT_ROOT: process.cwd(),
-  },
   basePath,
 }
+
+module.exports = withNextPluginPreval(settings)

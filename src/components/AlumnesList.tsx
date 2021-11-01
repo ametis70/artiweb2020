@@ -11,7 +11,7 @@ import { random } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Parallax } from 'react-scroll-parallax'
-import { AlumnesPageAlumne } from '../pages/alumnes'
+import { AlumneData } from '../pages/alumnes'
 
 import { navBarHeight } from './NavBar'
 
@@ -44,7 +44,7 @@ const FloatingCircles: React.FC = () => {
   return <>{circles}</>
 }
 
-const AlumnesList: React.FC<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) => {
+const AlumnesList: React.FC<{ alumnes: AlumneData[] }> = ({ alumnes }) => {
   const [floatingCircles, setFloatingCircles] = useState<JSX.Element>(null)
   const router = useRouter()
 
@@ -66,7 +66,7 @@ const AlumnesList: React.FC<{ alumnes: AlumnesPageAlumne[] }> = ({ alumnes }) =>
     router.push(`/alumnes?alumne=${to}`, undefined, { shallow: true })
   }
 
-  const printCarrera = (alumne: AlumnesPageAlumne): JSX.Element => {
+  const printCarrera = (alumne: AlumneData): JSX.Element => {
     let text = ''
     switch (alumne.carrera) {
       case 'multimedia':
