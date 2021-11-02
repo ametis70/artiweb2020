@@ -1,5 +1,8 @@
 import { Box, BoxProps, SystemStyleObject } from '@chakra-ui/react'
 import { DownloadedImage, ResponsiveImageUrls } from '../lib/api'
+import { getBasePath } from '../lib/util'
+
+const basePath = getBasePath()
 
 type ResponsiveImageProps = {
   img: ResponsiveImageUrls
@@ -13,7 +16,9 @@ const getSrcSet = (images: DownloadedImage[]) => {
   let srcSet = ''
 
   images.forEach((src, i) => {
-    srcSet = `${srcSet}${src.path}${i < images.length - 1 ? ` ${src.width}w, ` : ''}`
+    srcSet = `${srcSet}${basePath}${src.path}${
+      i < images.length - 1 ? ` ${src.width}w, ` : ''
+    }`
   })
 
   return srcSet
@@ -46,7 +51,7 @@ const ResponsiveImage: React.FC<ResponsiveImageProps & BoxProps> = ({
         <img
           style={{ position: 'relative', zIndex: 1 }}
           alt={alt}
-          src={img.jpg[img.jpg.length - 1].path}
+          src={`${basePath}/${img.jpg[img.jpg.length - 1].path}`}
           srcSet={jpegSrcSet}
           loading="lazy"
         />
