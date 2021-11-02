@@ -17,6 +17,7 @@ import '../styles/typeface-futura.css'
 import 'focus-visible/dist/focus-visible'
 
 import theme from '../theme'
+import ObrasLayout from '../components/ObrasLayout'
 
 const variants = {
   initial: { opacity: 0, y: '100%' },
@@ -37,7 +38,7 @@ const variants = {
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter()
-  const [previousPath, setPreviousPath] = useState(router.pathname)
+  const [previousPath, setPreviousPath] = useState(router.asPath)
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -57,17 +58,17 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
       if (typeof window !== undefined && process.env.NODE_ENV === 'production') {
         setTimeout(() => {
-          const { pathname } = router
+          const { asPath } = router
 
           const { _paq } = window as any
 
           if (previousPath) {
             _paq.push(['setReferrerUrl', `${previousPath}`])
           }
-          _paq.push(['setCustomUrl', pathname])
+          _paq.push(['setCustomUrl', asPath])
           _paq.push(['setDocumentTitle', document.title])
           _paq.push(['trackPageView'])
-          setPreviousPath(pathname)
+          setPreviousPath(asPath)
         }, 0)
       }
     }
@@ -84,6 +85,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     })
   }, [])
 
+  const obras = router.asPath.includes('/obras')
+
   return (
     <ChakraProvider theme={theme} resetCSS>
       <ParallaxProvider>
@@ -97,14 +100,20 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           {router.pathname !== '/' ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
             <motion.div
-              key={router.pathname}
+              key={obras ? '/obras' : router.route}
               variants={variants}
               initial="initial"
               animate="enter"
               exit="exit"
               style={{ width: '100%' }}
             >
-              <Component {...pageProps} />
+              {obras ? (
+                <ObrasLayout>
+                  <Component {...pageProps} />
+                </ObrasLayout>
+              ) : (
+                <Component {...pageProps} />
+              )}
             </motion.div>
           </AnimatePresence>
         </Box>

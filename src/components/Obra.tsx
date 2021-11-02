@@ -2,34 +2,31 @@ import { Box, Flex, Heading, Link as ChakraLink, Stack, Text } from '@chakra-ui/
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 
-import { AlumneType, ObraType } from '../lib/api'
+import { ObrasPageObra } from '../pages/obras/[slug]'
 import ResponsiveImage from './ResponsiveImage'
 
 export type ObraComponentProps = {
-  obra: ObraType
+  obra: ObrasPageObra
   maxW: string
 }
 
-const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
-  const getLinkText = (obra: ObraType): string => {
-    switch (obra.tipo_contenido_personalizado) {
-      case 'external':
-        return 'Continuar a sitio externo'
+const getLinkText = (obra: ObrasPageObra): string => {
+  switch (obra.tipo_contenido_personalizado) {
+    case 'external':
+      return 'Continuar a sitio externo'
 
-      case 'video':
-        return 'Ver Video'
+    case 'video':
+      return 'Ver Video'
 
-      case 'downloadable':
-        return 'Continuar a descarga'
+    case 'downloadable':
+      return 'Continuar a descarga'
 
-      default:
-        return 'Tipo de link no identificado'
-    }
+    default:
+      return 'Tipo de link no identificado'
   }
+}
 
-  const alumnes = obra.alumnes as AlumneType[]
-  console.log(alumnes)
-
+const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
       <Stack maxW={maxW} m="0 auto" spacing="2rem">
@@ -56,18 +53,18 @@ const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
             }}
           >
             Obra realizada por{' '}
-            {alumnes.map((alumne, i) => (
-              <>
-                <Link key={alumne.slug} href={alumne.slug} passHref>
+            {obra.alumnes.map((alumne, i) => (
+              <span key={alumne.slug}>
+                <Link href={`/alumnes?alumne=${alumne.slug}`} passHref>
                   <ChakraLink>
                     {alumne.nombre} {alumne.apellido}
                   </ChakraLink>
                 </Link>
                 {i < obra.alumnes.length - 1 ? ' y ' : ''}
-              </>
+              </span>
             ))}
           </Text>
-          {alumnes[0].carrera !== 'multimedia' ? (
+          {obra.alumnes[0].carrera !== 'multimedia' ? (
             <Text as="small" color="gray.500">
               {' '}
               — Obra invitada

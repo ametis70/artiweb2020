@@ -2,36 +2,31 @@ import { Box, Flex, Link as ChakraLink, ListItem, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 
 import ResponsiveImage from '../components/ResponsiveImage'
-import { IParticipantExtended } from '../lib/api'
+import { GlobalAlumnesData } from '../lib/global.preval'
+import { getAlumneFullName } from '../lib/util'
 
 type StudentNavbarLinkProps = {
-  student: IParticipantExtended
+  alumne: GlobalAlumnesData
   current: boolean
   lastItem: boolean
   color?: 'green' | 'magenta'
 }
 
 const StudentNavbarLink: React.FC<StudentNavbarLinkProps> = ({
-  student,
+  alumne,
   current,
   lastItem,
   color = 'magenta',
 }) => {
-  if (!student) return null
+  if (!alumne) return null
 
   return (
-    <ListItem
-      px="1rem"
-      mb={['0', '0', '1.5rem']}
-      id={student.alumne_slug}
-      w="190px"
-      ml="0"
-    >
-      <Link href={student.obra_url} passHref shallow>
+    <ListItem px="1rem" mb={['0', '0', '1.5rem']} id={alumne.slug} w="190px" ml="0">
+      <Link href={`/obras/${alumne.obra.slug}`} passHref>
         <ChakraLink>
           <Flex align="center" direction={['column', 'column', 'row']}>
             <Box
-              bg={student.avatarUrl ? 'none' : 'gray.400'}
+              bg={alumne.avatar ? 'none' : 'gray.400'}
               w={['96px', '96px', '128px']}
               h={['96px', '96px', '128px']}
               flex={['0 0 96px', '0 0 96px', '0 0 128px']}
@@ -40,16 +35,16 @@ const StudentNavbarLink: React.FC<StudentNavbarLinkProps> = ({
               position="relative"
               overflow="visible"
             >
-              {student.avatarUrl ? (
+              {alumne.avatar ? (
                 <>
                   <ResponsiveImage
+                    img={alumne.avatar}
                     filter={!current ? 'grayscale()' : 'none'}
                     overflow="hidden"
                     w="100%"
                     h="100%"
                     borderRadius="50%"
-                    url={`avatars/${student.avatarUrl}`}
-                    alt={`Avatar de ${student.full_name}`}
+                    alt={`Avatar de ${getAlumneFullName(alumne)}`}
                     imageStyle={{ filter: 'grayscale()' }}
                     avatar
                   >
@@ -62,7 +57,7 @@ const StudentNavbarLink: React.FC<StudentNavbarLinkProps> = ({
                         sx={{
                           mixBlendMode: color === 'magenta' ? 'screen' : 'soft-light',
                         }}
-                        zIndex="1"
+                        zIndex="2"
                       />
                     ) : null}
                   </ResponsiveImage>
@@ -92,7 +87,7 @@ const StudentNavbarLink: React.FC<StudentNavbarLinkProps> = ({
               textAlign={['center', 'center', 'left']}
               fontSize={['md', 'lg', 'lg']}
             >
-              {student.full_name}
+              {getAlumneFullName(alumne)}
             </Text>
           </Flex>
         </ChakraLink>
