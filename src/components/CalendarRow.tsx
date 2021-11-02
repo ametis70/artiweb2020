@@ -1,12 +1,13 @@
 import { Box, Flex } from '@chakra-ui/react'
+import { PartialItem } from '@directus/sdk'
 
-import { IEvent } from '../lib/api'
+import { EventType } from '../lib/api'
 import CalendarRowDay from './CalendarRowDay'
 import EventCard from './EventCard'
 
 type CalendarRowProps = {
   date: Date
-  events?: IEvent[] | undefined
+  events: PartialItem<EventType>[]
 }
 
 const CalendarRow: React.FC<CalendarRowProps> = ({ date, events }) => {

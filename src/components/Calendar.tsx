@@ -2,9 +2,10 @@ import { Flex } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-import events from '../events.json'
 import CalendarRow from './CalendarRow'
 import { navBarHeight } from './NavBar'
+
+import global from '../lib/global.preval'
 
 type CalendarProps = {
   start: string
@@ -21,6 +22,7 @@ const getDaysArray = (start: string, end: string): Date[] => {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ start, end }) => {
+  const { events } = global
   const days = getDaysArray(start, end)
 
   const ref = useRef<HTMLDivElement>()

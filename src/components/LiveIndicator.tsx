@@ -11,13 +11,16 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import { PartialItem } from '@directus/sdk'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import EventCard from '../components/EventCard'
-import events from '../events.json'
+import { EventType } from '../lib/api'
 
-const getDuration = (event): [Date, Date] => {
+import global from '../lib/global.preval'
+
+const getDuration = (event: PartialItem<EventType>): [Date, Date] => {
   return [
     new Date(`${event.fecha}T${event.hora_comienzo}`),
     new Date(`${event.fecha}T${event.hora_fin}`),
@@ -25,13 +28,10 @@ const getDuration = (event): [Date, Date] => {
 }
 
 const LiveIndicator = () => {
+  const { events } = global
   const [currentEvent, setCurrentEvent] = useState(null)
   const [showIndicator, setShowIndicator] = useState<boolean>(false)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [[currentEventStart, currentEventEnd], setCurrentDuration] = useState([
-    null,
-    null,
-  ])
+  const [[_, currentEventEnd], setCurrentDuration] = useState([null, null])
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {

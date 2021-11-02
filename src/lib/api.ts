@@ -33,7 +33,7 @@ export type AlumneType = {
   bio: string
   carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
   slug: string
-  obra: ID | ObraType
+  obra: ObraType
 }
 
 export type EventType = {
@@ -42,9 +42,9 @@ export type EventType = {
   hora_comienzo: Date
   hora_fin: Date
   fecha: Date
-  tipo_evento: 'performance' | 'multimedia' | 'invitade' | 'festival'
+  tipo_de_evento: 'performance' | 'multimedia' | 'invitade' | 'festival'
   url?: string
-  alumne?: ID | AlumneType
+  alumne?: AlumneType
 }
 
 export type ObraType = {

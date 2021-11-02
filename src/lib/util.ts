@@ -1,12 +1,13 @@
 import { AlumneType } from './api'
 import getConfig from 'next/config'
+import { PartialItem } from '@directus/sdk'
 
 const { publicRuntimeConfig } = getConfig()
 const { basePath } = publicRuntimeConfig
 
-export function getAlumneFullName<T extends Pick<AlumneType, 'nombre' | 'apellido'>>(
-  alumne: T,
-) {
+export function getAlumneFullName<
+  T extends PartialItem<Pick<AlumneType, 'nombre' | 'apellido'>>,
+>(alumne: T) {
   if (alumne.nombre && alumne.apellido) {
     return `${alumne.nombre} ${alumne.apellido}`
   }
@@ -14,7 +15,7 @@ export function getAlumneFullName<T extends Pick<AlumneType, 'nombre' | 'apellid
   throw new Error('Alumne is missing nombre or apellido properties')
 }
 
-export function isGuest<T extends Pick<AlumneType, 'carrera'>>(alumne: T) {
+export function isGuest<T extends PartialItem<Pick<AlumneType, 'carrera'>>>(alumne: T) {
   if (!alumne.carrera) {
     throw new Error('Alumne is missing carrera property')
   }
@@ -22,7 +23,9 @@ export function isGuest<T extends Pick<AlumneType, 'carrera'>>(alumne: T) {
   return alumne.carrera !== 'multimedia'
 }
 
-export function splitAlumnes<T extends Pick<AlumneType, 'carrera'>>(alumnes: T[]) {
+export function splitAlumnes<T extends PartialItem<Pick<AlumneType, 'carrera'>>>(
+  alumnes: T[],
+) {
   const multimedia: T[] = []
   const invitades: T[] = []
 

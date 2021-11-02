@@ -38,7 +38,9 @@ async function getData(): Promise<{
     _data.map(async (a) => extendWithAvatars(a)),
   )
 
-  const events = await getAllEvents()
+  const events = await getAllEvents({
+    fields: '*,alumne.obra.slug,alumne.nombre,alumne.apellido',
+  })
 
   return { alumnes: alumnesWithAvatars, events: events.data }
 }
