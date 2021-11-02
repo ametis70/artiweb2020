@@ -2,7 +2,6 @@ import { Icon, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { GrBrush, GrCirclePlay, GrDocumentPdf } from 'react-icons/gr'
-import { ObraType } from '../lib/api'
 import { ObrasPageObra } from '../pages/obras/[slug]'
 
 import Investigacion from './Investigacion'
@@ -21,12 +20,11 @@ const ObraTabs: React.FC<{ obra: ObrasPageObra }> = ({ obra }) => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
-    console.log(router)
     const index = tabNames.indexOf(router.query.ver as string)
     setTabIndex(index !== -1 ? index : 0)
   }, [router.query.ver])
 
-  const handleTabsChange = (index) => {
+  const handleTabsChange = (index: number) => {
     router.push(`/obras/${obra.slug}?ver=${tabNames[index]}`, undefined, {
       shallow: true,
     })

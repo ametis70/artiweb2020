@@ -11,9 +11,7 @@ import global, { GlobalAlumnesData } from '../lib/global.preval'
 type AlumnesPageAlumne = Pick<AlumneType, 'id' | 'bio'>
 export type AlumneData = GlobalAlumnesData & AlumnesPageAlumne
 
-const Alumnes: NextPage<{ _alumnes: AlumnesPageAlumne[] }> = ({
-  _alumnes,
-}) => {
+const Alumnes: NextPage<{ _alumnes: AlumnesPageAlumne[] }> = ({ _alumnes }) => {
   const alumnes: AlumneData[] = _alumnes.map((_a) => ({
     ...global.alumnes.find((a) => a.id === _a.id),
     ..._a,
