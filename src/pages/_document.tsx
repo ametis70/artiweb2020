@@ -8,10 +8,11 @@ class MyDocument extends Document {
     return (
       <Html lang="es">
         <Head>
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{
-              __html: `
+          {process.env.NODE_ENV === 'development' ? null : (
+            <script
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `
   var _paq = window._paq = window._paq || [];
   /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(['trackPageView']);
@@ -24,8 +25,9 @@ class MyDocument extends Document {
     g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
   })();
                 `,
-            }}
-          />
+              }}
+            />
+          )}
           <meta charSet="UTF-8" />
           <meta
             name="description"

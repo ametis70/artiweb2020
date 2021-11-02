@@ -1,20 +1,17 @@
-import DirectusSDK from '@directus/sdk-js'
-import { IFile } from '@directus/sdk-js/dist/types/schemes/directus/File'
-import { IRoleResponse } from '@directus/sdk-js/dist/types/schemes/response/Role'
-import bent from 'bent'
 import fs from 'fs'
-import getConfig from 'next/config'
 import path from 'path'
+import { pipeline } from 'stream'
 import { promisify } from 'util'
 
-const { serverRuntimeConfig } = getConfig()
-const writeFile = promisify(fs.writeFile)
-const getBuffer = bent('buffer')
+const streamPipeline = promisify(pipeline)
 
-const assetsDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/src/assets/')
-const avatarsDir = path.join(assetsDir, '/avatars/')
-const bannersDir = path.join(assetsDir, '/banners/')
-const papersDir = path.join(serverRuntimeConfig.PROJECT_ROOT, '/public/papers/')
+import { Directus, ID, FileItem, QueryOne, FieldItem, QueryMany } from '@directus/sdk'
+
+export const publicDir = path.join(process.cwd(), 'public')
+export const assetsDir = path.join(publicDir, 'cms')
+export const avatarsDir = path.join(assetsDir, 'avatars')
+export const bannersDir = path.join(assetsDir, 'banners')
+export const papersDir = path.join(assetsDir, 'papers')
 
 const createDir = (dir: string) => {
   if (!fs.existsSync(dir)) {
@@ -28,207 +25,46 @@ createDir(avatarsDir)
 createDir(bannersDir)
 createDir(papersDir)
 
-const studentsRole = 'Alumn@'
-const guestRole = 'Invitad@'
-const teachersRole = 'Docente'
-
-export interface IFileWithData extends IFile {
-  filename_disk: string
-  data: {
-    full_url: string
-  }
+export type AlumneType = {
+  id: ID
+  avatar: ID
+  nombre: string
+  apellido: string
+  bio: string
+  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
+  slug: string
+  obra: ID | ObraType
 }
 
-export async function getImage(id: number) {
-  const images = ((await client.getFiles()) as unknown) as { data: Array<IFileWithData> }
-  return images.data.find((file) => file.id === id)
+export type EventType = {
+  id: ID
+  titulo: string
+  hora_comienzo: Date
+  hora_fin: Date
+  fecha: Date
+  tipo_evento: 'performance' | 'multimedia' | 'invitade' | 'festival'
+  url?: string
+  alumne?: ID | AlumneType
 }
 
-export async function downloadFile(id: number, dir: string): Promise<string | null> {
-  const imageData = await getImage(id)
-  if (!imageData) return null
-  const fileDir = path.join(dir, imageData.filename_disk)
-
-  if (!fs.existsSync(fileDir)) {
-    console.info(`Downloading image with id ${id} as ${fileDir}`)
-    const buffer = await getBuffer(imageData.data.full_url.replace('http', 'https'))
-    await writeFile(fileDir, buffer as Buffer)
-    console.info(`Succesfully downloaded image with ${fileDir}`)
-  } else {
-    console.info(`Image ${fileDir} exists. Skipping download`)
-  }
-
-  return imageData.filename_disk
-}
-
-const client = new DirectusSDK({
-  mode: 'jwt',
-  project: '_',
-  url: process.env.DIRECTUS_HOST,
-})
-
-export async function login() {
-  return client.login({
-    email: process.env.DIRECTUS_API_USER,
-    password: process.env.DIRECTUS_API_PASSWORD,
-  })
-}
-
-export interface IObra {
-  id: number
+export type ObraType = {
+  id: ID
   titulo: string
   descripcion: string
-  user: number
+  banner: ID
   tipo_contenido_personalizado: 'external' | 'video' | 'downloadable'
   link_contenido_personalizado: string
   ayuda_contenido_personalizado: string
-  banner: number
-  user2: number
-  investigacion_titulo: string
-  investigacion_abstract: string
-  investigacion_archivo: number
-  video_link: string
-  video2_link: string
+  investigacion_titulo?: string
+  investigacion_abstract?: string
+  investigacion_archivo?: FileItem
+  slug: string
+  alumnes: ID[] | AlumneType[]
+  video_links: string
+  video_titles?: string
 }
 
-export async function getAllObras() {
-  return client.getItems<IObra[]>('obras')
-}
-
-export async function getObraByUserId(id: number) {
-  const allObras = await getAllObras()
-  return allObras.data.find((item) => item.user === id)
-}
-
-export async function getRoleIdByName(roleName: string) {
-  const role = ((await client.getRoles({
-    filter: { name: { eq: roleName } },
-  })) as unknown) as IRoleResponse
-  return role.data[0].id
-}
-
-export async function getAllTeachers() {
-  const role = await getRoleIdByName(teachersRole)
-  return client.getUsers({ filter: { role: { eq: role } } })
-}
-
-export async function getAllStudents() {
-  const role = await getRoleIdByName(studentsRole)
-  return client.getUsers({ filter: { role: { eq: role } } })
-}
-
-export async function getAllGuests() {
-  const role = await getRoleIdByName(guestRole)
-  return client.getUsers({ filter: { role: { eq: role } } })
-}
-
-export interface IBio {
-  id: number
-  user: number
-  texto: string
-  carrera: 'multimedia' | 'musica_popular' | 'artes_audiovisuales' | 'composicion'
-}
-
-export async function getAllBios() {
-  return client.getItems<IBio[]>('biografias')
-}
-
-export interface IParticipantExtended {
-  obra_slug: string
-  obra_url: string
-  alumne_url: string
-  alumne_slug: string
-  id: number
-  first_name: string
-  last_name: string
-  full_name: string
-  avatar: number
-  guest: boolean
-  bio: IBio
-  obra: IObra
-  bannerUrl: string | null
-  avatarUrl: string | null
-  paperUrl: string | null
-}
-
-export async function getAllParticipantsExtended() {
-  const students = await getAllStudents()
-  const guests = await getAllGuests()
-  const allBios = await getAllBios()
-  const allObras = await getAllObras()
-
-  const participants = [...students.data, ...guests.data]
-
-  const participantsExtended: IParticipantExtended[] = await Promise.all(
-    participants.map(async (person) => {
-      const { first_name, last_name, avatar, id } = person
-      const obra = allObras.data.find((o) => o.user === id || o.user2 === id)
-      const bio = allBios.data.find((b) => b.user === id)
-
-      const guest = bio.carrera !== 'multimedia' ? true : false
-
-      let avatarUrl = null
-      if (avatar) {
-        avatarUrl = await downloadFile(avatar, avatarsDir)
-      }
-
-      let bannerUrl = null
-      if (obra && obra.banner) {
-        bannerUrl = await downloadFile(obra.banner, bannersDir)
-      }
-
-      let paperUrl = null
-      if (obra && obra.investigacion_archivo) {
-        paperUrl = await downloadFile(obra.investigacion_archivo, papersDir)
-      }
-
-      const full_name = `${first_name} ${last_name}`
-      const alumne_slug = last_name.toLowerCase().replace(/ /gi, '_')
-      const alumne_url = `/alumnes?alumne=${alumne_slug}`
-      const obra_slug = obra.titulo.toLowerCase().replace(/ /gi, '_')
-      const obra_url = `/obras?obra=${obra_slug}`
-
-      return {
-        id,
-        first_name,
-        last_name,
-        full_name,
-        alumne_slug,
-        alumne_url,
-        obra_slug,
-        obra_url,
-        avatar,
-        guest,
-        bio,
-        obra,
-        avatarUrl,
-        bannerUrl,
-        paperUrl,
-      }
-    }),
-  )
-
-  return participantsExtended
-}
-
-export interface IEvent {
-  id: number
-  dia_entero: boolean
-  fecha: string
-  hora_comienzo: string
-  hora_fin: string
-  mostrar_user_asociado: boolean
-  titulo: string
-  url: string
-  user_asociado: number
-  user_name?: string
-}
-
-export async function getAllEvents() {
-  return client.getItems<IEvent[]>('cronograma')
-}
-
-export interface IGeneralInfo {
+export type GeneralInfoType = {
   texto_descripcion_columna_1: string
   texto_descripcion_columna_2: string
   video_apertura_titulo: string
@@ -237,8 +73,203 @@ export interface IGeneralInfo {
   video_cierre: string
 }
 
-export async function getGeneralInfo() {
-  return client.getItems<IGeneralInfo[]>('general')
+type APITypes = {
+  alumnes: AlumneType
+  cronograma: EventType
+  obras: ObraType
+  general: GeneralInfoType
 }
 
-export default client
+const client = new Directus<APITypes>(process.env.PUBLIC_URL)
+
+export async function login() {
+  return client.auth.login({
+    email: process.env.ADMIN_EMAIL,
+    password: process.env.ADMIN_PASSWORD,
+  })
+}
+
+const obras = client.items('obras')
+const cronograma = client.items('cronograma')
+const general = client.items('general')
+const alumnes = client.items('alumnes')
+
+export async function getAllEvents(query?: QueryMany<EventType>) {
+  return cronograma.readMany(query)
+}
+
+export async function getAllAlumnes(query?: QueryMany<AlumneType>) {
+  return alumnes.readMany(query)
+}
+
+export async function getAlumneById(id: ID, query?: QueryOne<AlumneType>) {
+  return alumnes.readOne(id, query)
+}
+
+export async function getAllObras(query?: QueryMany<ObraType>) {
+  return obras.readMany(query)
+}
+
+export async function getObraById(id: ID, query?: QueryOne<ObraType>) {
+  return obras.readOne(id, query)
+}
+
+export async function getGeneralInfo() {
+  return general.readMany()
+}
+
+export async function getAllFiles(query?: QueryMany<FileItem>) {
+  return client.files.readMany(query)
+}
+
+export async function getFileById(id: ID, query?: QueryOne<FieldItem>) {
+  return client.files.readOne(id, query)
+}
+
+export async function downloadFile(
+  resource: string,
+  downloadPath: string,
+): Promise<void> {
+  const bearer = 'Bearer ' + client.auth.token
+  const url = `${process.env.PUBLIC_URL}${resource}`
+  const response = await fetch(url, { headers: { Authorization: bearer } })
+
+  if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`)
+
+  await streamPipeline(response.body, fs.createWriteStream(downloadPath))
+
+  console.info(`Downloaded ${downloadPath}`)
+}
+
+export type ImageTransform = {
+  fit?: 'cover' | 'contain' | 'inside' | 'outside'
+  width: number
+  height?: number
+  quality?: number
+  withoutEnlargement?: boolean
+  format: 'jpg' | 'png' | 'webp' | 'tiff'
+}
+
+export type DownloadedImage = {
+  path: string
+  transformed: boolean
+  width: number
+}
+
+type ImageDownloader = (
+  id: ID,
+  directory: string,
+  params?: ImageTransform,
+) => Promise<DownloadedImage>
+
+function parseParams(params: ImageTransform) {
+  let transform = ''
+  if (params) {
+    transform = '?'
+    const entries = Object.entries(params)
+    entries.forEach((entry, i) => {
+      const [key, value] = entry
+      transform = `${transform}${key}=${value}${i < entries.length - 1 ? '&' : ''}`
+    })
+  }
+
+  return transform
+}
+
+async function getImageMeta(id: ID) {
+  let fileMeta: FileItem
+
+  try {
+    fileMeta = await getFileById(id)
+  } catch {
+    throw new Error(`File with ID ${id} does not exist`)
+  }
+
+  if (!/^image*/.test(fileMeta.type)) {
+    throw new Error('Tried to transform a file that is not an image')
+  }
+
+  return fileMeta
+}
+
+export const downloadBase64Image = async (id: ID, params: ImageTransform) => {
+  await getImageMeta(id)
+  const transform = parseParams(params)
+
+  const bearer = 'Bearer ' + client.auth.token
+  const url = `${process.env.PUBLIC_URL}/assets/${id}${transform}`
+  const response = await fetch(url, { headers: { Authorization: bearer } })
+
+  if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`)
+
+  // @ts-ignore
+  const data = await response.buffer()
+  const b64 = data.toString('base64')
+
+  console.info(`Downloaded base64 image ${id}`)
+
+  return b64
+}
+
+export const downloadImage: ImageDownloader = async (id, directory, params) => {
+  const fileMeta = await getImageMeta(id)
+
+  const filename = params
+    ? `${id}-${params.width}w.${params.format}`
+    : fileMeta.filename_disk
+
+  const filePath = path.join(directory, filename)
+  const relativePath = path.relative(publicDir, filePath)
+
+  if (!fs.existsSync(filePath)) {
+    const transform = parseParams(params)
+    await downloadFile(`/assets/${id}${transform}`, filePath)
+  }
+
+  return {
+    path: relativePath,
+    transformed: params !== undefined,
+    width: params?.width ?? fileMeta.width,
+  }
+}
+
+export type ResponsiveImageUrls = {
+  jpg: DownloadedImage[]
+  webp: DownloadedImage[]
+  lqip: string
+}
+
+export const downloadAvatar = async (id: ID) => {
+  const sizes = [96, 256, 500]
+  const quality = 85
+
+  const jpg = await Promise.all(
+    sizes.map(
+      async (w) =>
+        await downloadImage(id, avatarsDir, { width: w, format: 'jpg', quality }),
+    ),
+  )
+
+  const webp = await Promise.all(
+    sizes.map(
+      async (w) =>
+        await downloadImage(id, avatarsDir, { width: w, format: 'webp', quality }),
+    ),
+  )
+
+  const lqip = await downloadBase64Image(id, { width: 16, format: 'jpg', quality: 20 })
+
+  return { jpg, webp, lqip }
+}
+
+export const extendWithAvatars = async <T extends Pick<AlumneType, 'avatar'>>(
+  alumne: T,
+): Promise<Omit<T, 'avatar'> & { avatar: ResponsiveImageUrls }> => {
+  if (!alumne.avatar) {
+    throw new Error('Called extendWithAvatars but alumne has not propierty avatar')
+  }
+
+  const avatar = await downloadAvatar(alumne.avatar)
+
+  return { ...alumne, avatar }
+}

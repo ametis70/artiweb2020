@@ -2,37 +2,35 @@ import { Box, Flex, Heading, Link as ChakraLink, Stack, Text } from '@chakra-ui/
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 
-import { IObra, IParticipantExtended } from '../lib/api'
+import { ObrasPageObra } from '../pages/obras/[slug]'
 import ResponsiveImage from './ResponsiveImage'
 
 export type ObraComponentProps = {
-  student: IParticipantExtended
-  secondStudent: IParticipantExtended
+  obra: ObrasPageObra
   maxW: string
 }
 
-const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) => {
-  const getLinkText = (obra: IObra): string => {
-    switch (obra.tipo_contenido_personalizado) {
-      case 'external':
-        return 'Continuar a sitio externo'
+const getLinkText = (obra: ObrasPageObra): string => {
+  switch (obra.tipo_contenido_personalizado) {
+    case 'external':
+      return 'Continuar a sitio externo'
 
-      case 'video':
-        return 'Ver Video'
+    case 'video':
+      return 'Ver Video'
 
-      case 'downloadable':
-        return 'Continuar a descarga'
+    case 'downloadable':
+      return 'Continuar a descarga'
 
-      default:
-        return 'Tipo de link no identificado'
-    }
+    default:
+      return 'Tipo de link no identificado'
   }
+}
 
-  const { obra } = student
-
+const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
       <Stack maxW={maxW} m="0 auto" spacing="2rem">
+        {/*
         <ResponsiveImage
           w="100%"
           h="0"
@@ -42,6 +40,7 @@ const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) =>
           url={student.bannerUrl ? `banners/${student.bannerUrl}` : null}
           alt={`Imagen de banner de ${obra.titulo}`}
         />
+        */}
         <Box>
           <Heading> {obra.titulo} </Heading>
           <Text
@@ -54,20 +53,18 @@ const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) =>
             }}
           >
             Obra realizada por{' '}
-            <Link href={student.alumne_url} passHref>
-              <ChakraLink>{student.full_name}</ChakraLink>
-            </Link>
-            {secondStudent ? (
-              <>
-                {' '}
-                y{' '}
-                <Link href={secondStudent.alumne_url} passHref>
-                  <ChakraLink>{secondStudent.full_name}</ChakraLink>
+            {obra.alumnes.map((alumne, i) => (
+              <span key={alumne.slug}>
+                <Link href={`/alumnes?alumne=${alumne.slug}`} passHref>
+                  <ChakraLink>
+                    {alumne.nombre} {alumne.apellido}
+                  </ChakraLink>
                 </Link>
-              </>
-            ) : null}
+                {i < obra.alumnes.length - 1 ? ' y ' : ''}
+              </span>
+            ))}
           </Text>
-          {student.guest ? (
+          {obra.alumnes[0].carrera !== 'multimedia' ? (
             <Text as="small" color="gray.500">
               {' '}
               — Obra invitada
@@ -76,7 +73,7 @@ const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) =>
         </Box>
         <Text
           as={ReactMarkdown}
-          source={obra.descripcion}
+          children={obra.descripcion}
           sx={{
             '& p': {
               pb: '2rem',
@@ -97,7 +94,7 @@ const Obra: React.FC<ObraComponentProps> = ({ student, secondStudent, maxW }) =>
         </ChakraLink>
         <Text
           as={ReactMarkdown}
-          source={obra.ayuda_contenido_personalizado}
+          children={obra.ayuda_contenido_personalizado}
           color="gray.500"
           fontSize="md"
           textAlign="center"

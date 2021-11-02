@@ -1,5 +1,6 @@
 import {
   Box,
+  chakra,
   Flex,
   IconButton,
   Image,
@@ -21,7 +22,7 @@ const { publicRuntimeConfig } = getConfig()
 
 import paths from '../paths'
 
-const MotionBox = motion.custom(Box)
+const MotionBox = chakra(motion.div)
 
 const containerVariants = {
   open: {
