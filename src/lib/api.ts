@@ -247,18 +247,23 @@ export type ResponsiveImageUrls = {
   lqip: string
 }
 
-const downloadResponsiveImages = async (sizes: number[], quality: number, id: ID) => {
+const downloadResponsiveImages = async (
+  sizes: number[],
+  quality: number,
+  directory: string,
+  id: ID,
+) => {
   const jpg = await Promise.all(
     sizes.map(
       async (w) =>
-        await downloadImage(id, avatarsDir, { width: w, format: 'jpg', quality }),
+        await downloadImage(id, directory, { width: w, format: 'jpg', quality }),
     ),
   )
 
   const webp = await Promise.all(
     sizes.map(
       async (w) =>
-        await downloadImage(id, avatarsDir, { width: w, format: 'webp', quality }),
+        await downloadImage(id, directory, { width: w, format: 'webp', quality }),
     ),
   )
 
@@ -271,14 +276,14 @@ export const downloadAvatar = async (id: ID) => {
   const sizes = [96, 256, 500]
   const quality = 85
 
-  return await downloadResponsiveImages(sizes, quality, id)
+  return await downloadResponsiveImages(sizes, quality, avatarsDir, id)
 }
 
 export const downloadBanner = async (id: ID) => {
   const sizes = [400, 900, 1600]
   const quality = 85
 
-  return await downloadResponsiveImages(sizes, quality, id)
+  return await downloadResponsiveImages(sizes, quality, bannersDir, id)
 }
 
 export const extendWithAvatars = async <T extends Pick<AlumneType, 'avatar'>>(
