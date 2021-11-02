@@ -24,8 +24,6 @@
     "directus": "^9.0.0-rc.99",
     "focus-visible": "^5.2.0",
     "framer-motion": "^4.1.17",
-    "imagemin-mozjpeg": "^9.0.0",
-    "imagemin-optipng": "^8.0.0",
     "lodash": "^4.17.21",
     "next": "^11.1.2",
     "next-plugin-preval": "^1.2.1",
@@ -42,11 +40,9 @@
     "react-scroll-parallax": "^2.4.0",
     "react-textfit": "^1.1.1",
     "smoothscroll-polyfill": "^0.4.4",
-    "sqlite3": "^5.0.2",
-    "use-http": "^1.0.26"
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "@types/bent": "^7.3.2",
     "@types/node": "^16.11.4",
     "@types/nprogress": "^0.2.0",
     "@types/react": "^17.0.31",
@@ -54,7 +50,6 @@
     "@types/react-headroom": "^2.2.2",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "dotenv": "^10.0.0",
-    "eslint-config-next": "^11.1.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "typescript": "^4.4.4"
   }
