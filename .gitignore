@@ -42,3 +42,4 @@ dump*
 assets/
 src/events.json
 public/cms/
+uploads/*__*
