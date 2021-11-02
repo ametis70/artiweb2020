@@ -2,59 +2,60 @@
 
 Este es el repositorio para el código del sitio web de Artimañas 2020.
 
-## Instrucciones para desarrollo
+## Acerca
 
-La aplicación web consiste de dos partes:
+Este sitio web fue desarrollado con [Next.js](https://nextjs.org/) y [Directus](https://directus.io/)
 
-1. CMS: [Directus](https://directus.io/)
-2. Componente de SSR (Server Side Rendering): [Next.js](https://nextjs.org/)
+### Actualizaciones 
 
-### Configurando el entorno
+Posterior a la muestra, este sitio fue actualizado con motivos educativos y de preservación con los siguientes cambios:
 
-Hay 3 variables de entorno que se deben configurar en el archivo `.env`, la primera corresponde a la contraseña de la base de datos de MySQL y las otras dos a la seguridad de Directus:
+- Se actualizó Directus 8 (PHP) a Directus 9 (Node.js)
+- Se reemplazó MySQL con SQLite, para eliminar el paso de tener que configurar una instancia de MySQL/MariaDB
+- El esquema de la base de datos se simplificó (se eliminaron campos redudantes y se aprovecharon mejor las relaciones entre tablas)
+- Se actualizó Next.js (10 a 11) y se removió [next-optimized-images](https://github.com/cyrilwanner/next-optimized-images) para utilizar las [transformaciones de assets](https://docs.directus.io/reference/files/#requesting-a-thumbnail) de Directus
+- Se removieron otras dependencias y se simplificó el código en muchos lugares
+- Se generaron paginas individuales para cada obra con sus respectivos metadatos
+- Se agregaron los assets al repositorio, que antes solo estaban en una instancia privada de Directus
 
-- `MYSQL_PASSWORD`
-- `DIRECTUS_AUTH_PUBLICKEY`
-- `DIRECTUS_AUTH_SECRETKEY`
+## Desarrollo
 
-Estas pueden ser cualquier string, pero se deben asignar antes de crear los contenedores, y si se modifican posteriormente, los contenedores no funcionaran correctamente.
+Para correr el servidor de desarrollo y el servidor de directus, se requiere [Node.js](https://nodejs.org/en/) (probado con la versión 14.18.1). Una vez instalado, se deben seguir los siguientes pasos:
 
-El script `setup-env.sh` permite generar valores para las variables de entorno automáticamente y crear e iniciar los contenedores de docker después de esto.
+1. Instalar dependencias del proyecto
 
-``` bash
-./setup-env.sh
+```sh
+npm run i
 ```
 
-### CMS y base de datos
+2. Configurar el entorno
 
-Directus depende de una base de datos SQL que se puede levantar usando [Docker](https://www.docker.com/) con el archivo de [docker-compose](https://docs.docker.com/compose/) provisto:
-
-```bash
-docker-compose up -d
+```sh
+npm run setup
 ```
 
-Cuando el contenedor de la base de datos se cree por primera vez, la base de datos se inicializará con el dump que se encuentra en `./db/init.sql`. Este contiene las tablas para las obras, biografías, e información general del sitio, así como los usuarios correspondientes a cada alumno de la materia. Para modificar los datos una vez iniciados los contenedores, se puede acceder a la interfaz web de directus en [http://localhost:8080](http://localhost:8080) con las siguientes credenciales:
+3. Iniciar el servidor
 
-- Usuario: `admin@artiweb.net`
-- Contraseña: `password`
-
-Eventualmente, este dump deberá ser actualizado con el contenido real/final, para que el entorno de desarrollo sea lo mas fiel posible con respecto al de producción. Esto se puede llevar a cabo con el script provisto en la raíz del repositorio (`manage-db`):
-
-``` bash
-./manage-db.sh backup
-```
-
-### Sitio web (front end)
-
-Una vez que la base de datos haya sido inicializada, se puede iniciar el servidor de desarrollo (componente de SSR) con:
-
-```bash
+```sh
 npm run dev
 ```
 
-Los archivos en el directorio `src` se pueden editar y los cambios se verán reflejados en el navegador sin la necesidad de recargar la página.
+Alternativamente, se pueden iniciar el servidor de desarrollo y el servidor de Directus en diferentes shells con:
 
-## Screencasts
+```sh
+npm run dev:web
+npm run dev:cms
+```
 
-- [Configurando el servidor de desarrollo en Manjaro / Arch Linux](https://youtu.be/1_Eo37owlDw)
-- [Descripción de los archivos del respositorio](https://youtu.be/5-D9CbGm-8Q)
+### Compilando el sitio de manera estática
+
+Para generar una versión estática, se debe seguir los pasos 1 y 2 de la sección de Desarrollo, y posteriormente usar los siguientes comandos:
+
+```sh
+npm run build
+npm run export
+```
+
+## Créditos
+
+El sitio web fue diseñado en conjunto con alumnxs de la cursada y con el apoyo de lxs profesorxs
