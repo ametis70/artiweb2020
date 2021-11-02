@@ -1,10 +1,18 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 
 import ObraTabs from '../../components/ObraTabs'
-import { AlumneType, getAllObras, login, ObraType } from '../../lib/api'
+import {
+  AlumneType,
+  extendWithBanner,
+  getAllObras,
+  login,
+  ObraType,
+  ResponsiveImageUrls,
+} from '../../lib/api'
 
 export type ObrasPageObra = ObraType & {
   alumnes: Pick<AlumneType, 'nombre' | 'apellido' | 'carrera' | 'slug'>[]
+  banner: ResponsiveImageUrls
 }
 
 const Obra: NextPage<{ obra: ObrasPageObra }> = ({ obra }) => {
@@ -24,7 +32,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     fields: '*,alumnes.nombre,alumnes.apellido,alumnes.carrera,alumnes.slug',
   })
 
-  return { props: { obra: obra.data[0] } }
+  const obraWithAvatar = await extendWithBanner(obra.data[0])
+
+  return { props: { obra: obraWithAvatar } }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

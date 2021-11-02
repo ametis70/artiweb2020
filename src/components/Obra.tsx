@@ -30,17 +30,15 @@ const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
       <Stack maxW={maxW} m="0 auto" spacing="2rem">
-        {/*
         <ResponsiveImage
           w="100%"
           h="0"
           pb="37.5%"
           overflow="hidden"
           maxH="300px"
-          url={student.bannerUrl ? `banners/${student.bannerUrl}` : null}
+          img={obra.banner}
           alt={`Imagen de banner de ${obra.titulo}`}
         />
-        */}
         <Box>
           <Heading> {obra.titulo} </Heading>
           <Text

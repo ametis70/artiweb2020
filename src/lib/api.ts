@@ -5,7 +5,15 @@ import { promisify } from 'util'
 
 const streamPipeline = promisify(pipeline)
 
-import { Directus, ID, FileItem, QueryOne, FieldItem, QueryMany } from '@directus/sdk'
+import {
+  Directus,
+  ID,
+  FileItem,
+  QueryOne,
+  FieldItem,
+  QueryMany,
+  PartialItem,
+} from '@directus/sdk'
 
 export const publicDir = path.join(process.cwd(), 'public')
 export const assetsDir = path.join(publicDir, 'cms')
@@ -239,10 +247,7 @@ export type ResponsiveImageUrls = {
   lqip: string
 }
 
-export const downloadAvatar = async (id: ID) => {
-  const sizes = [96, 256, 500]
-  const quality = 85
-
+const downloadResponsiveImages = async (sizes: number[], quality: number, id: ID) => {
   const jpg = await Promise.all(
     sizes.map(
       async (w) =>
@@ -262,6 +267,20 @@ export const downloadAvatar = async (id: ID) => {
   return { jpg, webp, lqip }
 }
 
+export const downloadAvatar = async (id: ID) => {
+  const sizes = [96, 256, 500]
+  const quality = 85
+
+  return await downloadResponsiveImages(sizes, quality, id)
+}
+
+export const downloadBanner = async (id: ID) => {
+  const sizes = [400, 900, 1600]
+  const quality = 85
+
+  return await downloadResponsiveImages(sizes, quality, id)
+}
+
 export const extendWithAvatars = async <T extends Pick<AlumneType, 'avatar'>>(
   alumne: T,
 ): Promise<Omit<T, 'avatar'> & { avatar: ResponsiveImageUrls }> => {
@@ -272,4 +291,16 @@ export const extendWithAvatars = async <T extends Pick<AlumneType, 'avatar'>>(
   const avatar = await downloadAvatar(alumne.avatar)
 
   return { ...alumne, avatar }
+}
+
+export const extendWithBanner = async <T extends PartialItem<Pick<ObraType, 'banner'>>>(
+  obra: T,
+): Promise<Omit<T, 'banner'> & { banner: ResponsiveImageUrls }> => {
+  if (!obra.banner) {
+    throw new Error('Called extendWithBanner but obra has not propierty banner')
+  }
+
+  const banner = await downloadBanner(obra.banner)
+
+  return { ...obra, banner }
 }
