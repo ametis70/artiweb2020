@@ -1,8 +1,6 @@
-import getConfig from 'next/config'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-
-const { publicRuntimeConfig } = getConfig()
+import { getBasePath } from '../lib/util'
 
 const defaultTitle = 'Artimañas 2020'
 
@@ -19,20 +17,17 @@ const SEO: React.FC<SEOProps> = ({ title }) => {
   return (
     <Head>
       <title>{t}</title>
-      <link rel="icon" href={`${publicRuntimeConfig.basePath}/favicon.ico`} />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta
         name="description"
         content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"
       />
       <meta property="og:title" content={t} key="ogtitle" />
-      <meta property="og:url" content={`${baseUrl}${router.pathname}`} />
+      <meta property="og:url" content={`${getBasePath()}${router.pathname}`} />
       <meta
         property="og:description"
         content="Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación"
         key="ogdesc"
       />
-      <meta property="og:image" content="android-chrome-512x512.png" key="ogimage" />
       <meta
         property="og:image"
         content={`${baseUrl}/android-chrome-512x512.png`}

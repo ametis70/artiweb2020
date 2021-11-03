@@ -16,7 +16,7 @@ const getSrcSet = (images: DownloadedImage[]) => {
   let srcSet = ''
 
   images.forEach((src, i) => {
-    srcSet = `${srcSet}${basePath}${src.path}${
+    srcSet = `${srcSet}${basePath}/${src.path}${
       i < images.length - 1 ? ` ${src.width}w, ` : ''
     }`
   })

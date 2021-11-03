@@ -42,7 +42,11 @@ export function splitAlumnes<T extends PartialItem<Pick<AlumneType, 'carrera'>>>
 }
 
 export function getBasePath() {
-  return basePath === '' ? '/' : basePath
+  return basePath
 }
 
-export type ReturnedPromiseResolvedType<T> = T extends (...args: any[]) => Promise<infer R> ? R : never
+export type ReturnedPromiseResolvedType<T> = T extends (
+  ...args: any[]
+) => Promise<infer R>
+  ? R
+  : never

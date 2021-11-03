@@ -11,8 +11,6 @@ export type InvestigacionProps = {
 const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
   const { investigacion_titulo, investigacion_abstract, investigacion_archivo } = obra
 
-  console.log(investigacion_archivo)
-
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
       <Stack maxW={maxW} m="0 auto" spacing="2rem">
@@ -38,7 +36,7 @@ const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
             <object
               type="application/pdf"
               aria-label={`Investigación de ${obra.alumnes[0].nombre} ${obra.alumnes[0].apellido}`}
-              data={`${getBasePath()}cms/papers/${investigacion_archivo}`}
+              data={`${getBasePath()}/cms/papers/${investigacion_archivo}`}
               width="100%"
               height="100%"
             />
