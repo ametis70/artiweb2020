@@ -1,18 +1,17 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react'
-import getConfig from 'next/config'
 import ReactMarkdown from 'react-markdown'
-
-import { Obra } from '../lib/api'
-
-const { publicRuntimeConfig } = getConfig()
+import { getBasePath } from '../lib/util'
+import { ObrasPageObra } from '../pages/obras/[slug]'
 
 export type InvestigacionProps = {
-  obra: Obra
+  obra: ObrasPageObra
   maxW: string
 }
 
 const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
   const { investigacion_titulo, investigacion_abstract, investigacion_archivo } = obra
+
+  console.log(investigacion_archivo)
 
   return (
     <Box p={['1rem', '1rem', '2rem']} flex="1 0 0" fontSize={['md', 'lg', 'lg']}>
@@ -39,7 +38,7 @@ const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
             <object
               type="application/pdf"
               aria-label={`Investigación de ${obra.alumnes[0].nombre} ${obra.alumnes[0].apellido}`}
-              data={`${publicRuntimeConfig.basePath}/papers/${investigacion_archivo}`}
+              data={`${getBasePath()}cms/papers/${investigacion_archivo}`}
               width="100%"
               height="100%"
             />

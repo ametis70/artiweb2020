@@ -65,7 +65,7 @@ export type ObraType = {
   ayuda_contenido_personalizado: string
   investigacion_titulo?: string
   investigacion_abstract?: string
-  investigacion_archivo?: FileItem
+  investigacion_archivo?: ID
   slug: string
   alumnes: ID[] | AlumneType[]
   video_links: string
@@ -308,4 +308,22 @@ export const extendWithBanner = async <T extends PartialItem<Pick<ObraType, 'ban
   const banner = await downloadBanner(obra.banner)
 
   return { ...obra, banner }
+}
+
+export const extendWithPaper = async <
+  T extends PartialItem<Pick<ObraType, 'investigacion_archivo' | 'slug'>>,
+>(
+  obra: T,
+): Promise<T> => {
+  if (!obra.investigacion_archivo) {
+    throw new Error('Called extendWithBanner but obra has not propierty banner')
+  }
+
+  const fileName = `${obra.slug}.pdf`
+  await downloadFile(
+    `/assets/${obra.investigacion_archivo}`,
+    path.join(papersDir, fileName),
+  )
+
+  return { ...obra, investigacion_archivo: fileName }
 }

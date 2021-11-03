@@ -4,6 +4,7 @@ import ObraTabs from '../../components/ObraTabs'
 import {
   AlumneType,
   extendWithBanner,
+  extendWithPaper,
   getAllObras,
   login,
   ObraType,
@@ -23,7 +24,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params
 
   await login()
-  const obra = await getAllObras({
+  const obras = await getAllObras({
     filter: {
       slug: {
         _eq: slug,
@@ -32,9 +33,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     fields: '*,alumnes.nombre,alumnes.apellido,alumnes.carrera,alumnes.slug',
   })
 
-  const obraWithAvatar = await extendWithBanner(obra.data[0])
+  const _obra = await extendWithBanner(obras.data[0])
+  const obraComplete = await extendWithPaper(_obra)
 
-  return { props: { obra: obraWithAvatar } }
+  return { props: { obra: obraComplete } }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
