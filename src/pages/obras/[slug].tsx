@@ -1,3 +1,4 @@
+import { PartialItem } from '@directus/sdk'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 
 import ObraTabs from '../../components/ObraTabs'
@@ -10,6 +11,7 @@ import {
   ObraType,
   ResponsiveImageUrls,
 } from '../../lib/api'
+import { ReturnedPromiseResolvedType } from '../../lib/util'
 
 export type ObrasPageObra = ObraType & {
   alumnes: Pick<AlumneType, 'nombre' | 'apellido' | 'carrera' | 'slug'>[]
@@ -33,10 +35,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     fields: '*,alumnes.nombre,alumnes.apellido,alumnes.carrera,alumnes.slug',
   })
 
-  const _obra = await extendWithBanner(obras.data[0])
-  const obraComplete = await extendWithPaper(_obra)
+  const obra = await extendWithBanner(obras.data[0])
 
-  return { props: { obra: obraComplete } }
+  let obraComplete: ReturnedPromiseResolvedType<typeof extendWithPaper> | undefined
+
+  if (obra.investigacion_archivo) {
+    obraComplete = await extendWithPaper(obra)
+  }
+
+  return { props: { obra: obraComplete ? obraComplete : obra } }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
