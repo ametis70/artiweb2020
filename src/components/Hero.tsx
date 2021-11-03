@@ -47,7 +47,7 @@ const siteData = [
     image: festivalImage,
   },
   {
-    url: 'https://taller5.ludic.cc.com/',
+    url: 'https://taller5.ludic.cc/',
     name: 'Taller de Diseño Multimedial V',
     image: tallerImage,
   },
@@ -247,7 +247,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       global.alumnes.forEach((a) =>
         avatarsData.push({
           image: p5.loadImage(a.avatar.jpg[1].path),
-          url: a.slug,
+          url: `/alumnes?alumne=${a.slug}`,
           size: a.avatar.jpg[1].width,
           overlay: true,
         }),
@@ -256,7 +256,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       obras.forEach((o) => {
         avatarsData.push({
           image: p5.loadImage(o.banner.path),
-          url: o.slug,
+          url: `/obras/${o.slug}`,
           size: o.banner.width,
           overlay: true,
         })
