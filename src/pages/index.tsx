@@ -1,12 +1,21 @@
 import IndexNav from '../components/IndexNav'
 import { Flex, Text, Box } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
-import SEO from '../components/SEO'
-import { getAllParticipantsExtended, IParticipantExtended, login } from '../lib/api'
+
+import {
+  bannersDir,
+  DownloadedImage,
+  downloadImage,
+  getAllObras,
+  login,
+  ObraType,
+} from '../lib/api'
 
 const Hero = dynamic(() => import('../components/Hero'), { ssr: false })
 
-const Home: React.FC<{ students: IParticipantExtended[] }> = ({ students }) => {
+export type HeroObra = Pick<ObraType, 'slug'> & { banner: DownloadedImage }
+
+const Home: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
   return (
     <Flex
       direction="column"
@@ -27,7 +36,7 @@ const Home: React.FC<{ students: IParticipantExtended[] }> = ({ students }) => {
       </Text>
       <IndexNav />
       <Box w="100%" overflow="hidden" position="relative" h="100%" alignSelf="stretch">
-        <Hero students={students} />
+        <Hero obras={obras} />
       </Box>
     </Flex>
   )
@@ -42,7 +51,18 @@ export default Home
 export async function getStaticProps() {
   await login()
 
-  const students = await getAllParticipantsExtended()
+  const _obras = await getAllObras({ fields: 'slug,banner' })
+  const obras = await Promise.all(
+    _obras.data.map(async (o) => ({
+      ...o,
+      banner: await downloadImage(o.banner, bannersDir, {
+        width: 200,
+        height: 200,
+        quality: 85,
+        format: 'jpg',
+      }),
+    })),
+  )
 
-  return { props: { students } }
+  return { props: { obras } }
 }

@@ -1,12 +1,16 @@
 import p5Types from 'p5'
 import { useMemo, useRef } from 'react'
 import Sketch from 'react-p5'
-import { IParticipantExtended } from '../lib/api'
 import shuffle from 'lodash/shuffle'
+
+import { HeroObra } from '../pages'
+import { getAlumneFullName } from '../lib/util'
 
 import { useRouter } from 'next/router'
 
 import { green, magenta } from '../theme'
+
+import global from '../lib/global.preval'
 
 import alumnesImage from '../img/sketch_icons/alumnes.png'
 import obrasImage from '../img/sketch_icons/obras.png'
@@ -16,10 +20,8 @@ import tallerImage from '../img/sketch_icons/t5.png'
 
 type AvatarData = {
   image: p5Types.Image
-  name: string
   url: string
-  width: number
-  height: number
+  size: number
   overlay: boolean
 }
 
@@ -68,7 +70,7 @@ function divideGetClosestInteger(input: number, max: number): number {
   return closest
 }
 
-const Hero: React.FC<{ students: IParticipantExtended[] }> = ({ students }) => {
+const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
   const router = useRouter()
 
   const circleRadius = 128 + window.innerWidth * 0.01
@@ -241,59 +243,34 @@ const Hero: React.FC<{ students: IParticipantExtended[] }> = ({ students }) => {
   } = persist.current
 
   return useMemo(() => {
-    const studentsWithImages = students.map((student) => {
-      return {
-        name: `${student.first_name.split(/[ ,]+/)[0]} ${
-          student.last_name.split(/[ ,]+/)[0]
-        }`,
-        url: student.alumne_url,
-        image: require('../assets/avatars/' + student.avatarUrl + '?size=200'),
-        obra: {
-          name: student.obra.titulo,
-          url: student.obra_url,
-          image: require('../assets/banners/' + student.bannerUrl + '?size=400'),
-        },
-      }
-    })
-
     const preload = (p5: p5Types) => {
-      for (let i = 0; i < studentsWithImages.length; i++) {
-        const { name, image, url, obra } = studentsWithImages[i]
-        avatarsData[2 * i] = {
-          name,
-          image: p5.loadImage(image.src),
-          url,
-          width: image.width,
-          height: image.height,
+      global.alumnes.forEach((a) =>
+        avatarsData.push({
+          image: p5.loadImage(a.avatar.jpg[1].path),
+          url: a.slug,
+          size: a.avatar.jpg[1].width,
           overlay: true,
-        }
-        avatarsData[2 * i + 1] = {
-          name: obra.name,
-          image: p5.loadImage(obra.image.src),
-          width: obra.image.width,
-          height: obra.image.height,
-          url: obra.url,
+        }),
+      )
+
+      obras.forEach((o) => {
+        avatarsData.push({
+          image: p5.loadImage(o.banner.path),
+          url: o.slug,
+          size: o.banner.width,
           overlay: true,
-        }
-      }
+        })
+      })
 
-      const length = avatarsData.length
-
-      for (let i = 0; i < siteData.length; i++) {
-        const { name, url, image } = siteData[i]
-        avatarsData[length + i] = {
-          name,
-          image: p5.loadImage(image.src),
-          width: image.width,
-          height: image.height,
-          url,
+      siteData.forEach((s) => {
+        avatarsData.push({
+          image: p5.loadImage(s.image.src),
+          size: s.image.width,
+          url: s.url,
           overlay: false,
-        }
-      }
+        })
+      })
 
-      // Hack for disloque (repeated obra)
-      const disloque = avatarsData.findIndex((obra) => obra.name === 'Disloque')
-      avatarsData.splice(disloque, 1)
       avatarsData = shuffle(avatarsData)
     }
 
