@@ -4,7 +4,6 @@ import Sketch from 'react-p5'
 import shuffle from 'lodash/shuffle'
 
 import { HeroObra } from '../pages'
-import { getAlumneFullName } from '../lib/util'
 
 import { useRouter } from 'next/router'
 
@@ -19,7 +18,7 @@ import festivalImage from '../img/sketch_icons/festival.png'
 import tallerImage from '../img/sketch_icons/t5.png'
 
 type AvatarData = {
-  image: p5Types.Image
+  image: string
   url: string
   size: number
   overlay: boolean
@@ -70,7 +69,10 @@ function divideGetClosestInteger(input: number, max: number): number {
   return closest
 }
 
-const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
+const Hero: React.FC<{ obras: HeroObra[]; setHeroLoaded: (arg: boolean) => void }> = ({
+  obras,
+  setHeroLoaded,
+}) => {
   const router = useRouter()
 
   const circleRadius = 128 + window.innerWidth * 0.01
@@ -90,6 +92,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
     currentSpeed: number
     mouseBorderThreshold: number
     pressedPosition: p5Types.Vector
+    postLoadRun: boolean
   }>({
     DEBUG: false,
     pressedPosition: null,
@@ -105,6 +108,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
     autoadvanceSpeed: 4,
     currentSpeed: 0,
     mouseBorderThreshold: 0,
+    postLoadRun: false,
   })
 
   class Avatar {
@@ -112,6 +116,8 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
     position: p5Types.Vector
     wrapping: boolean
     data: AvatarData
+    drawn: boolean
+    img: p5Types.Image
 
     constructor(
       p5: p5Types,
@@ -133,6 +139,13 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       this.p5 = p5
     }
 
+    loadAndDraw() {
+      this.p5.loadImage(this.data.image, (img) => {
+        this.img = img
+        this.drawImage()
+      })
+    }
+
     drawImage() {
       graphics.fill('black')
       graphics.ellipse(
@@ -143,10 +156,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       )
 
       const avatarScale = 1.1
-      const scaleFactor =
-        this.data.width === this.data.height
-          ? avatarScale
-          : this.data.width / this.data.height
+      const scaleFactor = avatarScale
 
       const height =
         scaleFactor === avatarScale ? circleRadius * avatarScale : circleRadius
@@ -155,16 +165,17 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
           ? circleRadius * avatarScale
           : circleRadius * scaleFactor
 
-      graphics.image(this.data.image, this.position.x, this.position.y, width, height)
+      graphics.image(this.img, this.position.x, this.position.y, width, height)
       if (this.wrapping) {
         graphics.image(
-          this.data.image,
+          this.img,
           this.position.x - graphics.width,
           this.position.y,
           width,
           height,
         )
       }
+      this.drawn = true
     }
 
     drawOverlay() {
@@ -197,6 +208,10 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
 
     getData() {
       return this.data
+    }
+
+    getDrawn() {
+      return this.drawn
     }
 
     mouseOver() {
@@ -240,40 +255,10 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
     mouseBorderThreshold,
     graphicsImage,
     pressedPosition,
+    postLoadRun,
   } = persist.current
 
   return useMemo(() => {
-    const preload = (p5: p5Types) => {
-      global.alumnes.forEach((a) =>
-        avatarsData.push({
-          image: p5.loadImage(a.avatar.jpg[1].path),
-          url: `/alumnes?alumne=${a.slug}`,
-          size: a.avatar.jpg[1].width,
-          overlay: true,
-        }),
-      )
-
-      obras.forEach((o) => {
-        avatarsData.push({
-          image: p5.loadImage(o.banner.path),
-          url: `/obras/${o.slug}`,
-          size: o.banner.width,
-          overlay: true,
-        })
-      })
-
-      siteData.forEach((s) => {
-        avatarsData.push({
-          image: p5.loadImage(s.image.src),
-          size: s.image.width,
-          url: s.url,
-          overlay: false,
-        })
-      })
-
-      avatarsData = shuffle(avatarsData)
-    }
-
     const setup = (p5: p5Types, canvasParentRef: Element) => {
       p5.disableFriendlyErrors = true // disables FES
       const cnv = p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef)
@@ -289,6 +274,35 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
     }
 
     const render = (p5: p5Types) => {
+      global.alumnes.forEach((a) =>
+        avatarsData.push({
+          image: a.avatar.jpg[1].path,
+          url: `/alumnes?alumne=${a.slug}`,
+          size: a.avatar.jpg[1].width,
+          overlay: true,
+        }),
+      )
+
+      obras.forEach((o) => {
+        avatarsData.push({
+          image: o.banner.path,
+          url: `/obras/${o.slug}`,
+          size: o.banner.width,
+          overlay: true,
+        })
+      })
+
+      siteData.forEach((s) => {
+        avatarsData.push({
+          image: s.image.src,
+          size: s.image.width,
+          url: s.url,
+          overlay: false,
+        })
+      })
+
+      avatarsData = shuffle(avatarsData)
+
       const numberOfAvatars = avatarsData.length
       const maxRows = Math.floor(p5.height / spacingY)
       const rows = divideGetClosestInteger(numberOfAvatars, maxRows)
@@ -320,7 +334,7 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       mouseBorderThreshold = p5.width / 100 // disable mouse after threshold
 
       avatars.forEach((avatar) => {
-        avatar.drawImage()
+        avatar.loadAndDraw()
         const pos = avatar.getPosition()
         const wrap = avatar.getWrapping()
         mask.circle(pos.x, pos.y, circleRadius)
@@ -328,17 +342,25 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
           mask.circle(pos.x - mask.width, pos.y, circleRadius)
         }
       })
-      graphics.filter(p5.GRAY)
-      avatars.forEach((avatar) => {
-        avatar.drawOverlay()
-      })
-
-      graphicsImage = graphics.get()
-      graphicsImage.mask(mask.get())
     }
 
     const draw = (p5: p5Types) => {
       p5.background(magenta)
+
+      if (!avatars.every((a) => a.drawn)) {
+        return
+      } else if (!postLoadRun) {
+        graphics.filter(p5.GRAY)
+
+        avatars.forEach((avatar) => {
+          avatar.drawOverlay()
+        })
+
+        graphicsImage = graphics.get()
+        graphicsImage.mask(mask.get())
+        postLoadRun = true
+        setHeroLoaded(true)
+      }
 
       let shouldStop = false
 
@@ -412,7 +434,6 @@ const Hero: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
 
     return (
       <Sketch
-        preload={preload}
         setup={setup}
         draw={draw}
         mouseDragged={mouseDragged}

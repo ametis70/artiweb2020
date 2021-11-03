@@ -10,12 +10,14 @@ import {
   login,
   ObraType,
 } from '../lib/api'
+import { useState } from 'react'
 
 const Hero = dynamic(() => import('../components/Hero'), { ssr: false })
 
 export type HeroObra = Pick<ObraType, 'slug'> & { banner: DownloadedImage }
 
 const Home: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
+  const [heroLoaded, setHeroLoaded] = useState(false)
   return (
     <Flex
       direction="column"
@@ -36,15 +38,23 @@ const Home: React.FC<{ obras: HeroObra[] }> = ({ obras }) => {
       </Text>
       <IndexNav />
       <Box w="100%" overflow="hidden" position="relative" h="100%" alignSelf="stretch">
-        <Hero obras={obras} />
+        <Hero obras={obras} setHeroLoaded={setHeroLoaded} />
+        {!heroLoaded ? (
+          <Text
+            position="absolute"
+            top="30%"
+            left="50%"
+            transform="translateX(-50%)"
+            opacity="50%"
+            fontWeight="bold"
+          >
+            Cargando
+          </Text>
+        ) : null}
       </Box>
     </Flex>
   )
 }
-
-// <Text position="absolute" textAlign="center" zIndex="0" pt="1rem" w="100%">
-//   Cargando
-// </Text>
 
 export default Home
 
