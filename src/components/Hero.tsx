@@ -16,6 +16,7 @@ import obrasImage from '../img/sketch_icons/obras.png'
 import calendarImage from '../img/sketch_icons/calendar.png'
 import festivalImage from '../img/sketch_icons/festival.png'
 import tallerImage from '../img/sketch_icons/t5.png'
+import { getBasePath } from '../lib/util'
 
 type AvatarData = {
   image: string
@@ -294,7 +295,7 @@ const Hero: React.FC<{ obras: HeroObra[]; setHeroLoaded: (arg: boolean) => void 
 
       siteData.forEach((s) => {
         avatarsData.push({
-          image: s.image.src,
+          image: `${getBasePath()}/${s.image.src}`,
           size: s.image.width,
           url: s.url,
           overlay: false,

@@ -13,7 +13,7 @@ const colors: CardColor[] = [
   { bg: 'green', color: 'black' },
 ]
 
-const EventCard: React.FC<{ event: PartialItem<EventType>; onClick: () => void }> = ({
+const EventCard: React.FC<{ event: PartialItem<EventType>; onClick?: () => void }> = ({
   event,
   onClick = undefined,
 }) => {

@@ -9,7 +9,7 @@
     "dev:cms": "directus start",
     "dev:web": "next dev -p 5000",
     "dev": "concurrently -n cms,web -c 'cyan.bgGray.bold,magenta.bgGray.bold' 'npm:dev:cms' 'npm:dev:web'",
-    "build": "next build",
+    "build": "concurrently --kill-others -n cms,build 'npm:dev:cms' 'next build'",
     "export": "next export",
     "start": "next start",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
@@ -50,6 +50,7 @@
     "@types/react-headroom": "^2.2.2",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "dotenv": "^10.0.0",
+    "eslint": "^8.1.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "typescript": "^4.4.4"
   }
