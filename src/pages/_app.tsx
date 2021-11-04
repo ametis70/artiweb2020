@@ -7,17 +7,17 @@ import { useEffect, useState } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import smoothscroll from 'smoothscroll-polyfill'
 
+import 'focus-visible/dist/focus-visible'
+
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
 
 // disable FitText warning
 console.warn = () => undefined
 
-import '../styles/typeface-futura.css'
-import 'focus-visible/dist/focus-visible'
-
 import theme from '../theme'
 import ObrasLayout from '../components/ObrasLayout'
+import { getBasePath } from '../lib/util'
 
 const variants = {
   initial: { opacity: 0, y: '100%' },
@@ -89,6 +89,23 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
   return (
     <ChakraProvider theme={theme} resetCSS>
+      <style global jsx>{`
+@font-face {
+  font-family: 'Futura PT';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: local('Futura PT Regular'), url('${getBasePath()}/font/FuturaPTBook.otf') format('opentype'); 
+}
+
+/* roboto-700normal - latin */
+@font-face {
+  font-family: 'Futura PT';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: local('Futura PT Bold'), url('${getBasePath()}/font/FuturaPTBold.otf') format('opentype'); 
+      `}</style>
       <ParallaxProvider>
         <Box
           minH="calc(var(--vh, 1vh) * 100)"

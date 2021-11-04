@@ -2,13 +2,11 @@ import p5Types from 'p5'
 import { useMemo, useRef } from 'react'
 import Sketch from 'react-p5'
 import shuffle from 'lodash/shuffle'
-
-import { HeroObra } from '../pages'
-
 import { useRouter } from 'next/router'
 
+import { HeroObra } from '../pages'
 import { green, magenta } from '../theme'
-
+import { getBasePath } from '../lib/util'
 import global from '../lib/global.preval'
 
 import alumnesImage from '../img/sketch_icons/alumnes.png'
@@ -16,7 +14,6 @@ import obrasImage from '../img/sketch_icons/obras.png'
 import calendarImage from '../img/sketch_icons/calendar.png'
 import festivalImage from '../img/sketch_icons/festival.png'
 import tallerImage from '../img/sketch_icons/t5.png'
-import { getBasePath } from '../lib/util'
 
 type AvatarData = {
   image: string
@@ -277,7 +274,7 @@ const Hero: React.FC<{ obras: HeroObra[]; setHeroLoaded: (arg: boolean) => void 
     const render = (p5: p5Types) => {
       global.alumnes.forEach((a) =>
         avatarsData.push({
-          image: a.avatar.jpg[1].path,
+          image: `${getBasePath()}/${a.avatar.jpg[1].path}`,
           url: `/alumnes?alumne=${a.slug}`,
           size: a.avatar.jpg[1].width,
           overlay: true,
@@ -286,7 +283,7 @@ const Hero: React.FC<{ obras: HeroObra[]; setHeroLoaded: (arg: boolean) => void 
 
       obras.forEach((o) => {
         avatarsData.push({
-          image: o.banner.path,
+          image: `${getBasePath()}/${o.banner.path}`,
           url: `/obras/${o.slug}`,
           size: o.banner.width,
           overlay: true,
@@ -295,7 +292,7 @@ const Hero: React.FC<{ obras: HeroObra[]; setHeroLoaded: (arg: boolean) => void 
 
       siteData.forEach((s) => {
         avatarsData.push({
-          image: `${getBasePath()}/${s.image.src}`,
+          image: `${getBasePath()}${s.image.src}`,
           size: s.image.width,
           url: s.url,
           overlay: false,
