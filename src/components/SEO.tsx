@@ -8,7 +8,7 @@ type SEOProps = {
   image?: string
 }
 
-const url = process.env.OG_DOMAIN
+const url = process.env.NEXT_PUBLIC_OG_DOMAIN
 const baseUrl = `${url ? url : ''}${getBasePath()}`
 
 const defaults: SEOProps = {
