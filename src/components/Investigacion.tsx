@@ -29,15 +29,16 @@ const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
             },
           }}
         />
-        <Box
-          w="100%"
-          m="0 auto"
-          position="relative"
-          display="block"
-          h={`calc(${maxW} * 1.41)`}
-          overflow="hidden"
-        >
-          {!isMobile() ? (
+
+        {!isMobile() ? (
+          <Box
+            w="100%"
+            m="0 auto"
+            position="relative"
+            display="block"
+            h={`calc(${maxW} * 1.41)`}
+            overflow="hidden"
+          >
             <object
               type="application/pdf"
               aria-label={`Investigación de ${obra.alumnes[0].nombre} ${obra.alumnes[0].apellido}`}
@@ -45,8 +46,8 @@ const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
               width="100%"
               height="100%"
             />
-          ) : null}
-        </Box>
+          </Box>
+        ) : null}
         <ChakraLink href={link} isExternal target="_blank">
           <Flex w="100%" py="1rem" bg="magenta" justify="center">
             <Text
