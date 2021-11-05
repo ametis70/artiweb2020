@@ -3,12 +3,15 @@ import Document, { Head, Html, Main, NextScript } from 'next/document'
 
 const { publicRuntimeConfig } = getConfig()
 
+const matomoUrl = process.env.NEXT_PUBLIC_MATOMO_URL
+
 class MyDocument extends Document {
   render() {
     return (
       <Html lang="es">
         <Head>
-          {process.env.NODE_ENV === 'development' ? null : (
+          {process.env.NODE_ENV === 'development' ||
+          (process.env.NODE_ENV === 'production' && matomoUrl) ? (
             <script
               type="text/javascript"
               dangerouslySetInnerHTML={{
@@ -18,7 +21,7 @@ class MyDocument extends Document {
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
-    var u="//matomo.ludic.cc/";
+    var u="${matomoUrl}";
     _paq.push(['setTrackerUrl', u+'matomo.php']);
     _paq.push(['setSiteId', '1']);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
@@ -27,7 +30,7 @@ class MyDocument extends Document {
                 `,
               }}
             />
-          )}
+          ) : null}
           <link
             rel="apple-touch-icon"
             sizes="180x180"

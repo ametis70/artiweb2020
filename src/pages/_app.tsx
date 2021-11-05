@@ -56,7 +56,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
     const stop = () => {
       NProgress.done()
 
-      if (typeof window !== undefined && process.env.NODE_ENV === 'production') {
+      if (
+        typeof window !== undefined &&
+        process.env.NODE_ENV === 'production' &&
+        process.env.NEXT_PUBLIC_MATOMO_URL
+      ) {
         setTimeout(() => {
           const { asPath } = router
 
