@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
         px={['1rem', '1rem', '2rem']}
         direction={['column', 'column', 'row']}
       >
-        <Box px="1rem" maxW={['100%', '100%', '60%']} position="relative">
+        <Box maxW={['100%', '100%', '60%']} position="relative">
           <Flex position="absolute" w="100%" h="100%">
             <ChakraLink
               href="https://taller5.ludic.cc/"
