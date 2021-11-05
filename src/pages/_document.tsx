@@ -10,8 +10,7 @@ class MyDocument extends Document {
     return (
       <Html lang="es">
         <Head>
-          {process.env.NODE_ENV === 'development' ||
-          (process.env.NODE_ENV === 'production' && matomoUrl) ? (
+          {process.env.NODE_ENV === 'production' && matomoUrl ? (
             <script
               type="text/javascript"
               dangerouslySetInnerHTML={{
