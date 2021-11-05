@@ -15,7 +15,7 @@ const defaults: SEOProps = {
   description:
     'Artimañas es un evento que tiene como objetivo el compartir el trabajo final de l·s alumn·s de la cátedra de Taller de Diseño Multimedial V, el resultado de las experiencias empírica y práctica de las diferentes temáticas relevantes que eligieron l·s futur·s licenciad·s, concretando así sus proyectos de graduación',
   title: 'Artimañas 2020',
-  image: `${baseUrl}/android-chrome-512x512.png`,
+  image: `android-chrome-512x512.png`,
 }
 
 const SEO: React.FC<SEOProps> = ({
