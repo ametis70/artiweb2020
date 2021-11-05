@@ -1,7 +1,8 @@
-import { PartialItem } from '@directus/sdk'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 
 import ObraTabs from '../../components/ObraTabs'
+import SEO from '../../components/SEO'
+
 import {
   AlumneType,
   extendWithBanner,
@@ -11,16 +12,30 @@ import {
   ObraType,
   ResponsiveImageUrls,
 } from '../../lib/api'
-import { ReturnedPromiseResolvedType } from '../../lib/util'
+import { getAlumneFullName, ReturnedPromiseResolvedType } from '../../lib/util'
 
 export type ObrasPageObra = ObraType & {
   alumnes: Pick<AlumneType, 'nombre' | 'apellido' | 'carrera' | 'slug'>[]
   banner: ResponsiveImageUrls
 }
 
-const Obra: NextPage<{ obra: ObrasPageObra }> = ({ obra }) => {
-  return <ObraTabs obra={obra} />
-}
+const Obra: NextPage<{ obra: ObrasPageObra }> = ({ obra }) => (
+  <>
+    <SEO
+      title={obra.titulo}
+      description={`"${
+        obra.titulo
+      }" es una obra que fue llevada a cabo por ${obra.alumnes.map((a, i) =>
+        i === obra.alumnes.length - 1
+          ? getAlumneFullName(a)
+          : `${getAlumneFullName(a)} y `,
+      )} para Artimañas 2020`}
+      image={obra.banner.jpg[2].path}
+    />
+
+    <ObraTabs obra={obra} />
+  </>
+)
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params

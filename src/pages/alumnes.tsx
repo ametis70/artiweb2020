@@ -19,7 +19,10 @@ const Alumnes: NextPage<{ _alumnes: AlumnesPageAlumne[] }> = ({ _alumnes }) => {
 
   return (
     <>
-      <SEO title="Alumnes" />
+      <SEO
+        title="Alumnes"
+        description="Conocé a les alumnes que pariticiparon en la muestra Artimañas 2020"
+      />
       <Box w="100%" overflow="hidden">
         <AlumnesList alumnes={alumnes} />
         <AlumnesBios alumnes={alumnes} />
