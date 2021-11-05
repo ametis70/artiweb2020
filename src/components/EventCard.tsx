@@ -41,7 +41,7 @@ const EventCard: React.FC<{ event: PartialItem<EventType>; onClick?: () => void 
       }`
 
   return (
-    <Box px={['0.5rem', '0.5rem', '1rem']} flex="1 0 0" minW="220px">
+    <Box px={['0.5rem', '0.5rem', '1rem']} flex="1 0 0">
       <Link href={url} passHref>
         <ChakraLink onClick={onClick}>
           <Flex
@@ -67,7 +67,7 @@ const EventCard: React.FC<{ event: PartialItem<EventType>; onClick?: () => void 
 
             <Spacer />
             {event.alumne ? (
-              <Text lineHeight="1.2" fontSize={['sm', 'sm', 'lg']}>
+              <Text lineHeight="1.2" fontSize={['sm', 'sm', 'lg']} whiteSpace="nowrap">
                 por {getAlumneFullName(event.alumne)}
               </Text>
             ) : null}
