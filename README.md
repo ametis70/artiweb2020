@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://github.com/ametis70/artiweb2020/raw/main/public/android-chrome-192x192.png" alt="Logo de Artimañas 2020" />
+</p>
+
 # Artimañas 2020
 
 Este es el repositorio del código del sitio web de Artimañas 2020.
@@ -47,6 +51,13 @@ Alternativamente, se pueden iniciar el servidor de desarrollo y el servidor de D
 npm run dev:web
 npm run dev:cms
 ```
+
+Por defecto, el serivdor web corre en el puerto 5000, mientras que el de Directus en el 8055. Ambos se pueden acceder desde http://locahost:5000 y http://localhost:8055 respectivamente.
+
+Las credenciales para acceder a directus se pueden encontrar en el archivo `.env` generado, y son:
+
+- **username**: admin@taller5.ludic.cc
+- **password**: admin
 
 ### Compilando el sitio de manera estática
 
