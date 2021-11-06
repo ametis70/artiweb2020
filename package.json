@@ -24,6 +24,7 @@
     "directus": "^9.0.0-rc.99",
     "focus-visible": "^5.2.0",
     "framer-motion": "^5.2.1",
+    "ismobilejs": "^1.1.1",
     "lodash": "^4.17.21",
     "next": "^11.1.2",
     "next-plugin-preval": "^1.2.1",

@@ -2,7 +2,7 @@ import { Box, Flex, Heading, Stack, Text, Link as ChakraLink } from '@chakra-ui/
 import ReactMarkdown from 'react-markdown'
 import { getBasePath } from '../lib/util'
 import { ObrasPageObra } from '../pages/obras/[slug]'
-import useMobileDetect from 'use-mobile-detect-hook'
+import isMobile from 'ismobilejs'
 
 export type InvestigacionProps = {
   obra: ObrasPageObra
@@ -11,7 +11,7 @@ export type InvestigacionProps = {
 
 const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
   const { investigacion_titulo, investigacion_abstract, investigacion_archivo } = obra
-  const { isMobile } = useMobileDetect()
+  const { phone, tablet } = isMobile()
 
   const link = `${getBasePath()}/cms/papers/${investigacion_archivo}`
 
@@ -30,7 +30,7 @@ const Investigacion: React.FC<InvestigacionProps> = ({ obra, maxW }) => {
           }}
         />
 
-        {!isMobile() ? (
+        {!phone && !tablet ? (
           <Box
             w="100%"
             m="0 auto"
