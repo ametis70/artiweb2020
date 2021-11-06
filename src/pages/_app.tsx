@@ -1,14 +1,13 @@
 import { Box, ChakraProvider } from '@chakra-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, Variants } from 'framer-motion'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import NProgress from 'nprogress'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import smoothscroll from 'smoothscroll-polyfill'
 
 import 'focus-visible/dist/focus-visible'
-
 import Footer from '../components/Footer'
 import NavBar from '../components/NavBar'
 
@@ -19,8 +18,11 @@ import theme from '../theme'
 import ObrasLayout from '../components/ObrasLayout'
 import { getBasePath } from '../lib/util'
 
-const variants = {
-  initial: { opacity: 0, y: '100%' },
+const variants: Variants = {
+  initial: {
+    opacity: 0,
+    y: '100%',
+  },
   enter: {
     opacity: 1,
     scale: 1,
@@ -29,16 +31,26 @@ const variants = {
     transition: { ease: 'easeOut', duration: 0.5 },
   },
   exit: {
+    zIndex: 999,
+    position: 'absolute',
     opacity: 0,
     scale: 0,
     y: '-50%',
-    transition: { ease: 'easeOut', duration: 0.3 },
+    transition: { ease: 'easeOut', duration: 0.5 },
   },
 }
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const router = useRouter()
   const [previousPath, setPreviousPath] = useState(router.asPath)
+
+  const retainedHome = useRef(null)
+
+  const isHome = router.asPath === '/'
+
+  if (isHome && retainedHome.current === null) {
+    retainedHome.current = <Component {...pageProps} />
+  }
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -118,7 +130,15 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
           sx={{ scrollbarWidth: 'none' }}
           className="hide-scrollbar"
         >
-          {router.pathname !== '/' ? <NavBar /> : null}
+          <motion.div
+            key="home"
+            variants={variants}
+            initial="initial"
+            animate={isHome ? 'enter' : 'exit'}
+          >
+            {retainedHome.current}
+          </motion.div>
+          {!isHome ? <NavBar /> : null}
           <AnimatePresence exitBeforeEnter>
             <motion.div
               key={obras ? '/obras' : router.route}
@@ -132,7 +152,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
                 <ObrasLayout>
                   <Component {...pageProps} />
                 </ObrasLayout>
-              ) : (
+              ) : isHome ? null : (
                 <Component {...pageProps} />
               )}
             </motion.div>
