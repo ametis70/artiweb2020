@@ -94,12 +94,11 @@ const Obra: React.FC<ObraComponentProps> = ({ obra, maxW }) => {
           as={ReactMarkdown}
           children={obra.ayuda_contenido_personalizado}
           color="gray.500"
-          fontSize="md"
+          fontSize="sm"
           textAlign="center"
-          sx={{
-            '& a': {
-              color: 'gray.300',
-            },
+          components={{
+            a: ({ node, ...props }) => <ChakraLink color="gray.300" {...props} />,
+            li: ({ node, ...props }) => <li style={{ textAlign: 'left' }} {...props} />,
           }}
         />
       </Stack>

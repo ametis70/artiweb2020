@@ -35,7 +35,9 @@ const ObraTabs: React.FC<{ obra: ObrasPageObra }> = ({ obra }) => {
 
   const tabProps = {
     _selected: { color: fg, bg: bg, '& svg path': { stroke: fg } },
+    borderBottomWidth: [0, 0, 3],
     borderColor: bg,
+    py: '1rem',
     color: 'gray.500',
     sx: { '& svg': { mr: '0.5rem' }, '& svg path': { stroke: 'gray.500' } },
   }
@@ -53,6 +55,7 @@ const ObraTabs: React.FC<{ obra: ObrasPageObra }> = ({ obra }) => {
         maxW={maxW}
         m="0 auto"
         display="flex"
+        borderWidth={0}
         flexDirection={['column-reverse', 'row', 'row']}
       >
         <Tab {...tabProps}>

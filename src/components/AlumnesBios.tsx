@@ -57,8 +57,8 @@ const AlumneBio: React.FC<{
       ) : (
         <ResponsiveImage
           overflow="hidden"
-          flex="0 0 160px"
-          h="160px"
+          flex={['0 0 120px', '0 0 120px', '0 0 160px']}
+          h={['120px', '120px', '120px']}
           mr="1rem"
           img={alumne.avatar}
           alt={`Avatar de ${alumne.nombre} ${alumne.apellido}`}

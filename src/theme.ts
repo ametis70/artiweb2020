@@ -42,7 +42,7 @@ const customTheme = extendTheme({
         fontFamily: 'Futura PT, sans-serif',
         bg: 'black',
         color: 'white',
-        fontSize: 'xl',
+        fontSize: ['lg', 'lg', 'xl'],
         lineHeight: 'tall',
         width: '100%',
         minHeight: '100vh',
